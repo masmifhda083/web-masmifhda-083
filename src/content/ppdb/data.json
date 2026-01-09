@@ -1,11 +1,11 @@
 {
   "datappdb": {
-    "schoolName": "SMA NEGERI 1 INDONESIA",
-    "ppdbAlias": "Penerimaan Peserta Didik Baru",
-    "logoUrl": "/uploads/logo-sma.png",
-    "coverImageUrl": "/uploads/smanegeri1indonesia.png",
-    "primaryColor": "#034FF3",
-    "secondaryColor": "#10b981",
+    "schoolName": "MA MIFTAHUL HUDA",
+    "ppdbAlias": "Penerimaan Siswa Baru",
+    "logoUrl": "/uploads/logo.webp",
+    "coverImageUrl": "/uploads/cover.webp",
+    "primaryColor": "#7ED321",
+    "secondaryColor": "#417505",
     "academicYear": "2026/2027",
     "registrationOpen": true,
     "registrationPeriod": "Gelombang II 1 - 30 Mei 2026",
