@@ -9,7 +9,7 @@ description: >-
   Agama (Kemenag), menjadi panggung penting untuk menyalurkan potensi akademik
   dan riset siswa madrasah.
 category: Prestasi
-heroImage: /uploads/naufal-osn-informatika.jpeg
+heroImage: /uploads/mifda-13.webp
 ---
 
 Olimpiade Madrasah Indonesia (OMI) 2025, yang diselenggarakan oleh Kementerian Agama (Kemenag), menjadi panggung penting untuk menyalurkan potensi akademik dan riset siswa madrasah. Sebagai lembaga pendidikan Islam, MA Miftahul Huda sangat mendukung dan mendorong para siswanya untuk terlibat aktif dalam kompetisi ini sebagai bagian dari upaya meningkatkan prestasi dan karakter santri.
