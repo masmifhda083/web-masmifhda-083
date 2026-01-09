@@ -133,11 +133,11 @@
   },
   "seo": {
     "siteInfo": {
-      "siteName": "Sma Negeri 1 Indonesia",
-      "siteUrl": "https://smanegeri1indonesia.sch.id",
-      "siteDescription": "Sekolah Unggulan Berbasis Karakter",
-      "siteLogo": "/uploads/logo-sma.png",
-      "favicon": "/uploads/logo-sma.png"
+      "siteName": "Mas Miftahul Huda",
+      "siteUrl": "https://masmifhda.sch.id/",
+      "siteDescription": "Mewujudkan Pendidikan Yang Bermanfaat, Baik Di Dunia Maupun Akhirat",
+      "siteLogo": "/uploads/logo.webp",
+      "favicon": "/uploads/logo.webp"
     },
     "globalMeta": {
       "titleTemplate": "%s | Sma Negeri 1 Indonesia",
