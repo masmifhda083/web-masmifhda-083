@@ -1,0 +1,708 @@
+---
+//src/pages/ppdb.astro
+import Layout from '../layouts/Layout.astro';
+import Year from '../components/Year.astro';
+import { getCollection } from 'astro:content';
+// Ambil data sekolah dari Tina CMS
+const ppdbData = await getCollection('ppdb');
+const settings = ppdbData[0]?.data?.datappdb || {
+  schoolName: '',
+  ppdbAlias: '',
+  logoUrl: '',
+  coverImageUrl: '',
+  primaryColor: '',
+  secondaryColor: '',
+  academicYear: '',
+  registrationPeriod: '',
+  registrationOpen: true
+};
+---
+
+<Layout title="Pendaftaran PPDB">
+  <section class={`relative overflow-hidden bg-cover bg-center befor:content-[''] before:absolute before:opacity-70 before:z-10 before:w-full before:h-full before:bg-${settings.primaryColor}`} style={`background-image: url('${settings.coverImageUrl || ''}'); `}>
+    <div class="absolute inset-0 opacity-90" style={`background-color: ${settings.primaryColor || '#1e40af'};`} ></div>
+    <div class="container mx-auto px-4 py-12 md:py-16 relative z-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <!-- Logo dan Nama Sekolah -->
+        <div class="flex flex-col md:flex-row justify-center md:justify-start items-center gap-4 text-center md:text-left">
+          {settings.logoUrl && (
+            <div class="w-20 h-20 md:w-24 md:h-24 bg-surface rounded-full p-2 shadow-lg">
+              <img 
+                src={settings.logoUrl} 
+                alt={`Logo ${settings.schoolName}`}
+                class="w-full h-full object-contain"
+              />
+            </div>
+          )}
+          <div class="text-surface">
+            {settings.ppdbAlias && (
+              <p class="text-sm font-medium">
+                {settings.ppdbAlias}
+              </p>
+            )}
+            <h1 class="text-2xl md:text-4xl font-bold mb-2">
+              {settings.schoolName}
+            </h1>
+            <p class="text-lg mt-2">Tahun Ajaran: {settings.academicYear}</p>
+            <p class="text-lg mt-2">{settings.registrationPeriod}</p>
+          </div>
+        </div>
+        
+        <!-- Status Pendaftaran -->
+        <div class={`inline-flex flex-col md:flex-row items-center px-6 py-3 rounded-full shadow-lg ${settings.registrationOpen ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+          <div class="flex items-center">
+            <div class={`w-3 h-3 rounded-full mr-3 ${settings.registrationOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+            <div class="font-bold text-sm">
+              Pendaftaran {settings.registrationOpen ? 'DIBUKA' : 'DITUTUP'}
+            </div>
+          </div>
+          <div class="ml-3 text-xs">
+            {settings.registrationOpen ? '🏃 Yuk Daftar Sekarang!' : '⏳ Tunggu Periode Berikutnya'}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Navigation Tabs -->
+    <div class="flex border-b border-gray-200 mb-8">
+      <a 
+        href="/ppdb" 
+        class="p-3 text-sm md:text-lg font-medium text-blue-600 border-b-2 border-blue-600"
+      >
+        Form Pendaftaran
+      </a>
+      <a 
+        href="/ppdb/status" 
+        class="p-3 text-sm md:text-lg font-medium text-gray-500 hover:text-blue-600"
+      >
+        Cek Status
+      </a>
+    </div>
+    
+    <h1 class="text-xl md:text-3xl font-bold text-center max-w-4xl mx-auto mb-8 text-gray-800">
+      Formulir Pendaftaran {settings.ppdbAlias}
+      <span class="text-blue-600"><Year/></span>
+    </h1>
+    
+    <!-- Form sama dengan sebelumnya, tapi adjust endpoint API -->
+    <form id="registrationForm" class="space-y-8 max-w-4xl mx-auto">
+      
+      <!-- Informasi Pendaftaran -->
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800 border-l-4 border-secondary pl-3">
+          Informasi Pendaftaran
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Tahun PPDB <span class="text-red-500">*</span>
+            </label>
+            <select 
+              name="tahun_ppdb" 
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            >
+              <option value="">Pilih Tahun</option>
+              <option value="2026/2027">2026/2027</option>
+              <option value="2025/2026">2027/2028</option>
+              <option value="2025/2026">2028/2029</option>
+            </select>
+          </div>
+        </div>
+        <div class="space-y-4 mt-5">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Pilihan Jurusan <span class="text-red-500">*</span>
+          </label>
+          <select
+            name="jurusan"
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+          >
+            <option value="">Pilih Jurusan</option>
+            <option value="IPA">IPA</option>
+            <option value="IPS">IPS</option>
+            <option value="Bahasa">Bahasa</option>
+          </select>
+        </div>
+
+      </section>
+      
+      <!-- Data Pribadi Peserta Didik -->
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <h2 class="text-xl font-semibold mb-6 text-gray-800 border-l-4 border-secondary pl-3">
+          Data Pribadi Peserta Didik
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Nama Lengkap -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Nama Lengkap <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              name="nama_lengkap" 
+              required
+              placeholder="Masukkan nama lengkap"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            />
+          </div>
+          
+          <!-- Nama Panggilan -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Nama Panggilan <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              name="nama_panggilan" 
+              required
+              placeholder="Masukkan nama panggilan"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            />
+          </div>
+          
+          <!-- Tempat Lahir -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Tempat Lahir <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              name="tempat_lahir" 
+              required
+              placeholder="Kota tempat lahir"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            />
+          </div>
+          
+          <!-- Tanggal Lahir -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Tanggal Lahir <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="date" 
+              name="tanggal_lahir" 
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            />
+          </div>
+          
+          <!-- Jenis Kelamin -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Jenis Kelamin <span class="text-red-500">*</span>
+            </label>
+            <select 
+              name="jenis_kelamin" 
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            >
+              <option value="">Pilih Jenis Kelamin</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+          
+          <!-- Agama -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Agama <span class="text-red-500">*</span>
+            </label>
+            <select 
+              name="agama" 
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            >
+              <option value="">Pilih Agama</option>
+              <option value="Islam">Islam</option>
+              <option value="Kristen">Kristen</option>
+              <option value="Katolik">Katolik</option>
+              <option value="Hindu">Hindu</option>
+              <option value="Buddha">Buddha</option>
+              <option value="Konghucu">Konghucu</option>
+            </select>
+          </div>
+          
+          <!-- Nomor HP -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Nomor HP/WhatsApp <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="tel" 
+              name="nomor_hp" 
+              required
+              placeholder="081234567890"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            />
+          </div>
+          
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Email <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="email" 
+              name="email" 
+              required
+              placeholder="email@contoh.com"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            />
+          </div>
+        </div>
+        
+        <!-- Alamat Lengkap -->
+        <div class="mt-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Alamat Lengkap <span class="text-red-500">*</span>
+          </label>
+          <textarea 
+            name="alamat_lengkap" 
+            required
+            rows="4"
+            placeholder="Masukkan alamat lengkap (jalan, RT/RW, kelurahan, kecamatan, kota)"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+          ></textarea>
+        </div>
+      </section>
+      
+      <!-- Data Pendidikan Sebelumnya -->
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <h2 class="text-xl font-semibold mb-6 text-gray-800 border-l-4 border-secondary pl-3">
+          Data Pendidikan Sebelumnya
+        </h2>
+        
+        <div class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Asal Sekolah <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              name="asal_sekolah" 
+              required
+              placeholder="Nama sekolah sebelumnya"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            />
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Alamat Asal Sekolah <span class="text-red-500">*</span>
+            </label>
+            <textarea 
+              name="alamat_sekolah" 
+              required
+              rows="4"
+              placeholder="Alamat lengkap sekolah sebelumnya"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+            ></textarea>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Data Orang Tua -->
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <h2 class="text-xl font-semibold mb-6 text-gray-800 border-l-4 border-secondary pl-3">
+          Data Orang Tua/Wali
+        </h2>
+        
+        <div class="space-y-8">
+          <!-- Data Ayah -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-4 pb-2 border-b border-gray-200">
+              Data Ayah
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Nama Lengkap Ayah <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="nama_ayah" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Nomor Telepon Ayah <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="tel" 
+                  name="telepon_ayah" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Pekerjaan Ayah <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="pekerjaan_ayah" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Alamat Ayah <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="alamat_ayah" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <!-- Data Ibu -->
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-4 pb-2 border-b border-gray-200">
+              Data Ibu
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Nama Lengkap Ibu <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="nama_ibu" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Nomor Telepon Ibu <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="tel" 
+                  name="telepon_ibu" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Pekerjaan Ibu <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="pekerjaan_ibu" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Alamat Ibu <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="alamat_ibu" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Pernyataan -->
+      <section class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <h2 class="text-xl font-semibold mb-6 text-gray-800 border-l-4 border-secondary pl-3">
+          Pernyataan
+        </h2>
+        
+        <div class="space-y-4 bg-gray-50 p-6 rounded-lg">
+          <div class="flex items-start">
+            <input 
+              type="checkbox" 
+              name="pernyataan_kebenaran" 
+              id="pernyataan_kebenaran"
+              class="mt-1 mr-3 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-secondary"
+              required
+            />
+            <label for="pernyataan_kebenaran" class="text-gray-700">
+              <span class="font-medium">Data yang saya berikan adalah benar dan dapat dipertanggungjawabkan</span>
+            </label>
+          </div>
+          
+          <div class="flex items-start">
+            <input 
+              type="checkbox" 
+              name="pernyataan_seleksi" 
+              id="pernyataan_seleksi"
+              class="mt-1 mr-3 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-secondary"
+              required
+            />
+            <label for="pernyataan_seleksi" class="text-gray-700">
+              <span class="font-medium">Saya bersedia mengikuti proses seleksi PPDB sesuai jadwal</span>
+            </label>
+          </div>
+          
+          <div class="flex items-start">
+            <input 
+              type="checkbox" 
+              name="pernyataan_keputusan" 
+              id="pernyataan_keputusan"
+              class="mt-1 mr-3 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-secondary"
+              required
+            />
+            <label for="pernyataan_keputusan" class="text-gray-700">
+              <span class="font-medium">Saya memahami bahwa keputusan panitia PPDB adalah mutlak</span>
+            </label>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button 
+          type="submit"
+          id="submitBtn"
+          class="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2 transition duration-300 text-lg shadow-lg hover:shadow-xl"
+        >
+          Kirim Pendaftaran
+        </button>
+      </div>
+    </form>
+    
+    <!-- Result Modal -->
+    <div id="resultModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-auto transform transition-all">
+        <div class="p-8">
+          <div class="text-center mb-6">
+            <div id="modalIcon" class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+              <!-- Icon akan diisi oleh JavaScript -->
+            </div>
+            <h3 id="modalTitle" class="text-2xl font-bold text-gray-900"></h3>
+          </div>
+          
+          <p id="modalMessage" class="text-gray-600 mb-6 text-center"></p>
+          
+          <div id="registrationId" class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden">
+            <p class="text-sm font-medium text-blue-800 mb-1">Kode Pendaftaran Anda:</p>
+            <p id="idValue" class="text-lg font-mono font-bold text-blue-900 text-center"></p>
+            <p class="text-xs text-blue-600 mt-2 text-center">Simpan kode ini untuk pengecekan status</p>
+          </div>
+          
+          <div class="flex space-x-3">
+            <button 
+              onclick="closeModal()"
+              class="flex-1 px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 transition duration-200"
+            >
+              Tutup
+            </button>
+            <a 
+              href="/ppdb/status"
+              id="checkStatusBtn"
+              class="flex-1 px-4 py-3 bg-gray-100 text-gray-800 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 transition duration-200 text-center hidden"
+            >
+              Cek Status
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const form = document.getElementById('registrationForm');
+    const modal = document.getElementById('resultModal');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Disable submit button
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Mengirim...';
+      submitBtn.classList.add('opacity-50');
+      
+      // Collect form data
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Convert checkboxes to boolean
+      data.pernyataan_kebenaran = formData.has('pernyataan_kebenaran');
+      data.pernyataan_seleksi = formData.has('pernyataan_seleksi');
+      data.pernyataan_keputusan = formData.has('pernyataan_keputusan');
+      
+      try {
+        const response = await fetch('/api/ppdb/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          showModal(
+            'success',
+            'Pendaftaran Berhasil!',
+            'Data pendaftaran Anda telah berhasil disimpan dan sedang menunggu proses review oleh admin.',
+            result.data.kode_pendaftaran
+          );
+          form.reset();
+        } else {
+          showModal(
+            'error',
+            'Terjadi Kesalahan',
+            result.message || 'Gagal menyimpan data pendaftaran',
+            null
+          );
+        }
+      } catch (error) {
+        showModal(
+          'error',
+          'Error',
+          'Terjadi kesalahan pada server. Silakan coba lagi.',
+          null
+        );
+      } finally {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Kirim Pendaftaran';
+        submitBtn.classList.remove('opacity-50');
+      }
+    });
+    
+    function showModal(type, title, message, kode) {
+      const modalIcon = document.getElementById('modalIcon');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const idSection = document.getElementById('registrationId');
+      const idValue = document.getElementById('idValue');
+      const checkStatusBtn = document.getElementById('checkStatusBtn');
+      
+      // Set modal content
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      
+      // Set icon based on type
+      if (type === 'success') {
+        modalIcon.innerHTML = `
+          <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        `;
+        modalIcon.className = 'mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4';
+      } else {
+        modalIcon.innerHTML = `
+          <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        `;
+        modalIcon.className = 'mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4';
+      }
+      
+      // Show/hide registration ID
+      if (kode) {
+  idValue.textContent = kode;
+  idSection.classList.remove('hidden');
+  checkStatusBtn.classList.remove('hidden');
+}
+
+      
+      // Show modal
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+    
+    // Auto-hide modal after 10 seconds for success
+    let modalTimeout;
+    form.addEventListener('submit', () => {
+      if (modalTimeout) clearTimeout(modalTimeout);
+      modalTimeout = setTimeout(() => {
+        if (!modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      }, 10000);
+    });
+  </script>
+  
+  <style>
+    /* Custom styles */
+    input, select, textarea {
+      transition: all 0.2s ease-in-out;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    #resultModal {
+      backdrop-filter: blur(4px);
+    }
+    
+    /* Animation for modal */
+    @keyframes modalEnter {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    #resultModal > div {
+      animation: modalEnter 0.3s ease-out;
+    }
+    
+    /* Checkbox styling */
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+    
+    /* Required field asterisk */
+    .required::after {
+      content: " *";
+      color: #ef4444;
+    }
+  </style>
+</Layout>

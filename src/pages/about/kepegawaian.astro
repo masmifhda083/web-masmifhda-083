@@ -1,0 +1,88 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import { getEntry } from "astro:content"
+import Sidebar from "../../components/Sidebar.astro"
+import Breadcrumb from '../../components/Breadcrumb.astro';
+const about = await getEntry("about", "index")
+if (!about) throw new Error("About data not found")
+
+const { kepegawaian } = about.data
+const item = kepegawaian.items[0]
+const backgroundImage = item?.image
+
+function parseTable(markdown) {
+  const lines = markdown
+    .split("\n")
+    .map(l => l.trim())
+    .filter(l => l.startsWith("|"))
+
+  const rows = lines.slice(2)
+
+  return rows.map(row => {
+    const cols = row
+      .split("|")
+      .map(c => c.trim())
+      .filter(Boolean)
+
+    return {
+      nama: cols[0],
+      role: cols[1]
+    }
+  })
+}
+
+const rows = parseTable(item.body)
+const title = "Tendik dan Kependidikan"
+---
+<Layout title={title}>
+  <!-- HERO -->
+  <section class="relative py-12 px-4">
+    <div class="container relative w-full h-screen mx-auto rounded-2xl bg-cover bg-center before:content-[''] before:absolute before:bg-black before:opacity-70 before:inset-0 before:rounded-2xl before:w-full before:h-full" 
+          style={`background-image: url(${backgroundImage})`}>
+      <div class="relative w-full h-full flex flex-col items-center justify-center">
+          <h1 class="text-xl md:text-3xl text-surface text-center p-2 font-semibold">
+            {title}
+          </h1>
+          <Breadcrumb title={title} parent={{ label: "About", href: "/about" }}/>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLE -->
+  <section>
+    <div class="container px-4 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6">
+      <div class="w-full lg:w-3/4 space-y-3 overflow-x-auto mb-12">
+        <h2 class="text-2xl font-semibold mb-6">
+            {item.title}
+        </h2>
+        <table class="w-full text-sm">
+          <thead class="bg-surface">
+            <tr>
+              <th class="px-2 py-3 text-left">
+                Nama
+              </th>
+              <th class="px-2 py-3 text-left">
+                Jabatan
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.map((row, index) => (
+                <tr class={index % 2 === 0 ? "bg-surface" : "bg-muted text-surface"}>
+                  <td class="border-y px-2 py-2">
+                    {row.nama}
+                  </td>
+                  <td class="border-y px-2 py-2">
+                    {row.role}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <Sidebar />
+    </div>
+  </section>
+</Layout>

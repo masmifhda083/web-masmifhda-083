@@ -1,0 +1,130 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-base);
+}
+
+@theme {
+  --font-dafoe: "Mr Dafoe", cursive;
+
+  --color-background: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-text: var(--color-text-base);
+  --color-heading: var(--color-text-heading);
+  --color-muted: var(--color-text-muted);
+  --color-link: var(--color-link);
+  --color-link-hover: var(--color-link-hover);
+  --color-border: var(--color-border);
+}
+
+/* Global element */
+a {
+  color: var(--color-link);
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+hr {
+  border-color: var(--color-border);
+}
+
+/* ===== PROSE VARIANT ===== */
+
+@utility prose-pink {
+  @apply prose;
+  & > * {
+    --tw-prose-body: var(--color-text);
+    --tw-prose-headings: var(--color-heading);
+    --tw-prose-links: var(--color-link);
+    --tw-prose-bold: var(--color-heading);
+    --tw-prose-hr: var(--color-border);
+    --tw-prose-quotes: var(--color-heading);
+    --tw-prose-quote-borders: var(--color-border);
+    --tw-prose-captions: var(--color-muted);
+    --tw-prose-code: var(--color-heading);
+    --tw-prose-pre-bg: var(--color-surface);
+
+    --tw-prose-invert-body: var(--color-text);
+    --tw-prose-invert-headings: var(--color-heading);
+    --tw-prose-invert-links: var(--color-link);
+  }
+}
+
+@utility prose {
+  ol,
+  ul {
+    @apply my-4;
+
+    ol,
+    ul {
+      @apply my-1;
+    }
+
+    li {
+      @apply my-1 ml-6;
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p {
+        @apply my-1;
+      }
+    }
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  table {
+    @apply my-4 w-full table-auto border-collapse text-center text-sm/6;
+
+    thead {
+      @apply border-b border-border;
+    }
+
+    tfoot {
+      @apply border-t border-border;
+    }
+
+    tr {
+      @apply border-y border-border even:bg-surface;
+    }
+
+    th {
+      @apply font-semibold;
+    }
+
+    td,
+    th {
+      @apply p-2;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold text-heading empty:hidden m-0;
+  }
+
+  p {
+    @apply text-text text-base empty:hidden;
+  }
+}

@@ -1,0 +1,454 @@
+---
+// src/pages/dashboard/ppdb.astro
+import Layout from '../../layouts/Layout.astro';
+import { getAllUsers } from '../../lib/db';
+
+const usersResult = await getAllUsers();
+const allUsers = usersResult.success ? usersResult.data : [];
+
+// Get unique years from data
+const uniqueYears = [...new Set(allUsers.map(user => user.tahun_ppdb))].sort();
+
+// Get current year from URL or default to "Semua"
+const url = new URL(Astro.request.url);
+const selectedYear = url.searchParams.get('tahun') || 'Semua';
+
+// Filter users by year if selected
+const filteredUsers = selectedYear === 'Semua' 
+  ? allUsers 
+  : allUsers.filter(user => user.tahun_ppdb === selectedYear);
+
+// Calculate statistics
+const calculateStats = (users) => {
+  const total = users.length;
+  const pending = users.filter(u => !u.status || u.status === 'pending').length;
+  const review = users.filter(u => u.status === 'review').length;
+  const approved = users.filter(u => u.status === 'approved').length;
+  const rejected = users.filter(u => u.status === 'rejected').length;
+  
+  return { total, pending, review, approved, rejected };
+};
+
+const stats = calculateStats(filteredUsers);
+const allStats = calculateStats(allUsers);
+
+const ipaUsers = filteredUsers.filter(u => u.jurusan === 'IPA');
+const ipsUsers = filteredUsers.filter(u => u.jurusan === 'IPS');
+const bahasaUsers = filteredUsers.filter(u => u.jurusan === 'Bahasa');
+
+---
+
+<Layout title="Admin PPDB">
+  <div class="container min-h-screen mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Admin Panel - Pendaftaran PPDB</h1>
+    <button 
+        id="logoutBtn"
+        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium flex items-center"
+      >
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+        </svg>
+        Logout
+    </button>
+    <!-- Filter Section -->
+    <div class="bg-body rounded-xl shadow-lg p-6 mb-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Year Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Filter Berdasarkan Tahun PPDB</label>
+          <div class="flex flex-wrap gap-2">
+            <a href="?tahun=Semua">
+              <p class={`px-4 py-2 rounded-lg font-medium transition ${
+                selectedYear === 'Semua' 
+                  ? 'bg-primary text-surface' 
+                  : 'bg-secondary text-surface hover:bg-primary'
+              }`}>Semua Tahun</p>
+            </a>
+            {uniqueYears.map(year => (
+              <a href={`?tahun=${year}`}>
+                <p class={`px-4 py-2 rounded-lg font-medium transition ${
+                  selectedYear === year 
+                    ? 'bg-primary text-surface hover:bg-secondary' 
+                    : 'bg-secondary text-surface hover:bg-primary'
+                }`}>{year}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+        
+        <!-- Export Button -->
+       
+        <div class="flex flex-wrap items-end gap-3">
+          <!-- Select Jurusan -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Filter Jurusan
+            </label>
+            <select
+              id="jurusanSelect"
+              class="px-3 py-2 border rounded-lg text-sm"
+            >
+              <option value="">Semua Jurusan</option>
+              <option value="IPA">IPA</option>
+              <option value="IPS">IPS</option>
+              <option value="Bahasa">Bahasa</option>
+            </select>
+          </div>
+
+          <!-- Export Button -->
+          <button
+            id="exportBtn"
+            class="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800"
+          >
+            Export CSV
+          </button>
+        </div>
+
+      </div>
+      
+      <!-- Current Filter Info -->
+      <div class="mt-4 text-sm text-gray-600">
+        <p>
+          Menampilkan data untuk: 
+          <span class="font-medium ml-1">
+            {selectedYear === 'Semua' ? 'Semua Tahun' : `Tahun ${selectedYear}`}
+          </span>
+        </p>
+      </div>
+    </div>
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <!-- Total Card -->
+      <div class="bg-body rounded-xl shadow-lg p-6 border-t-4 border-blue-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Total Pendaftar</p>
+            <p class="text-2xl font-bold text-gray-800">{stats.total}</p>
+          </div>
+          <div class="p-3 bg-blue-100 rounded-lg">
+            <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          {selectedYear === 'Semua' ? 'Semua tahun' : `Tahun ${selectedYear}`}
+        </p>
+      </div>
+      
+      <!-- Pending Card -->
+      <div class="bg-body rounded-xl shadow-lg p-6 border-t-4 border-yellow-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Menunggu</p>
+            <p class="text-2xl font-bold text-gray-800">{stats.pending}</p>
+          </div>
+          <div class="p-3 bg-yellow-100 rounded-lg">
+            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          {stats.total > 0 ? `${Math.round((stats.pending / stats.total) * 100)}% dari total` : 'Tidak ada data'}
+        </p>
+      </div>
+      
+      
+      <!-- Approved Card -->
+      <div class="bg-body rounded-xl shadow-lg p-6 border-t-4 border-green-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Diterima</p>
+            <p class="text-2xl font-bold text-gray-800">{stats.approved}</p>
+          </div>
+          <div class="p-3 bg-green-100 rounded-lg">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          {stats.total > 0 ? `${Math.round((stats.approved / stats.total) * 100)}% dari total` : 'Tidak ada data'}
+        </p>
+      </div>
+      
+      <!-- Rejected Card -->
+      <div class="bg-body rounded-xl shadow-lg p-6 border-t-4 border-red-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Ditolak</p>
+            <p class="text-2xl font-bold text-gray-800">{stats.rejected}</p>
+          </div>
+          <div class="p-3 bg-red-100 rounded-lg">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          {stats.total > 0 ? `${Math.round((stats.rejected / stats.total) * 100)}% dari total` : 'Tidak ada data'}
+        </p>
+      </div>
+    </div>
+    <!-- Users Table -->
+      <h2 class="text-xl font-bold mb-4">Jurusan IPA <span class="text-green-700">{ipaUsers.length}</span> Pendaftar</h2>
+    <div class="bg-body rounded-xl shadow-lg mb-6">
+
+    {ipaUsers.length > 0 ? (
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr class="*:p-3 text-left text-xs  text-gray-500 uppercase tracking-wider">
+              <th class="font-medium">ID Pendaftaran</th>
+              <th class="font-medium">Tanggal</th>
+              <th class="font-medium">Nama</th>
+              <th class="font-medium">Status</th>
+              <th class="font-medium">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ipaUsers.map(user => (
+              <tr>
+                <td class="pl-3 py-4 text-sm font-mono text-gray-900">{user.kode_pendaftaran}</td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">
+                    {new Date(user.created_at).toLocaleDateString('id-ID')}
+                  </div>
+                </td>
+                <td class="text-sm py-2">{user.nama_lengkap}</td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <span class={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full status-badge capitalize ${
+                      user.status === 'approved' ? 'bg-green-100 text-green-800' :
+                      user.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                      user.status === 'review' ? 'bg-blue-100 text-blue-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {user.status || 'pending'}
+                    </span>
+                  </td>
+                <td class="px-3 py-2 whitespace-nowrap text-sm font-medium">
+                  <a 
+                    href={`/dashboard/ppdb/detail?id=${user.id}`}
+                    class="text-secondary hover:text-blue-900 mr-3"
+                  >
+                    Detail
+                  </a>
+                  <a 
+                    href={`/api/ppdb/update-status?id=${user.id}&status=approved`}
+                    class="text-green-600 hover:text-green-900 mr-2 action-approve"
+                  >
+                    Terima
+                  </a>
+                  <a 
+                    href={`/api/ppdb/update-status?id=${user.id}&status=rejected`}
+                    class="text-red-600 hover:text-red-900 action-reject"
+                  >
+                    Tolak
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      ) : (
+        <p class="text-sm text-gray-500">Tidak ada pendaftar IPA</p>
+      )}
+      </div>
+      <h2 class="text-xl font-bold mt-12 mb-5">Jurusan IPS <span class="text-green-700">{ipsUsers.length}</span> Pendaftar</h2>
+    <div class="bg-body rounded-xl shadow-lg mb-6">
+
+    {ipsUsers.length > 0 ? (
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr class="*:p-3 text-left text-xs  text-gray-500 uppercase tracking-wider">
+              <th class="font-medium">ID Pendaftaran</th>
+              <th class="font-medium">Tanggal</th>
+              <th class="font-medium">Nama</th>
+              <th class="font-medium">Status</th>
+              <th class="font-medium">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ipsUsers.map(user => (
+              <tr>
+                <td class="px-3 py-4 text-sm font-mono text-gray-900">{user.kode_pendaftaran}</td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">
+                    {new Date(user.created_at).toLocaleDateString('id-ID')}
+                  </div>
+                </td>
+                <td class="text-sm px-3 py-2">{user.nama_lengkap}</td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <span class={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full status-badge ${
+                      user.status === 'approved' ? 'bg-green-100 text-green-800' :
+                      user.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                      user.status === 'review' ? 'bg-blue-100 text-blue-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {user.status || 'pending'}
+                    </span>
+                  </td>
+                <td class="px-3 py-2 whitespace-nowrap text-sm font-medium">
+                  <a 
+                    href={`/dashboard/ppdb/detail?id=${user.id}`}
+                    class="text-secondary hover:text-blue-900 mr-3"
+                  >
+                    Detail
+                  </a>
+                  <a 
+                    href={`/api/ppdb/update-status?id=${user.id}&status=approved`}
+                    class="text-green-600 hover:text-green-900 mr-2 action-approve"
+                  >
+                    Terima
+                  </a>
+                  <a 
+                    href={`/api/ppdb/update-status?id=${user.id}&status=rejected`}
+                    class="text-red-600 hover:text-red-900 action-reject"
+                  >
+                    Tolak
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      ) : (
+        <p class="text-sm text-gray-500">Tidak ada pendaftar IPS</p>
+      )}
+      </div>
+      <h2 class="text-xl font-bold mt-12 mb-5">Jurusan BAHASA <span class="text-green-700">{bahasaUsers.length}</span> Pendaftar</h2>
+    <div class="bg-body rounded-xl shadow-lg mb-6">
+
+    {bahasaUsers.length > 0 ? (
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr class="space-x-3 text-left text-xs  text-gray-500 uppercase tracking-wider">
+              <th class="font-medium">ID Pendaftaran</th>
+              <th class="font-medium">Tanggal</th>
+              <th class="font-medium">Nama</th>
+              <th class="font-medium">Status</th>
+              <th class="font-medium">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ipsUsers.map(user => (
+              <tr>
+                <td class="px-3 py-4 text-sm font-mono text-gray-900">{user.kode_pendaftaran}</td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">
+                    {new Date(user.created_at).toLocaleDateString('id-ID')}
+                  </div>
+                </td>
+                <td class="text-sm px-3 py-2">{user.nama_lengkap}</td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <span class={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full status-badge ${
+                      user.status === 'approved' ? 'bg-green-100 text-green-800' :
+                      user.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                      user.status === 'review' ? 'bg-blue-100 text-blue-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {user.status || 'pending'}
+                    </span>
+                  </td>
+                <td class="px-3 py-2 whitespace-nowrap text-sm font-medium">
+                  <a 
+                    href={`/dashboard/ppdb/detail?id=${user.id}`}
+                    class="text-secondary hover:text-blue-900 mr-3"
+                  >
+                    Detail
+                  </a>
+                  <a 
+                    href={`/api/ppdb/update-status?id=${user.id}&status=approved`}
+                    class="text-green-600 hover:text-green-900 mr-2 action-approve"
+                  >
+                    Terima
+                  </a>
+                  <a 
+                    href={`/api/ppdb/update-status?id=${user.id}&status=rejected`}
+                    class="text-red-600 hover:text-red-900 action-reject"
+                  >
+                    Tolak
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      ) : (
+        <p class="text-sm text-gray-500">Tidak ada pendaftar BAHASA</p>
+      )}
+      </div>
+    <!-- Footer Summary -->
+    <div class="mt-6 text-center text-sm text-gray-500">
+      <p>
+        {selectedYear === 'Semua' 
+          ? `Menampilkan semua data dari ${uniqueYears.length} tahun akademik` 
+          : `Data hanya untuk tahun akademik ${selectedYear}`}
+      </p>
+      <p class="mt-1">
+        Terakhir diupdate: {new Date().toLocaleDateString('id-ID', { 
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}
+      </p>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Logout function
+      document.getElementById('logoutBtn').addEventListener('click', async function() {
+        if (confirm('Apakah Anda yakin ingin logout?')) {
+          try {
+            await fetch('/api/admin/logout', { method: 'POST' });
+            window.location.href = '/dashboard/login';
+          } catch (error) {
+            alert('Gagal logout. Silakan coba lagi.');
+          }
+        }
+      });
+      // Konfirmasi sebelum update status
+      document.querySelectorAll('.action-approve, .action-reject').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const action = this.classList.contains('action-approve') ? 'menerima' : 'menolak';
+          const confirmed = confirm(`Apakah Anda yakin ingin ${action} pendaftaran ini?`);
+          
+          if (!confirmed) {
+            e.preventDefault();
+          }
+        });
+      });
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+    const exportBtn = document.getElementById('exportBtn');
+    const jurusanSelect = document.getElementById('jurusanSelect');
+
+    exportBtn.addEventListener('click', () => {
+      const jurusan = jurusanSelect.value;
+      const tahun = new URLSearchParams(window.location.search).get('tahun');
+
+      let url = '/api/ppdb/export?';
+
+      if (tahun && tahun !== 'Semua') {
+        url += `tahun=${encodeURIComponent(tahun)}&`;
+      }
+
+      if (jurusan) {
+        url += `jurusan=${encodeURIComponent(jurusan)}`;
+      }
+
+      window.location.href = url;
+    });
+  });
+  </script>
+</Layout>

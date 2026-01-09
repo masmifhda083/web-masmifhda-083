@@ -1,0 +1,56 @@
+---
+// src/pages/authors.astro
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+const authors = await getCollection("authors");
+
+// Count posts per author
+const allPosts = await getCollection("posts");
+const authorStats = new Map();
+
+allPosts.forEach(post => {
+  const authorUsername = post.data.author;
+  authorStats.set(authorUsername, (authorStats.get(authorUsername) || 0) + 1);
+});
+---
+
+<Layout title="Authors" description="Daftar penulis dan kontributor">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Authors & Contributors</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {authors.map(author => {
+        const postCount = authorStats.get(author.data.username) || 0;
+        
+        return (
+          <a 
+            href={`/author/${author.data.username}`}
+            class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center"
+          >
+            <img 
+              src={author.data.avatar} 
+              alt={author.data.name}
+              class="w-24 h-24 rounded-full mb-4 object-cover"
+            />
+            
+            <h3 class="text-xl font-bold mb-1">{author.data.name}</h3>
+            <span class="text-blue-600 text-sm mb-3">{author.data.role}</span>
+            
+            {author.data.bio && (
+              <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                {author.data.bio}
+              </p>
+            )}
+            
+            <div class="mt-auto">
+              <div class="text-sm text-gray-500">
+                {postCount} artikel
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</Layout>

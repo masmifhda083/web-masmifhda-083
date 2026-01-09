@@ -1,0 +1,167 @@
+{
+  "hero": {
+    "enabled": true,
+    "slides": [
+      {
+        "backgroundImage": "/uploads/bakar.jpeg",
+        "welcome": "Selamat Datang di",
+        "headline": "SMA Negeri 1 Indonesia",
+        "city": "Malang",
+        "subtitle": "Sekolah Unggulan Berbasis Se-Indonesia"
+      },
+      {
+        "backgroundImage": "/uploads/hero-2.jpg",
+        "welcome": "Slide Kedua",
+        "headline": "Judul Slide 2",
+        "city": "Kota Kedua",
+        "subtitle": "Deskripsi slide kedua"
+      },
+      {
+        "backgroundImage": "/uploads/hero-3.jpg",
+        "welcome": "Slide Ketiga",
+        "headline": "Judul Slide 3",
+        "city": "Kota Ketiga",
+        "subtitle": "Deskripsi slide ketiga"
+      }
+    ],
+    "textColors": {
+      "welcomeColor": "#ffffff",
+      "headlineColor": "#ffffff",
+      "cityColor": "#fbbf24",
+      "subtitleColor": "#e5e7eb"
+    },
+    "overlay": {
+      "gradientColor": "#14532d",
+      "opacity": 50
+    },
+    "marquee": {
+      "scrollSpeed": 15,
+      "enabled": true
+    }
+  },
+  "header": {
+    "items": [
+      {
+        "label": "Home",
+        "href": "/",
+        "isActive": true
+      },
+      {
+        "label": "Profil ",
+        "href": "/about",
+        "isActive": false
+      },
+      {
+        "label": "Berita",
+        "href": "/posts/news",
+        "isActive": false
+      },
+      {
+        "label": "Pengumuman",
+        "href": "/posts/pengumuman",
+        "isActive": false
+      },
+      {
+        "label": "Prestasi",
+        "href": "/posts/prestasi",
+        "isActive": false
+      },
+      {
+        "label": "Kurikulum",
+        "href": "/posts/Kurikulum"
+      },
+      {
+        "label": "Kontak",
+        "href": "/contact",
+        "isActive": false
+      }
+    ],
+    "style": {
+      "bgColor": "#F6F6F6",
+      "textColor": "#3D5272",
+      "hoverColor": "#6689BF",
+      "borderColor": "#e5e7eb",
+      "bgTransparent": "solid"
+    },
+    "schoolInfo": {
+      "name": "SMAN 1 INDONESIA",
+      "logo": "/uploads/logo-sma.png",
+      "logoAlt": "Logo Sekolah",
+      "logoWidthDesktop": 40,
+      "logoWidthMobile": 40,
+      "showName": true
+    }
+  },
+  "slider": {
+    "images": [
+      {
+        "url": "/uploads/smanegeri1indonesia.png",
+        "alt": "Slider Image",
+        "caption": ""
+      },
+      {
+        "url": "/uploads/peter-robbins-nKxFAgpvhOw-unsplash.jpg",
+        "alt": "Slider Image",
+        "caption": ""
+      },
+      {
+        "url": "/uploads/zoshua-colah-bz4vI87iRQc-unsplash.jpg",
+        "alt": "Slider Image",
+        "caption": ""
+      }
+    ],
+    "schoolInfo": {
+      "name": "SMA NEGERI 01 ",
+      "city": "INDONESIA",
+      "motto": "SEKOLAH UNGGULAN BERBASIS KARAKTER",
+      "welcomeMessage": "Welcome to",
+      "textSettings": {
+        "color": "#FFFFFF",
+        "fontFamily": {
+          "welcome": "font-mono"
+        }
+      }
+    },
+    "overlay": {
+      "color": "#000000",
+      "opacity": "0.8"
+    },
+    "animation": {
+      "autoSlide": true,
+      "marqueeSpeed": 1
+    }
+  },
+  "seo": {
+    "siteInfo": {
+      "siteName": "Sma Negeri 1 Indonesia",
+      "siteUrl": "https://smanegeri1indonesia.sch.id",
+      "siteDescription": "Sekolah Unggulan Berbasis Karakter",
+      "siteLogo": "/uploads/logo-sma.png",
+      "favicon": "/uploads/logo-sma.png"
+    },
+    "globalMeta": {
+      "titleTemplate": "%s | Sma Negeri 1 Indonesia",
+      "defaultTitle": "Sma Negeri 1 Indonesia",
+      "defaultDescription": "Sekolah Negeri Unggulan",
+      "defaultKeywords": "Sma Negeri 1 Indonesia"
+    },
+    "openGraph": {
+      "type": "website"
+    }
+  },
+  "footer": {
+    "schoolName": "SMA NEGERI 1 INDONESIA"
+  },
+  "themeColors": {
+    "background": "#F6F6F6",
+    "primary": "#254166",
+    "secondary": "#6689BF",
+    "surface": "#F6F6F6",
+    "textBase": "#111827",
+    "textHeading": "#3D5272",
+    "textMuted": "#6b7280",
+    "link": "#3D5272",
+    "linkHover": "#6689BF",
+    "border": "#D4D4D4"
+  }
+}

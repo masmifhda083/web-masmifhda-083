@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ExtracurricularList from '../../components/ExtracurricularList.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+const allExtracurricular = await getCollection('extracurricular');
+const title = "Ekstrakurikuler"
+---
+
+<Layout title={title} description="Daftar lengkap ekstrakurikuler yang tersedia di sekolah kami">
+  <section class="bg-surface">
+    <!-- Hero Section -->
+    <div class="bg-primary text-surface">
+      <div class="container mx-auto px-4 py-16">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
+          <p class="text-xl text-surface">
+            Temukan minat dan bakat Anda melalui berbagai kegiatan ekstrakurikuler yang menarik
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="container mx-auto px-4 py-12">
+      <div class="max-w-6xl mx-auto">
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div class="bg-surface rounded-lg p-6 text-center">
+            <div class="text-5xl font-bold text-primary mb-2">{allExtracurricular.length}</div>
+            <div class="text-secondary font-semibold">Ekstrakurikuler</div>
+          </div>
+          <div class="bg-surface rounded-lg p-6 text-center">
+            <div class="text-5xl font-bold text-primary mb-2">
+              {allExtracurricular.filter(item => item.data.schedule).length}
+            </div>
+            <div class="text-secondary font-semibold">Aktif</div>
+          </div>
+          <div class="bg-surface rounded-lg p-6 text-center">
+            <div class="text-5xl font-bold text-primary mb-2">
+              {allExtracurricular.reduce((total, item) => 
+                total + (item.data.achievements?.length || 0), 0
+              )}
+            </div>
+            <div class="text-secondary font-semibold">Prestasi</div>
+          </div>
+        </div>
+
+        <!-- Extracurricular List -->
+        <ExtracurricularList maxItems={allExtracurricular.length} />
+
+        <!-- Info Pendaftaran -->
+        <div class="bg-surface rounded-lg p-8 mt-12 text-center">
+          <h2 class="text-2xl font-bold text-primary mb-4">Tertarik Bergabung?</h2>
+          <p class="text-muted mb-6 max-w-2xl mx-auto">
+            Daftarkan diri Anda untuk mengikuti ekstrakurikuler pilihan melalui wali kelas atau langsung menghubungi pembina masing-masing.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="/contact">
+              <span class="bg-secondary text-surface px-6 py-3 rounded-lg hover:bg-primary transition-colors font-semibold">Hubungi Kami</span>
+            </a>
+            <a
+              href="/profile"
+              class="bg-primary px-6 py-3 rounded-lg hover:bg-secondary transition-colors font-semibold"
+            >
+             
+              <span class="text-surface"> Profil Sekolah</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

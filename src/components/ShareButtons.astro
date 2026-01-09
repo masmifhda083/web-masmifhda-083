@@ -1,0 +1,52 @@
+---
+// FILE: src/components/ShareButtons.astro
+import { SOCIAL_ICON_REGISTRY } from "../config/socialIcons"
+import { SHARE_PLATFORMS } from "../config/sharePlatforms"
+const SHARE_COLORS = {
+  twitter: "#000000",
+  facebook: "#1877F2",
+  whatsapp: "#25D366",
+  telegram: "#229ED9",
+  linkedin: "#0A66C2",
+  threads: "#000000"
+}
+const { title = "", url = "", excerpt = "" } = Astro.props
+---
+<section role="navigation" aria-label="Share article">
+  <div class="flex gap-2">
+    {Object.entries(SHARE_PLATFORMS).map(([key, config]) => {
+      const icon = SOCIAL_ICON_REGISTRY[key]
+      if (!icon) return null
+
+      const shareUrl = config.buildUrl({ title, url, excerpt })
+
+      return (
+        <a href={shareUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Share on ${icon.label}`}
+          class="p-2 rounded-full bg-primary hover:bg-secondary transition"
+          style={`background-color:${SHARE_COLORS[key]};color:#fff`}>
+            <p set:html={icon.svg} class="text-surface "></p>
+        </a>
+      )
+    })}
+  </div>
+
+  <button id="share-native" class="ml-2 text-sm">
+    Share
+  </button>
+</section>
+
+<script client:load>
+  const btn = document.getElementById("share-native")
+  if (btn && navigator.share) {
+    btn.addEventListener("click", () => {
+      navigator.share({
+        title: {title},
+        text: {excerpt},
+        url: {url}
+      }).catch(() => {})
+    })
+  }
+</script>

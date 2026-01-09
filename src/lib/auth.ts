@@ -1,0 +1,81 @@
+// src/lib/auth.ts
+import crypto from 'crypto';
+// Simpan credentials di environment variables (lebih aman)
+// Atau di file ini jika tidak ingin pakai env
+
+export const ADMIN_CREDENTIALS = {
+  username: process.env.ADMIN_USERNAME || 'admin',
+  passwordHash: process.env.ADMIN_PASSWORD_HASH || ''
+};
+
+// Secret key untuk session (gunakan environment variable)
+export const SESSION_SECRET = process.env.SESSION_SECRET || 'ppdb-secret-key-change-this';
+
+// Session expiration (30 menit)
+export const SESSION_EXPIRY = 30 * 60 * 1000; // 30 menit dalam milidetik
+
+// Helper untuk hash password sederhana (dalam production gunakan bcrypt)
+export function hashPassword(password: string): string {
+  return crypto
+    .createHash('sha256')
+    .update(password)
+    .digest('hex');
+}
+
+// Cek credentials
+export function verifyCredentials(username: string, password: string): boolean {
+  const hashedInput = hashPassword(password);
+  return (
+    username === ADMIN_CREDENTIALS.username &&
+    hashedInput === ADMIN_CREDENTIALS.passwordHash
+  );
+}
+
+// Session management
+interface SessionData {
+  username: string;
+  expiresAt: number;
+}
+
+// Simpan session di memory (untuk production gunakan Redis atau database)
+const sessions = new Map<string, SessionData>();
+
+export function createSession(username: string): string {
+  const sessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+  const expiresAt = Date.now() + SESSION_EXPIRY;
+  
+  sessions.set(sessionId, { username, expiresAt });
+  
+  // Cleanup expired sessions setiap 5 menit
+  setTimeout(() => cleanupSessions(), 5 * 60 * 1000);
+  
+  return sessionId;
+}
+
+export function verifySession(sessionId: string): boolean {
+  const session = sessions.get(sessionId);
+  
+  if (!session) return false;
+  
+  if (Date.now() > session.expiresAt) {
+    sessions.delete(sessionId);
+    return false;
+  }
+  
+  // Perpanjang session
+  session.expiresAt = Date.now() + SESSION_EXPIRY;
+  return true;
+}
+
+export function destroySession(sessionId: string): void {
+  sessions.delete(sessionId);
+}
+
+function cleanupSessions() {
+  const now = Date.now();
+  for (const [sessionId, session] of sessions.entries()) {
+    if (now > session.expiresAt) {
+      sessions.delete(sessionId);
+    }
+  }
+}

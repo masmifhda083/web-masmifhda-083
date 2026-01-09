@@ -1,0 +1,98 @@
+---
+// FILE: src/components/StaffList.astro
+import type { CollectionEntry } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
+
+type StaffEntry = CollectionEntry<'staff'>
+
+interface Teacher {
+  name: string
+  avatar?: string
+  role?: string
+}
+
+const allCollections = await getCollection('staff')
+
+let staffData: StaffEntry | null = null
+let teachers: Teacher[] = []
+
+if (allCollections.length > 0) {
+  staffData = allCollections[0]
+} else {
+  const possibleIds = ['staff', 'index', 'staff/staff', 'staff.json']
+  for (const id of possibleIds) {
+    try {
+      const entry = await getEntry('staff', id)
+      if (entry) {
+        staffData = entry as StaffEntry
+        break
+      }
+    } catch (e) {
+      // continue
+    }
+  }
+}
+
+if (staffData) {
+  teachers = (staffData.data?.teachers as Teacher[]) || []
+}
+const displayTeachers = teachers.slice(0, 12);
+
+---
+
+<div data-animate="fade">
+  {displayTeachers.length === 0 ? (
+    <div class="text-center py-8 bg-gray-50 rounded-lg">
+      <p class="text-gray-500">Belum ada data guru</p>
+    </div>
+  ) : (
+    <div>
+      <div class="splide splide-staff">
+        <div class="splide__track">
+          <ul class="splide__list">
+            {displayTeachers.map((teacher, index) => (
+              <li class="splide__slide" key={index}>
+                <div class="bg-surface rounded-lg shadow-md mx-2 h-full text-center">
+                  <div class="aspect-square overflow-hidden rounded-lg">
+                    <img
+                      src={teacher.avatar || '/uploads/placeholder.webp'}
+                      alt={teacher.name}
+                      class="w-full h-full object-cover"
+                      width="300"
+                      height="300"
+                    />
+                  </div>
+                  <div class="py-2">
+                    <h3 class="font-bold text-primary text-lg lg:text-sm mb-1">{teacher.name}</h3>
+                  {teacher.role && (
+                    <p class="text-sm lg:text-xs text-muted w-full capitalize border-t border-border">
+                      {teacher.role.replace(/-/g, ' ')}
+                    </p>
+                  )}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="splide__arrows">
+          <button class="splide__arrow splide__arrow--prev">‹</button>
+          <button class="splide__arrow splide__arrow--next">›</button>
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+<style>
+  .splide-staff .splide__arrow {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .splide__arrow:hover {
+    background: rgba(0, 0, 0, 0.9);
+  }
+</style>

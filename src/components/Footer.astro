@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+
+// Ambil data settings
+const settingsData = await getCollection('settings');
+const settings = settingsData[0]?.data || {};
+
+// Ambil nama sekolah dengan cara yang lebih aman
+let schoolName = 'Nama Sekolah';
+
+if (settings.footer?.schoolName) {
+    schoolName = settings.footer.schoolName;
+} else if (settings.header?.schoolInfo?.name) {
+    schoolName = settings.header.schoolInfo.name;
+} else if (settings.slider?.schoolInfo?.name) {
+    schoolName = settings.slider.schoolInfo.name;
+}
+
+
+// Tahun otomatis
+const currentYear = new Date().getFullYear();
+---
+
+<footer role="contentinfo" class="bg-primary">
+    <div class="container w-full mx-auto py-4">
+        <p class="block text-sm text-surface text-center">
+            © {currentYear}
+            <a href="/" aria-label="footer"> <span class="text-surface hover:text-secondary">{schoolName}</span></a>
+            . All Rights Reserved.
+        </p>
+    </div>
+</footer>

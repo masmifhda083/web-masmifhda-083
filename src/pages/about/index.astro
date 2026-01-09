@@ -1,0 +1,95 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import Breadcrumb from "../../components/Breadcrumb.astro"
+import { getEntry } from "astro:content"
+
+const about = await getEntry("about", "index")
+if (!about) throw new Error("About data not found")
+
+const { facilities, gallery, kepegawaian, profil, sambutan, visimisi } = about.data
+
+const cards = [
+  {
+    title: "Fasilitas Sekolah",
+    description: "Sarana dan prasarana pendukung kegiatan belajar",
+    image: facilities.items[0]?.image,
+    url: "/about/facilities"
+  },
+  {
+    title: "Galeri Kegiatan",
+    description: "Dokumentasi aktivitas dan kegiatan sekolah",
+    image: gallery.items[0]?.image,
+    url: "/about/gallery"
+  },
+  {
+    title: "Tenaga Pendidik",
+    description: "Daftar tenaga pendidik dan kependidikan",
+    image: kepegawaian.items[0]?.image,
+    url: "/about/kepegawaian"
+  },
+  {
+    title: "Profil Sekolah",
+    description: "Profil Sekolah",
+    image: profil.items[0]?.image,
+    url: "/about/profil"
+  },
+  {
+    title: "Sambutan Kepala Sekolah",
+    description: "Sambutan Kepala Sekolah",
+    image: sambutan.items[0]?.image,
+    url: "/about/sambutan"
+  },
+  {
+    title: "Visi Misi Sekolah",
+    description: "Visi Misi Sekolah",
+    image: visimisi.items[0]?.image,
+    url: "/about/visimisi"
+  }
+]
+const title = "Profil Sekolah"
+---
+<Layout title={title}>
+  <section
+    class="min-h-80 bg-cover bg-center flex items-center relative before:content-[''] before:absolute before:bg-black before:opacity-70 before:w-full before:h-full"
+    style={`background-image: url(${cards[3]?.image})`}
+  >
+    <div class="container relative mx-auto px-4">
+      <h1 class="text-3xl text-white text-center font-semibold">
+        {title}
+      </h1>
+      <Breadcrumb title={title} parent={{ label: "About", href: "/about" }} />
+    </div>
+  </section>
+
+  <!-- CARD SECTION -->
+  <section class="py-16">
+    <div class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        cards.map(card => (
+          <a
+            href={card.url}
+            class="group block relative rounded overflow-hidden border"
+          >
+            <img
+              src={card.image}
+              alt={card.title}
+              class="w-full h-48 object-cover transition-transform group-hover:scale-105"
+            />
+
+            <div class="absolute inset-0 bg-black/40"></div>
+
+            <div class="absolute bottom-0 p-4 text-surface">
+              <h3 class="text-lg font-semibold">
+                {card.title}
+              </h3>
+              <p class="text-sm opacity-90">
+                {card.description}
+              </p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
+

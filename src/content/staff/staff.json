@@ -1,0 +1,44 @@
+{
+  "teachers": [
+    {
+      "name": "Budi Santoso",
+      "avatar": "/uploads/humberto-chavez-F_CnS-8NlZQ-unsplash.jpg",
+      "role": "kepala-sekolah"
+    },
+    {
+      "name": "Siti Rahayu",
+      "avatar": "/uploads/model.png",
+      "role": "wakil-kepala"
+    },
+    {
+      "name": "Setia Budi",
+      "avatar": "/uploads/danny-ocean-ehUYU820lcA-unsplash.jpg",
+      "role": "pend.-biologi"
+    },
+    {
+      "name": "Ayu Ningsih",
+      "avatar": "/uploads/aksin-famizani-FkfBOZrTDYA-unsplash.jpg",
+      "role": "pend.-agama-islam"
+    },
+    {
+      "name": "Sri Arum",
+      "avatar": "/uploads/doctake-9J9LFdkvhU4-unsplash.jpg",
+      "role": "pend.-bahasa-inggris"
+    },
+    {
+      "name": "Ridwan Angkasa",
+      "avatar": "/uploads/janko-ferlic-G-jo31ESuRE-unsplash.jpg",
+      "role": "pend.-matematika"
+    },
+    {
+      "name": "Nina Selia Putri",
+      "avatar": "/uploads/muhammad-faiz-zulkeflee-KrR7xEn4HV8-unsplash.jpg",
+      "role": "pend.-fisika"
+    },
+    {
+      "name": "Agung Sedayu",
+      "avatar": "/uploads/hoi-an-photographer-O3uN6fIuTig-unsplash.jpg",
+      "role": "pend.-ekonomi"
+    }
+  ]
+}

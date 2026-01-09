@@ -1,0 +1,227 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Gallery from '../../components/Gallery.astro';
+import MarkdownRenderer from '../../components/MarkdownRenderer.astro';
+
+// Generate static paths
+export async function getStaticPaths() {
+  const extracurricularItems = await getCollection('extracurricular');
+  
+  return extracurricularItems.map((item) => {
+    let slug = item.id.split('/').pop() || item.id;
+    
+    if (!slug || slug === 'undefined') {
+      slug = item.data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+    
+    return {
+      params: { slug },
+      props: { item },
+    };
+  });
+}
+
+// Component props
+type Props = {
+  item: any;
+}
+
+const { item } = Astro.props as Props;
+
+if (!item) {
+  throw new Error('Item not found');
+}
+
+const { data } = item;
+const { slug } = Astro.params;
+
+// Fungsi untuk format tanggal
+function formatDate(date: Date) {
+  return new Date(date).toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+// Type untuk achievement
+interface Achievement {
+  title: string;
+  level?: string;
+  year?: number;
+  description?: string;
+}
+---
+
+<Layout title={data.title} description={data.description}>
+  <section>
+    <!-- Hero Section -->
+    <div class="relative bg-primary text-surface">
+      <div class="container mx-auto px-4 py-16">
+        <div class="max-w-4xl mx-auto text-center">
+          {data.shortName && (
+            <span class="inline-block bg-secondary text-surface px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              {data.shortName}
+            </span>
+          )}
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">{data.title}</h1>
+          {data.description && (
+            <p class="text-md text-surface mb-6">{data.description}</p>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="container mx-auto px-4 py-8">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Main Content -->
+          <div class="lg:col-span-2">
+            <!-- Thumbnail -->
+            {data.thumbnail && (
+              <div class="mb-8">
+                <img
+                  src={data.thumbnail}
+                  alt={data.title}
+                  class="w-full h-64 md:h-96 object-cover rounded-lg shadow-md"
+                  loading="lazy"
+                />
+              </div>
+            )}
+
+            <!-- Body Content -->
+            <article class="prose prose-base max-w-none mb-8">
+            {item.body && (
+                <MarkdownRenderer content={item.body} />
+            )}
+            </article>
+
+            <!-- Gallery Section -->
+            {data.gallery && data.gallery.length > 0 && (
+              <section class="mb-8">
+                <h2 class="text-2xl font-bold text-primary mb-6">Galeri Foto</h2>
+                <Gallery images={data.gallery} />
+              </section>
+            )}
+          </div>
+
+          <!-- Sidebar -->
+          <div class="lg:col-span-1">
+            <div class="bg-secondary rounded-lg p-6 sticky top-8">
+              <!-- Informasi Jadwal -->
+              {data.schedule && (
+                <div class="mb-6">
+                  <h3 class="text-lg font-bold text-primary mb-3">📅 Jadwal Kegiatan</h3>
+                  <div class="space-y-2 text-surface text-sm">
+                    {data.schedule.day && (
+                      <div class="flex justify-between">
+                        <span class="font-semibold">Hari:</span>
+                        <span>{data.schedule.day}</span>
+                      </div>
+                    )}
+                    {data.schedule.time && (
+                      <div class="flex justify-between">
+                        <span class="font-semibold">Waktu:</span>
+                        <span>{data.schedule.time}</span>
+                      </div>
+                    )}
+                    {data.schedule.location && (
+                      <div class="flex justify-between">
+                        <span class="font-semibold">Lokasi:</span>
+                        <span>{data.schedule.location}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <!-- Informasi Pembina -->
+              {data.instructor && (
+                <div class="mb-6">
+                  <h3 class="text-lg font-bold text-primary mb-3">👨‍🏫 Pembina</h3>
+                  <div class="text-sm">
+                    <p class="font-semibold text-surface">{data.instructor.name}</p>
+                    {data.instructor.position && (
+                      <p class="text-secondary">{data.instructor.position}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <!-- Prestasi -->
+              {data.achievements && data.achievements.length > 0 && (
+                <div class="mb-6">
+                  <h3 class="text-lg font-bold text-primary mb-3">🏆 Prestasi</h3>
+                  <div class="space-y-2">
+                    {data.achievements.slice(0, 5).map((achievement: Achievement, index: number) => (
+                      <div class="text-primary text-sm p-2 bg-surface rounded border-l-4">
+                        <p class="font-semibold">{achievement.title}</p>
+                        {achievement.level && (
+                          <p class="text-xs">Tingkat: {achievement.level}</p>
+                        )}
+                        {achievement.year && (
+                          <p class="text-xs">Tahun: {achievement.year}</p>
+                        )}
+                      </div>
+                    ))}
+                    {data.achievements.length > 3 && (
+                      <p class="text-xs text-secondary text-center mt-2">
+                        +{data.achievements.length - 3} prestasi lainnya
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.prose {
+  color: #374151;
+  line-height: 1.7;
+}
+
+.prose h2 {
+  color: #166534;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h3 {
+  color: #15803d;
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.prose ul, .prose ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose strong {
+  color: #166534;
+  font-weight: bold;
+}
+</style>

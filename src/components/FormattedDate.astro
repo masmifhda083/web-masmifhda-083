@@ -1,0 +1,57 @@
+---
+// src/components/FormattedDate.astro
+interface Props {
+  date?: Date | string | null;
+  format?: string;
+}
+
+const { date, format = 'long' } = Astro.props;
+
+// Safe date formatter
+function formatDateSafe(dateValue: Date | string | null | undefined): string {
+  if (!dateValue) return '';
+  
+  try {
+    let dateObj: Date;
+    
+    if (dateValue instanceof Date) {
+      dateObj = dateValue;
+    } else if (typeof dateValue === 'string') {
+      dateObj = new Date(dateValue);
+    } else {
+      return '';
+    }
+    
+    // Validate date
+    if (isNaN(dateObj.getTime())) {
+      return '';
+    }
+    
+    const options: Intl.DateTimeFormatOptions = {};
+    
+    switch (format) {
+      case 'short':
+        options.day = 'numeric';
+        options.month = 'short';
+        options.year = 'numeric';
+        break;
+      case 'month-year':
+        options.month = 'long';
+        options.year = 'numeric';
+        break;
+      default: // 'long'
+        options.day = 'numeric';
+        options.month = 'short';
+        options.year = 'numeric';
+    }
+    
+    return dateObj.toLocaleDateString('id-ID', options);
+  } catch (error) {
+    return '';
+  }
+}
+
+const formattedDate = formatDateSafe(date);
+---
+
+{formattedDate && <time datetime={date instanceof Date ? date.toISOString() : date}>{formattedDate}</time>}

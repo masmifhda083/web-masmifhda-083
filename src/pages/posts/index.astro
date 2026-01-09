@@ -1,0 +1,238 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import CardPosts from "../../components/CardPosts.astro"
+import { getCollection } from "astro:content"
+
+// Ambil semua post
+const allPosts = await getCollection("posts")
+
+// Kelompokkan berdasarkan kategori dengan validasi
+const postsByCategory = {}
+const categoryCounts = {}
+
+for (const post of allPosts) {
+  try {
+    // Tentukan kategori dengan validasi
+    let category = "uncategorized"
+    if (post.data.category) {
+      const cat = post.data.category.toLowerCase().trim()
+      if (cat === "other" && post.data.customCategory) {
+        category = post.data.customCategory.toLowerCase().trim()
+      } else {
+        category = cat
+      }
+    }
+    
+    // Validasi kategori
+    if (!category || category === "undefined") {
+      category = "uncategorized"
+    }
+    
+    // Bersihkan kategori
+    category = category.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
+    
+    // Format untuk display
+    const formattedCategory = category
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
+    
+    // Hitung jumlah post per kategori
+    categoryCounts[category] = (categoryCounts[category] || 0) + 1
+    
+    // Initialize jika belum ada
+    if (!postsByCategory[category]) {
+      postsByCategory[category] = {
+        label: formattedCategory,
+        posts: []
+      }
+    }
+    
+    // **PERBAIKAN UTAMA: Gunakan slug yang benar dari post.slug**
+    let postSlug = ""
+    
+    // Cara 1: Coba ambil dari post.slug
+    if (post.slug) {
+      // Jika slug berupa path (folder/subfolder/slug), ambil bagian terakhir
+      if (typeof post.slug === 'string') {
+        const parts = post.slug.split('/').filter(Boolean)
+        postSlug = parts[parts.length - 1]
+      } else {
+        postSlug = String(post.slug)
+      }
+    }
+    
+    // Cara 2: Jika masih kosong, coba buat dari title
+    if (!postSlug && post.data?.title) {
+      postSlug = post.data.title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim()
+    }
+    
+    // Cara 3: Fallback menggunakan ID atau index
+    if (!postSlug) {
+      // Gunakan post.id jika ada
+      postSlug = post.id || `post-${post.slug || 'unknown'}`
+    }
+    
+    // Validasi slug
+    postSlug = postSlug.toLowerCase().trim()
+    if (!postSlug || postSlug === "undefined") {
+    }
+    
+    // Validasi URL
+    const postUrl = `/posts/${category}/${postSlug}`
+    
+    
+    // Add post
+    postsByCategory[category].posts.push({
+      title: post.data?.title || "Judul tidak tersedia",
+      description: post.data?.description || "",
+      heroImage: post.data?.heroImage || "",
+      pubdate: post.data?.pubdate || null,
+      url: postUrl,
+      data: post.data || {},
+      slug: postSlug // Simpan slug untuk debug
+    })
+    
+  } catch (error) {
+  }
+}
+
+// Sort kategori berdasarkan jumlah post, filter out undefined
+const sortedCategories = Object.keys(postsByCategory)
+  .filter(category => category && category !== "undefined")
+  .sort((a, b) => categoryCounts[b] - categoryCounts[a])
+
+
+// Sort posts dalam setiap kategori berdasarkan tanggal
+sortedCategories.forEach(category => {
+  try {
+    postsByCategory[category].posts.sort((a, b) => {
+      try {
+        const dateA = a.pubdate ? new Date(a.pubdate).getTime() : 0
+        const dateB = b.pubdate ? new Date(b.pubdate).getTime() : 0
+        return dateB - dateA
+      } catch {
+        return 0
+      }
+    })
+  } catch (error) {
+  }
+})
+
+const pageTitle = "Semua Artikel"
+const pageDescription = "Daftar semua artikel berdasarkan kategori"
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="container mx-auto px-4 py-812">
+    {sortedCategories.length === 0 ? (
+      <div class="text-center py-12">
+        <svg
+          class="w-16 h-16 mx-auto text-muted mb-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+        <p class="text-muted text-lg mb-4">
+          Belum ada artikel yang tersedia.
+        </p>
+        <a
+          href="/"
+          class="text-secondary hover:text-primary font-medium"
+        >
+          ← Kembali ke halaman utama
+        </a>
+      </div>
+    ) : (
+      sortedCategories.map((categorySlug) => {
+        try {
+          const group = postsByCategory[categorySlug]
+          if (!group || !group.posts || group.posts.length === 0) {
+            return null
+          }
+          
+          const categoryLabel = group.label
+          const posts = group.posts
+
+
+          return (
+            <div class="mb-12 last:mb-0" key={categorySlug}>
+              <div class="flex items-center justify-between mb-6 pb-3 border-b border-border">
+                <div>
+                  <h2 class="text-2xl font-bold text-primary">
+                    {categoryLabel}
+                  </h2>
+                  <p class="text-sm text-muted mt-1">
+                    {posts.length} artikel
+                  </p>
+                </div>
+                <a
+                  href={`/posts/${categorySlug}`}
+                  class="text-secondary hover:text-primary font-medium text-sm"
+                >
+                  Lihat semua →
+                </a>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {posts.slice(0, 4).map((post, index) => {
+                  try {
+                    let dateString = ""
+                    if (post.pubdate) {
+                      try {
+                        dateString = new Date(post.pubdate).toLocaleDateString('id-ID', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric'
+                        })
+                      } catch {
+                        dateString = ""
+                      }
+                    }
+                    
+                    
+                    return (
+                      <CardPosts
+                        title={post.title || "Judul tidak tersedia"}
+                        description={post.description || ""}
+                        image={post.heroImage}
+                        date={dateString}
+                        category={categoryLabel}
+                        url={post.url}
+                        author={post.data?.author ? { name: post.data.author } : undefined}
+                        key={`${categorySlug}-${index}-${post.slug}`}
+                      />
+                    )
+                  } catch (error) {
+                    return null
+                  }
+                })}
+              </div>
+
+            </div>
+          )
+        } catch (error) {
+          return null
+        }
+      })
+    )}
+  </div>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content"
+import Layout from "../../layouts/Layout.astro"
+
+const about = await getCollection("about")
+const facilities = about[0].data.facilities.items
+---
+
+<Layout>
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl font-semibold mb-8">
+      Fasilitas Sekolah
+    </h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      {facilities.map(item => (
+        <div class="relative w-full shadow rounded overflow-hidden">
+          <img
+            src={item.image}
+            alt={item.title}
+            class="object-cover aspect-video hover:scale-125 hover:-skew-3 transition-transform duration-300"
+          />
+          <span class="absolute bottom-2 left-1/2 -translate-x-1/2 w-max bg-surface rounded-full text-xs text-primary font-bold px-3 py-2 text-center">
+            {item.title}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+  
+</Layout>

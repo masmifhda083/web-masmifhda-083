@@ -1,0 +1,41 @@
+---
+//file: src/pages/about/sambutan.astro
+import Layout from "../../layouts/Layout.astro"
+import { getEntry } from "astro:content"
+import Sidebar from "../../components/Sidebar.astro";
+import MarkdownRenderer from '../../components/MarkdownRenderer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const about = await getEntry("about", "index")
+if (!about) throw new Error("About data not found")
+
+const { sambutan } = about.data
+const item = sambutan.items[0]
+
+const backgroundImage = item?.image
+const title = "Sambutan Kepala Sekolah"
+---
+<Layout title={title}>
+  <!-- HERO -->
+  <section class="relative py-12 px-4">
+    <div class="container relative w-full h-screen mx-auto rounded-2xl bg-cover bg-center before:content-[''] before:absolute before:bg-black before:opacity-70 before:inset-0 before:rounded-2xl before:w-full before:h-full" 
+          style={`background-image: url(${backgroundImage})`}>
+      <div class="relative w-full h-full flex flex-col items-center justify-center">
+          <h1 class="text-xl md:text-3xl text-surface text-center p-2 font-semibold">
+            {title}
+          </h1>
+          <Breadcrumb title={title} parent={{ label: "About", href: "/about" }}/>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container px-4 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6">
+        <div class="w-full lg:w-3/4 overflow-x-auto mb-12">
+            <article class="prose prose-md md:prose-lg max-w-auto overflow-hidden">
+                <MarkdownRenderer content={item.body} />
+            </article>
+        </div>
+        <Sidebar />
+    </div>
+  </section>
+</Layout>

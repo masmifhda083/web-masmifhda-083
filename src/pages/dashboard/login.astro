@@ -1,0 +1,143 @@
+---
+// src/pages/dashboard/login.astro
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Admin Login">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Admin Panel Login
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Sistem PPDB - Panel Administrator
+        </p>
+      </div>
+      
+      <form class="mt-8 space-y-6" id="loginForm">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="username" class="sr-only">Username</label>
+            <input 
+              id="username" 
+              name="username" 
+              type="text" 
+              required 
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+              placeholder="Username"
+            >
+          </div>
+          <div>
+            <label for="password" class="sr-only">Password</label>
+            <input 
+              id="password" 
+              name="password" 
+              type="password" 
+              required 
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+            >
+          </div>
+        </div>
+
+        <div>
+          <button 
+            type="submit"
+            id="loginBtn"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            <span id="btnText">Sign in</span>
+            <span id="loadingSpinner" class="hidden ml-2">
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+        
+        <div id="errorMessage" class="hidden text-red-600 text-sm text-center"></div>
+      </form>
+      
+      <div class="text-center text-xs text-gray-500 mt-4">
+        <p>Hanya untuk administrator sekolah</p>
+        <p class="mt-1">Hubungi super admin jika lupa password</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('loginBtn');
+      const btnText = document.getElementById('btnText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const errorMessage = document.getElementById('errorMessage');
+      
+      // Reset error message
+      errorMessage.classList.add('hidden');
+      errorMessage.textContent = '';
+      
+      // Show loading
+      loginBtn.disabled = true;
+      btnText.textContent = 'Signing in...';
+      loadingSpinner.classList.remove('hidden');
+      
+      try {
+        const response = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          // Redirect ke admin panel
+          window.location.href = '/dashboard/ppdb';
+        } else {
+          errorMessage.textContent = result.message || 'Login failed';
+          errorMessage.classList.remove('hidden');
+          
+          // Shake animation for error
+          loginBtn.classList.add('animate-shake');
+          setTimeout(() => {
+            loginBtn.classList.remove('animate-shake');
+          }, 500);
+        }
+      } catch (error) {
+        errorMessage.textContent = 'Network error. Please try again.';
+        errorMessage.classList.remove('hidden');
+      } finally {
+        // Reset button
+        loginBtn.disabled = false;
+        btnText.textContent = 'Sign in';
+        loadingSpinner.classList.add('hidden');
+      }
+    });
+    
+    // Auto-focus username field
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('username').focus();
+    });
+  </script>
+  
+  <style>
+    .animate-shake {
+      animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-1px, 0, 0); }
+      20%, 80% { transform: translate3d(2px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+  </style>
+</Layout>

@@ -1,0 +1,14 @@
+---
+const { src } = Astro.props;
+const bgSrc = typeof src === "string" && src.length > 0 ? src : (src && typeof src === "object" && "src" in src ? (src as any).src : "/uploads/default-thumb.jpg");
+---
+<div class="bg-white shadow rounded-md overflow-hidden">
+  <img
+    src={bgSrc}
+    alt=""
+    loading="lazy"
+    decoding="async"
+    class="rounded-md aspect-4/5 object-cover object-top w-full"
+    onerror="this.onerror=null;this.src='/uploads/default-thumb.jpg';"
+  />
+</div>

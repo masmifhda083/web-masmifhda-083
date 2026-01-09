@@ -1,0 +1,42 @@
+{
+  "datappdb": {
+    "schoolName": "SMA NEGERI 1 INDONESIA",
+    "ppdbAlias": "Penerimaan Peserta Didik Baru",
+    "logoUrl": "/uploads/logo-sma.png",
+    "coverImageUrl": "/uploads/smanegeri1indonesia.png",
+    "primaryColor": "#034FF3",
+    "secondaryColor": "#10b981",
+    "academicYear": "2026/2027",
+    "registrationOpen": true,
+    "registrationPeriod": "Gelombang II 1 - 30 Mei 2026",
+    "testDate": "11 November 2025",
+    "testTime": "08:00 - 12:00 WIB",
+    "testLocation": "Aula Utama SMAN Indonesia",
+    "requirements": [
+      {
+        "requirement": "Foto copy Kartu Keluarga"
+      },
+      {
+        "requirement": "Foto copy Akta Kelahiran"
+      },
+      {
+        "requirement": "Foto copy rapor"
+      },
+      {
+        "requirement": "Pas Foto 3x4 (2 lembar)"
+      },
+      {
+        "requirement": "Surat keterangan katolik (bagi yang beragama katolik)"
+      },
+      {
+        "requirement": "Dokumen dalam map merah (P) / biru (L)"
+      }
+    ],
+    "contactPhone": "(0271) 123-456",
+    "contactEmail": "ppdb@sekolah.example.com",
+    "contactAddress": "Jl. Pendidikan No. 123, Kota Anda"
+  },
+  "highlightPamflet": {
+    "customImage": "/uploads/1280w-6UHGujUD_QI.webp"
+  }
+}

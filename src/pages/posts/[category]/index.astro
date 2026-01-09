@@ -1,0 +1,71 @@
+---
+//src/pages/posts/[category]/index.astro
+export const prerender = true;
+import Layout from "../../../layouts/Layout.astro"
+import CardPosts from "../../../components/CardPosts.astro"
+import Pagination from "../../../components/Pagination.astro"
+import { getCollection } from "astro:content"
+import { paginate } from "../../../utils/pagination";
+export async function getStaticPaths() {
+  const posts = await getCollection("posts")
+  const categories = new Set(
+    posts.map(p => (p.data.category || "uncategorized").toLowerCase())
+  )
+
+  return Array.from(categories).map(category => ({
+    params: { category }
+  }))
+}
+const { category } = Astro.params
+
+const pageSize = 8
+const currentPage = 1
+
+const posts = (await getCollection("posts"))
+  .filter(p => (p.data.category || "").toLowerCase() === category)
+
+const pagination = paginate({
+  totalItems: posts.length,
+  currentPage,
+  pageSize
+})
+
+const pagedPosts = posts.slice(
+  pagination.start,
+  pagination.end
+)
+
+const baseUrl = `/posts/${category}`
+---
+<Layout title={`${category}`}>
+  <section>
+    <div class="container min-h-screen py-12 px-6 mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {pagedPosts.map(post => {
+          const slug = post.id.split("/").pop()
+          const url = `/posts/${category}/${slug}`
+
+        return (
+          <CardPosts
+            title={post.data.title}
+            description={post.data.description}
+            image={post.data.heroImage}
+            date={post.data.pubdate ?? null}
+            category={category}
+            url={url}
+            author={post.data.author ? { name: post.data.author } : undefined}
+          />
+        )
+      })}
+      </div>
+    <div class="mt-10 flex justify-center">
+        <Pagination
+  currentPage={pagination.currentPage}
+  totalPages={pagination.totalPages}
+  category={category}
+/>
+
+
+      </div>
+  </section>
+</Layout>

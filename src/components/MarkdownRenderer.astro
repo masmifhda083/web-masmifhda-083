@@ -1,0 +1,20 @@
+---
+import markdownit from 'markdown-it';
+
+interface Props {
+  content: string;
+}
+
+const { content } = Astro.props;
+
+const md = markdownit({
+  html: true,
+  breaks: true,
+  linkify: true,
+  typographer: true
+});
+
+const htmlContent = md.render(content || '');
+---
+
+<div set:html={htmlContent} />

@@ -1,0 +1,50 @@
+---
+// file: src/components/Pagination.astro
+const {
+  currentPage,
+  totalPages,
+  category
+} = Astro.props
+
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
+---
+
+<nav class="flex gap-2">
+  {currentPage > 1 && (
+    <a
+      href={
+        currentPage - 1 === 1
+          ? `/posts/${category}`
+          : `/posts/${category}/page/${currentPage - 1}`
+      }
+      class=""
+    >
+      <p class="bg-primary text-surface px-3 py-1 border rounded">Prev</p>
+      
+    </a>
+  )}
+
+  {pages.map(page => (
+    <a
+      href={
+        page === 1
+          ? `/posts/${category}`
+          : `/posts/${category}/page/${page}`
+      }
+      
+    >
+      <p class={`px-3 py-1 border rounded ${
+        page === currentPage ? "bg-primary text-surface" : ""
+      }`}>{page}</p>
+    </a>
+  ))}
+
+  {currentPage < totalPages && (
+    <a
+      href={`/posts/${category}/page/${currentPage + 1}`}
+      class=""
+    >
+      <p class="bg-primary text-surface px-3 py-1 border rounded">Next</p>
+    </a>
+  )}
+</nav>

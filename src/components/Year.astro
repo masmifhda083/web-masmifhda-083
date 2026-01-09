@@ -1,0 +1,26 @@
+---
+
+---
+<span id="currentYear"></span>/<span id="nextYear"></span>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get the current date
+    const today = new Date();
+    
+    // Get the current year (e.g., 2025)
+    const currentYear = today.getFullYear();
+    
+    // Calculate the next year by adding 1 to the current year
+    const nextYear = currentYear + 1;
+
+    // Find the HTML elements by their IDs and update their text content
+    const currentYearElement = document.getElementById('currentYear');
+    const nextYearElement = document.getElementById('nextYear');
+
+    if (currentYearElement && nextYearElement) {
+        currentYearElement.textContent = currentYear;
+        nextYearElement.textContent = nextYear;
+    }
+});
+</script>

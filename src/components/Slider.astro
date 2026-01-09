@@ -1,0 +1,85 @@
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<script>
+function initAllSplides() {
+  if (typeof Splide === 'undefined') {
+    setTimeout(initAllSplides, 100);
+    return;
+  }
+  
+  // ===== 1. HERO SLIDER =====
+  const heroSliders = document.querySelectorAll('.splide.splide-hero');
+  heroSliders.forEach(el => {
+    if (!el.classList.contains('is-initialized')) {
+      // HERO: Selalu 1 slide, tidak perlu breakpoints
+      new Splide(el, {
+        type: 'fade',
+        rewind: true,
+        autoplay: true,
+        interval: 4000,
+        pauseOnHover: true,
+        speed: 800,
+        arrows: true,
+        pagination: true,
+        drag: true,
+        perPage: 1, // SELALU 1
+        perMove: 1,
+        // TIDAK ADA breakpoints untuk hero
+      }).mount();
+      el.classList.add('is-initialized');
+    }
+  });
+  
+  // ===== 2. STAFF SLIDER =====
+  const staffSliders = document.querySelectorAll('.splide.splide-staff');
+  staffSliders.forEach(el => {
+    if (!el.classList.contains('is-initialized')) {
+      // Fungsi untuk menentukan perPage berdasarkan viewport
+      function getStaffPerPage() {
+        const width = window.innerWidth;
+        if (width >= 1024) return 6;
+        if (width >= 768) return 3;
+        if (width >= 480) return 2;
+        return 1;
+      }
+      
+      // Inisialisasi staff slider dengan perPage dinamis
+      const staffSplide = new Splide(el, {
+        type: 'loop',
+        gap: '1rem',
+        arrows: true,
+        pagination: false,
+        drag: true,
+        autoplay: true,
+        interval: 3000,
+        perPage: getStaffPerPage(),
+        perMove: 1,
+      });
+      
+      staffSplide.mount();
+      el.classList.add('is-initialized');
+      
+      // Update perPage saat resize
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const newPerPage = getStaffPerPage();
+          if (staffSplide.options.perPage !== newPerPage) {
+            staffSplide.options.perPage = newPerPage;
+            staffSplide.refresh();
+          }
+        }, 250);
+      });
+    }
+  });
+  
+}
+  
+  // Start initialization
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllSplides);
+  } else {
+    initAllSplides();
+  }
+</script>

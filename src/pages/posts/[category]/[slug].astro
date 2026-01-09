@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from "astro:content"
+import Article from "../../../layouts/Article.astro"
+export const prerender = true;
+export async function getStaticPaths() {
+  const posts = await getCollection("posts")
+
+  return posts.map(post => {
+    const category = (post.data.category || "uncategorized").toLowerCase()
+    const slug = post.id.split("/").pop()
+
+    return {
+      params: { category, slug },
+      props: { post }
+    }
+  })
+}
+
+const { post } = Astro.props
+if (!post) return Astro.redirect("/posts")
+
+const { Content, headings } = await render(post)
+
+const slug = post.id.split("/").pop()
+const category = (post.data.category || "uncategorized").toLowerCase()
+const url = `/posts/${category}/${slug}`
+---
+<Article
+  title={post.data.title}
+  author={post.data.author}
+  pubdate={post.data.pubdate}
+  heroImage={post.data.heroImage}
+  description={post.data.description}
+  url={url}
+  image={post.data.heroImage}
+  headings={headings}
+>
+  <Content />
+</Article>

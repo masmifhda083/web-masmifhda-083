@@ -1,0 +1,70 @@
+{
+  "gallery": {
+    "items": [
+      {
+        "title": "Upacara Bendera",
+        "image": "/uploads/Paskibra.jpeg"
+      },
+      {
+        "title": "Kegiatan Pramuka",
+        "image": "/uploads/1759283096.jpeg"
+      },
+      {
+        "title": "Kemah",
+        "image": "/uploads/janko-ferlic-G-jo31ESuRE-unsplash.jpg"
+      },
+      {
+        "title": "Ujian",
+        "image": "/uploads/20251104113343-whatsapp-image-2025-11-04-at-092100.webp"
+      }
+    ]
+  },
+  "facilities": {
+    "items": [
+      {
+        "title": "Laboratorium Komputer",
+        "image": "/uploads/20251104113343-whatsapp-image-2025-11-04-at-092100.webp"
+      },
+      {
+        "title": "Perpustakaan",
+        "image": "/uploads/zoshua-colah-bz4vI87iRQc-unsplash.jpg"
+      }
+    ]
+  },
+  "kepegawaian": {
+    "items": [
+      {
+        "title": "Daftar Tenaga Pendidik dan Kependidikan",
+        "image": "/uploads/premium_photo-1661756423422-4486e27eb6dd.avif",
+        "body": "## Daftar Tenaga Pendidik dan Kependidikan\n\n| NAMA                     | ROLE                    |\n| ------------------------ | ----------------------- |\n| Ahmad Rifa'i, M.Pd.      | Kepala Madrasah         |\n| Drs. Hamim Hasyim.       | Pendidikan Agama Islam  |\n| Endang Kurniasih, S.E.   | Pendidikan Ekonomi      |\n| Abidin, S.Pd.            | Pendidikan Seni Budaya  |\n| Bashori, S,Pd,I, M.Pd.   | Pendidikan Agama Islam  |\n| Didi Hartono, S.Pd.      | Pendidikan B. Arab      |\n| Saipudin Aziz, S.Pd.     | Pendidikan Olahraga     |\n| Siti Aisah, S.Pd.I.      | Pendidikan Agama Islam  |\n| Ari Romadlon, S.Pd.      | Pendidikan Agama Islam  |\n| Sulis Setiani, S.Pd.     | Pendidikan Fisika       |\n| Nizammudin, S.Pd.        | Guru Kelas              |\n| Indah Yunita Sari, S.Pd. | Pendidikan Matematika   |\n| Nia Purnamasari, S.Pd.   | Pendidikan B. Indonesia |\n| Nafsyiatun, S.Pd.        | Pendidikan B. Arab      |\n| M. Aziz Sulaiman, S.Pd.  | Pendidikan Komputer     |\n| Wahidin, S.Pd.           | Pendidikan              |\n| Julaini, S.Pd.           | Pendidikan B. Inggris   |\n| Ahmad Nabhan, S.Pd.      | Pendidikan Agama Islam  |\n| Syawaludin, S.Pd.        | Pendidikan Matematika   |\n| Jumhadi                  | Tata Usaha              |\n| Riono                    | Tata Usaha              |\n"
+      }
+    ]
+  },
+  "profil": {
+    "items": [
+      {
+        "title": "Profil Sekolah",
+        "image": "/uploads/smanegeri1indonesia.png",
+        "body": "| No | Keterangan                  | Data                                                                                                                              |\n| -- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |\n| 1  | Nama Sekolah                | SMA Negeri 1 Indonesia                                                                                                            |\n| 2  | NPSN                        | 20102467                                                                                                                          |\n| 3  | Jenjang Pendidikan          | SMA                                                                                                                               |\n| 4  | Status Sekolah              | Negeri                                                                                                                            |\n| 5  | Alamat Sekolah              | Jalan Taman Wijaya Kusuma, RT 008 / RW 004 Kel. Cilandak Barat, Kec. Cilandak, Kab. Jakarta Selatan, DKI Jakarta 12430, Indonesia |\n| 6  | Posisi Geografis            | -6 Lintang, 106 Bujur                                                                                                             |\n| 7  | SK Pendirian Sekolah        | NO.1.711.2/0233/09-04/015                                                                                                         |\n| 8  | Tanggal SK Pendirian        | 1984-04-14                                                                                                                        |\n| 9  | Status Kepemilikan          | Pemerintah Daerah                                                                                                                 |\n| 10 | SK Izin Operasional         | NO.1.711/2/0233/09-04/015                                                                                                         |\n| 11 | Tanggal SK Izin Operasional | 1984-04-14                                                                                                                        |\n| 12 | Kebutuhan Khusus Dilayani   | Tidak ada                                                                                                                         |\n| 13 | Nomor Rekening              | 2147483647                                                                                                                        |\n| 14 | Nama Bank                   | BPD DKI                                                                                                                           |\n| 15 | Cabang KCP/Unit             | BPD DKI Cabang Pondok Labu                                                                                                        |\n| 16 | Rekening Atas Nama          | SMA Negeri 1 Indonesia - BOS                                                                                                      |\n| 17 | MBS                         | Ya                                                                                                                                |\n| 18 | Luas Tanah Milik (m²)       | 4500                                                                                                                              |\n| 19 | Luas Tanah Bukan Milik (m²) | 0                                                                                                                                 |\n| 20 | Nama Wajib Pajak            | SMA Negeri 1 Indonesia                                                                                                            |\n| 21 | NPWP                        | 2147483647                                                                                                                        |\n| 22 | Nomor Telepon               | 217695272                                                                                                                         |\n| 23 | Nomor Fax                   | 217695272                                                                                                                         |\n| 24 | Email                       | [smanegeri1indonesia@email.sch.id](mailto:smanegeri1indonesia@email.sch.id)                                                       |\n| 25 | Website                     | [smanegeri1indonesia@email.sch.id](mailto:smanegeri1indonesia@email.sch.id)                                                       |\n| 26 | Waktu Penyelenggaraan       | Sehari penuh (5 h/m)                                                                                                              |\n| 27 | Bersedia Menerima BOS       | Bersedia                                                                                                                          |\n| 28 | Sertifikasi ISO             | Belum Bersertifikat                                                                                                               |\n| 29 | Sumber Listrik              | PLN                                                                                                                               |\n| 30 | Daya Listrik (Watt)         | 55000                                                                                                                             |\n| 31 | Akses Internet              | Hypernet                                                                                                                          |\n| 32 | Akses Internet Alternatif   | -                                                                                                                                 |\n| 33 | Kepala Sekolah              | Deti Andriati, M.Pd                                                                                                               |\n| 34 | Operator Pendataan          | Suroyo, S.Kom                                                                                                                     |\n| 35 | Akreditasi                  | A                                                                                                                                 |\n| 36 | Kurikulum                   | Kurikulum Merdeka                                                                                                                 |\n"
+      }
+    ]
+  },
+  "sambutan": {
+    "items": [
+      {
+        "title": "Sambutan Kepala Sekolah",
+        "image": "/uploads/humberto-chavez-F_CnS-8NlZQ-unsplash.jpg",
+        "body": "### *Bismillahirrohmanirrahim*\n\n##### Assalamu‘alaikum Wr. Wb.\n\nAlhamdulillah kami panjatkan syukur kepada Allah SWT. Berkat rahmat dan karunia-Nya Website sekolah ini dengan domain sman1indonesia.sch.id dapat diperbaharui dan dikembangkan. Kami menyambut dengan hangat kunjungan Anda di Website resmi SMA Negeri 1 Indonesia. Di era globalisasi dan perkembangan teknologi informasi sekarang ini, website menjadi bagian penting dalam dunia pendidikan khususnya sekolah. Website berfungsi sebagai sarana penyebaran informasi dan perkembangan terbaru sekolah yang perlu diketahui berbagai pihak. Selain itu, website menjadi media promosi yang efektif. Setiap kegiatan dan pencapaian sekolah dapat diunggah sebagai dokumentasi yang informatif bagi masyarakat.\n\nSebagai pimpinan sekolah saya mengucapkan terima kasih kepada tim yang telah menyusun dan mengelola Website ini. Kami memahami masih terdapat kekurangan. Saran dan kritik dari seluruh warga sekolah dan masyarakat sangat kami harapkan untuk pengembangan Website ini.\n\nSaya berharap Website ini dapat menjadi sarana interaksi yang positif di dunia maya bagi seluruh warga sekolah dan masyarakat umum. Silaturahim yang baik dapat terjalin. Mari bekerja dan berkarya dengan niat tulus demi kemajuan pendidikan dan bangsa.\n\nSemoga Allah SWT meridhai usaha kita semua. Aamiin YRA\n\n##### *Wassalamu‘alaikum Wr. Wb.*\n\nKepala SMA Negeri 1 Indonesia\n\n#### *Susilo Bambang, M.Pd*\n"
+      }
+    ]
+  },
+  "visimisi": {
+    "items": [
+      {
+        "title": "Visi Misi Sekolah",
+        "image": "/uploads/peter-robbins-nKxFAgpvhOw-unsplash.jpg",
+        "body": "### Visi\n\n###### *Terwujudnya warga madrasah yang Intelektual, Agamis, Kreatif & Berakhlaqul Karimah*\n\n### Misi\n\n1. Melaksanakan manajemen madrasah yang kuat dan efektif;\n2. Menciptakan iklim belajar yang efektif dan bermakna bagi siswa melalui pendekatan saintifik;\n3. Melengkapi dan memfungsikan sarana dan prasarana yang menunjang peningkatan mutu pendidikan;\n4. Menciptakan hubungan dan kerjasama yang harmonis pada tingkat satuan pendidikan, masyarakat dan instansi pemerintah;\n5. Menciptakan lingkungan madrasah yang beMHih, hijau dan ramah lingkungan;\n6. Memiliki semangat inovatif, renponsive, efektif dan kreatif.\n"
+      }
+    ]
+  }
+}

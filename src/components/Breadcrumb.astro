@@ -1,0 +1,30 @@
+---
+const { title, parent } = Astro.props
+---
+<nav aria-label="Breadcrumb">
+  <ol class="flex items-center justify-center flex-wrap text-sm mt-2">
+    <li>
+      <a href="/">
+        <p class="text-surface hover:text-secondary">Home</p>
+      </a>
+    </li>
+
+    <span class="text-surface mx-1">›</span>
+
+    {parent && (
+      <>
+        <li>
+          <a href={parent.href} class="text-surface hover:text-secondary">
+            
+            <p class="text-surface hover:text-secondary">{parent.label}</p>
+          </a>
+        </li>
+        <span class="text-surface mx-1">›</span>
+      </>
+    )}
+
+    <li class="text-secondary">
+      {title}
+    </li>
+  </ol>
+</nav>

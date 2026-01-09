@@ -1,0 +1,46 @@
+---
+interface Image {
+  image: string;
+  caption?: string;
+  date?: Date;
+}
+
+interface Props {
+  images: Image[];
+}
+
+const { images } = Astro.props;
+
+// Fungsi untuk format tanggal
+function formatDate(date: Date) {
+  return new Date(date).toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {images.map((img, index) => (
+    <div class="group relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+      <div class="relative overflow-hidden">
+        <img
+          src={img.image}
+          alt={img.caption || `Galeri foto ${index + 1}`}
+          class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
+      </div>
+      
+      <div class="p-3">
+        {img.caption && (
+          <p class="text-sm text-gray-700 font-medium mb-1">{img.caption}</p>
+        )}
+        {img.date && (
+          <p class="text-xs text-gray-500">{formatDate(img.date)}</p>
+        )}
+      </div>
+    </div>
+  ))}
+</div>

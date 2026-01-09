@@ -1,0 +1,261 @@
+---
+// src/pages/dashboard/ppdb/detail.astro
+import Layout from '../../../layouts/Layout.astro';
+import { getUserById, updateUserStatus } from '../../../lib/db';
+
+const url = new URL(Astro.request.url);
+const id = url.searchParams.get('id');
+
+let userData = null;
+let error = null;
+
+if (id) {
+  const result = await getUserById(id);
+  if (result.success && result.data) {
+    userData = result.data;
+  } else {
+    error = result.message || 'Data tidak ditemukan';
+  }
+}
+---
+
+<Layout title="Detail Pendaftaran">
+  <div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+      <a 
+        href="/dashboard/ppdb" 
+        class="inline-flex items-center text-blue-600 hover:text-blue-800"
+      >
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Kembali ke Daftar Pendaftar
+      </a>
+    </div>
+    
+    {error ? (
+      <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+        <h2 class="text-xl font-bold text-red-800 mb-2">Error</h2>
+        <p class="text-red-700">{error}</p>
+        <a href="/dashboard/ppdb" class="mt-4 inline-block text-blue-600 hover:text-blue-800">
+          ← Kembali ke daftar
+        </a>
+      </div>
+    ) : userData ? (
+      <div class="max-w-4xl mx-auto">
+        <!-- Header dengan status dan aksi -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800">Detail Pendaftaran</h1>
+              <p class="text-gray-600">ID: <span class="font-mono">{userData.kode_pendaftaran}</span></p>
+              <p class="text-gray-600 text-sm">
+                Tanggal: {new Date(userData.created_at).toLocaleDateString('id-ID', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+            </div>
+            
+            <div class="self-start">
+                <span class={`px-4 py-2 rounded-full font-medium capitalize ${
+                  userData.status === 'approved' ? 'bg-green-100 text-green-800' :
+                  userData.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                  userData.status === 'review' ? 'bg-blue-100 text-blue-800' :
+                  'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {userData.status || 'pending'}
+                </span>
+              </div>
+          </div>
+        </div>
+        
+        <!-- Data Sections -->
+        <div class="space-y-6">
+          <!-- Data Pribadi -->
+          <section class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 pb-3 border-b">Data Pribadi Peserta Didik</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <p class="text-sm text-gray-500">Nama Lengkap</p>
+                <p class="text-md font-medium capitalize">{userData.nama_lengkap}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Nama Panggilan</p>
+                <p class="text-md font-medium capitalize">{userData.nama_panggilan}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Tempat Lahir</p>
+                <p class="text-md font-medium capitalize">{userData.tempat_lahir}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Tanggal Lahir</p>
+                <p class="text-md font-medium capitalize">{userData.tanggal_lahir}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Jenis Kelamin</p>
+                <p class="text-md font-medium capitalize">{userData.jenis_kelamin}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Agama</p>
+                <p class="text-md font-medium capitalize">{userData.agama}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Nomor HP/WhatsApp</p>
+                <p class="text-md font-medium capitalize">{userData.nomor_hp}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Email</p>
+                <p class="text-md font-medium capitalize">{userData.email}</p>
+              </div>
+              <div class="md:col-span-2">
+                <p class="text-sm text-gray-500">Alamat Lengkap</p>
+                <p class="text-md font-medium capitalize whitespace-pre-line">{userData.alamat_lengkap}</p>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Data Pendidikan Sebelumnya -->
+          <section class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 pb-3 border-b">Data Pendidikan Sebelumnya</h2>
+            <div class="space-y-4">
+              <div>
+                <p class="text-sm text-gray-500">Asal Sekolah</p>
+                <p class="text-md font-medium capitalize">{userData.asal_sekolah}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Alamat Asal Sekolah</p>
+                <p class="text-md font-medium capitalize whitespace-pre-line">{userData.alamat_sekolah}</p>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Data Orang Tua -->
+          <section class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 pb-3 border-b">Data Orang Tua/Wali</h2>
+            
+            <div class="space-y-6">
+              <!-- Data Ayah -->
+              <div>
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">Data Ayah</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p class="text-sm text-gray-500">Nama Lengkap Ayah</p>
+                    <p class="text-md font-medium capitalize">{userData.nama_ayah}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Nomor Telepon Ayah</p>
+                    <p class="text-md font-medium capitalize">{userData.telepon_ayah}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Pekerjaan Ayah</p>
+                    <p class="text-md font-medium capitalize">{userData.pekerjaan_ayah}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Alamat Ayah</p>
+                    <p class="text-md font-medium capitalize">{userData.alamat_ayah}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Data Ibu -->
+              <div>
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">Data Ibu</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p class="text-sm text-gray-500">Nama Lengkap Ibu</p>
+                    <p class="text-md font-medium capitalize">{userData.nama_ibu}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Nomor Telepon Ibu</p>
+                    <p class="text-md font-medium capitalize">{userData.telepon_ibu}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Pekerjaan Ibu</p>
+                    <p class="text-md font-medium capitalize">{userData.pekerjaan_ibu}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Alamat Ibu</p>
+                    <p class="text-md font-medium capitalize">{userData.alamat_ibu}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Pernyataan dan Metadata -->
+          <section class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 pb-3 border-b">Pernyataan dan Metadata</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <p class="text-sm text-gray-500">Pernyataan Kebenaran Data</p>
+                <p class="font-medium">{userData.pernyataan_kebenaran ? '✓ Disetujui' : '✗ Tidak Disetujui'}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Pernyataan Seleksi</p>
+                <p class="font-medium">{userData.pernyataan_seleksi ? '✓ Disetujui' : '✗ Tidak Disetujui'}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Pernyataan Keputusan</p>
+                <p class="font-medium">{userData.pernyataan_keputusan ? '✓ Disetujui' : '✗ Tidak Disetujui'}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Dibuat pada</p>
+                <p class="font-medium">{new Date(userData.created_at).toLocaleString('id-ID')}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Terakhir diupdate</p>
+                <p class="font-medium">{new Date(userData.updated_at).toLocaleString('id-ID')}</p>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Quick Action Footer -->
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Update Status</h3>
+            <div class="flex flex-wrap gap-3">
+              <a 
+                href={`/api/ppdb/update-status?id=${userData.id}&status=pending`}
+                class="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg hover:bg-yellow-200 font-medium transition"
+              >
+                Set Pending
+              </a>
+              <a 
+                href={`/api/ppdb/update-status?id=${userData.id}&status=review`}
+                class="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 font-medium transition"
+              >
+                Set Review
+              </a>
+              <a 
+                href={`/api/ppdb/update-status?id=${userData.id}&status=approved`}
+                class="px-4 py-2 bg-green-100 text-green-800 rounded-lg hover:bg-green-200 font-medium transition"
+              >
+                Set Approved
+              </a>
+              <a 
+                href={`/api/ppdb/update-status?id=${userData.id}&status=rejected`}
+                class="px-4 py-2 bg-red-100 text-red-800 rounded-lg hover:bg-red-200 font-medium transition"
+              >
+                Set Rejected
+              </a>
+            </div>
+            <p class="text-sm text-gray-500 mt-3">Status saat ini: <span class="font-medium">{userData.status || 'pending'}</span></p>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">Data tidak ditemukan</h3>
+        <p class="mt-1 text-sm text-gray-500">Parameter ID tidak valid atau data sudah dihapus.</p>
+        <a href="/dashboard/ppdb" class="mt-4 inline-block text-blue-600 hover:text-blue-800">
+          ← Kembali ke daftar
+        </a>
+      </div>
+    )}
+  </div>
+</Layout>
