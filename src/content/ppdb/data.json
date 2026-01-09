@@ -8,10 +8,10 @@
     "secondaryColor": "#417505",
     "academicYear": "2026/2027",
     "registrationOpen": true,
-    "registrationPeriod": "Gelombang II 1 - 30 Mei 2026",
-    "testDate": "11 November 2025",
+    "registrationPeriod": "Gelombang I 1 JAN - 28 FEB 2026",
+    "testDate": "Coming Soon",
     "testTime": "08:00 - 12:00 WIB",
-    "testLocation": "Aula Utama SMAN Indonesia",
+    "testLocation": "Aula MA Miftahul Huda",
     "requirements": [
       {
         "requirement": "Foto copy Kartu Keluarga"
@@ -32,9 +32,9 @@
         "requirement": "Dokumen dalam map merah (P) / biru (L)"
       }
     ],
-    "contactPhone": "(0271) 123-456",
-    "contactEmail": "ppdb@sekolah.example.com",
-    "contactAddress": "Jl. Pendidikan No. 123, Kota Anda"
+    "contactPhone": "+6281938240819",
+    "contactEmail": "masmifhda083@gmail.com",
+    "contactAddress": "Jl. Tirtomoyo, Tembak Jaya, Way Tenong, Lampung Barat "
   },
   "highlightPamflet": {
     "customImage": "/uploads/WhatsApp Image 2026-01-09 at 13.51.33.jpeg"
