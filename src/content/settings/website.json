@@ -146,7 +146,8 @@
       "defaultKeywords": "Ma Miftahul Huda Tambak Jaya "
     },
     "openGraph": {
-      "type": "website"
+      "type": "website",
+      "image": "/uploads/cover.webp"
     }
   },
   "footer": {
