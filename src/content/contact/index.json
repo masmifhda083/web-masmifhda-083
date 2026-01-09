@@ -30,7 +30,7 @@
     "days": [
       {
         "day": "Senin - Jumat",
-        "time": "10:00 - 16:00 WIB"
+        "time": "08:00 - 14:00 WIB"
       },
       {
         "day": "Sabtu",
@@ -58,5 +58,5 @@
       }
     ]
   },
-  "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.1472762417!2d110.41625787379192!3d-6.9919287684731195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708b5dcf8a23c5%3A0xc99c4231d04e2984!2sSMA%20Negeri%201%20Semarang!5e0!3m2!1sid!2sid!4v1766466596342!5m2!1sid!2sid"
+  "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248.39870270784945!2d104.33091435581447!3d-5.0421049672175595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e4779bfde4f226b%3A0x385b4a400e1a84dd!2sMAS%20MIFTAHUL%20HUDA%20MATHLA&#39;UL%20ANWAR!5e0!3m2!1sid!2sid!4v1767934270184!5m2!1sid!2sid"
 }
