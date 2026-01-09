@@ -1,7 +1,7 @@
 ---
-name: Sela Alisa
-username: sela
-avatar: /uploads/model.png
+name: Admin
+username: Admin
+avatar: /uploads/placeholder.webp
 role: Staff
 ---
 
