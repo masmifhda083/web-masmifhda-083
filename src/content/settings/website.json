@@ -156,13 +156,13 @@
   "themeColors": {
     "background": "#F6F6F6",
     "primary": "#419B36",
-    "secondary": "#419B36",
+    "secondary": "#146909",
     "surface": "#F6F6F6",
     "textBase": "#111827",
-    "textHeading": "#3D5272",
+    "textHeading": "#146909",
     "textMuted": "#6b7280",
-    "link": "#3D5272",
-    "linkHover": "#6689BF",
+    "link": "#146909",
+    "linkHover": "#419B36",
     "border": "#D4D4D4"
   }
 }
