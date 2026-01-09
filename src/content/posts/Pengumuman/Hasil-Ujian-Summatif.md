@@ -3,8 +3,9 @@ title: Pelaksanaan Tes Kemampuan Akademik (TKA) MA Miftahul Huda Tahun 2025
 author: src/content/authors/sela.md
 pubdate: 2025-11-06T00:00:00.000Z
 description: >-
-  Customizing a website template involves modifying a pre-designed layout to
-  align with specific branding, content, and functional requirements.
+  Dalam rangka meningkatkan mutu lulusan dan mempersiapkan siswa menghadapi
+  jenjang pendidikan yang lebih tinggi, MA Miftahul Huda menyelenggarakan Tes
+  Kemampuan Akademik (TKA) bagi seluruh siswa kelas XII
 category: pengumuman
 heroImage: /uploads/mifda-3.webp
 ---
