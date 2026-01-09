@@ -1,22 +1,54 @@
 ---
 customCategory: akademik
-title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+title: Pelaksanaan Sumatif Akhir Semester Ganjil Berbasis Android di MA Miftahul Huda
 author: src/content/authors/sela.md
-pubdate: 2025-12-24T00:00:00.000Z
+pubdate: 2025-11-24T00:00:00.000Z
 description: >-
-  Nulla ac condimentum quam, a pharetra turpis. Praesent ultrices, tellus ac
-  malesuada pellentesque, purus turpis ornare elit, nec efficitur erat dui ut
-  elit
+  Sumatif akhir semester ganjil menjadi bagian penting dalam evaluasi
+  pembelajaran di MA Miftahul Huda. Tahun ini madrasah menerapkan sistem
+  berbasis Android atau Computer Based Test. 
 category: akademik
-heroImage: /uploads/WhatsApp Image 2025-12-03 at 08.44.53 (2).jpeg
+heroImage: /uploads/mifda-15.webp
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac condimentum quam, a pharetra turpis. Praesent ultrices, tellus ac malesuada pellentesque, purus turpis ornare elit, nec efficitur erat dui ut elit. Nulla lectus eros, malesuada id lorem quis, ultricies feugiat lacus. Mauris hendrerit augue non lobortis lobortis. Fusce suscipit ligula sit amet suscipit lobortis. Aenean tincidunt libero sed commodo aliquam. Nam vitae molestie lectus, id bibendum lacus.
+Sumatif akhir semester ganjil menjadi bagian penting dalam evaluasi pembelajaran di MA Miftahul Huda. Tahun ini madrasah menerapkan sistem berbasis Android atau Computer Based Test. Pelaksanaan ini menjadi langkah menuju pengelolaan ujian yang lebih efisien dan terukur. Sistem digital memberi kemudahan dalam distribusi soal, pengawasan, dan pengolahan nilai. Madrasah berupaya memastikan kegiatan berjalan sesuai standar yang ditetapkan. Sumatif ini tidak hanya dilaksanakan oleh MA Miftahul Huda. Mitra madrasah yaitu MA Al Karomah juga menerapkan sistem yang sama dalam waktu bersamaan.
 
-Vivamus sit amet mauris sollicitudin, imperdiet eros rhoncus, consectetur diam. Sed congue sem sed neque cursus, in maximus ipsum sodales. Nulla nec nisl eu erat eleifend sagittis eget in enim. Maecenas rutrum vulputate feugiat. Aliquam scelerisque luctus dolor. Fusce est libero, facilisis eget dapibus aliquam, sollicitudin ut quam. In dictum lobortis vulputate. Cras porta lorem vel sapien tempus consequat. Duis pretium interdum porttitor. Nunc in nisi non urna varius suscipit non vitae leo. Mauris feugiat, lectus id facilisis tempor, erat quam consequat eros, vel mollis velit orci ut urna.
+### Persiapan Teknis dan Simulasi Aplikasi Ujian
 
-Nam eu rhoncus nulla. Morbi quis lectus libero. Fusce ut ex vitae sem tincidunt pretium. Nam molestie mollis lorem. Integer sagittis convallis justo, eget fermentum sem fringilla a. Donec vitae enim tincidunt, mollis massa sed, accumsan ligula. Vestibulum posuere quis metus at pellentesque. Praesent vitae pharetra arcu, ac lobortis lectus. Donec placerat luctus turpis non convallis.
+Pelaksanaan sumatif berbasis Android dirancang untuk memberikan pengalaman ujian yang lebih terstruktur. Madrasah mempersiapkan perangkat, server lokal, serta jaringan internet yang mendukung kegiatan. Guru dan panitia teknis melakukan persiapan sejak awal semester. Siswa diberi arahan mengenai tata cara penggunaan aplikasi ujian melalui sesi simulasi. Langkah ini membantu siswa memahami prosedur dan mengurangi kesalahan teknis saat hari pelaksanaan. Sistem digital yang digunakan memberi akses yang lebih cepat dan akurat terhadap soal dan jawaban.
 
-Maecenas consequat nisl lacus, et maximus dui tristique quis. Maecenas efficitur nisi dignissim lorem porta finibus. Ut rhoncus lobortis risus vitae blandit. Curabitur et felis eu eros lobortis consectetur et vitae nunc. Phasellus magna libero, imperdiet sed arcu in, elementum tempus arcu. Suspendisse eget mattis mi. Sed pharetra, turpis ut feugiat laoreet, elit enim posuere erat, ut dignissim nulla velit tempus ex. Ut eget massa nec nisi ornare vulputate. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla mi risus, maximus quis nisl ac, condimentum laoreet diam. Etiam posuere pharetra sapien nec consectetur.
+### Pembagian Tugas Panitia, Guru, Pengawas, dan Siswa
 
-Phasellus a suscipit justo. Mauris vulputate imperdiet sodales. Fusce tincidunt placerat erat sed vestibulum. Aenean odio nisi, porta vitae urna ac, pulvinar rutrum nisi. Aliquam consequat a mauris sit amet sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus vel nisl ac augue pretium semper id vitae felis. Duis porttitor, erat in semper consequat, turpis lacus varius orci, nec auctor erat ex ac erat. Sed vel hendrerit urna. Morbi eu ornare ex.
+Kegiatan sumatif akhir semester ganjil melibatkan beberapa unsur. Panitia ujian bertanggung jawab mengelola server dan aplikasi. Guru mata pelajaran menyiapkan soal serta memeriksa hasil evaluasi. Siswa menjalankan ujian melalui perangkat Android masing masing dan sebagian menggunakan komputer yang disiapkan di madrasah. Pengawas ujian memantau proses melalui aplikasi pemantau. Koordinasi antar unsur dilakukan melalui rapat teknis yang berlangsung sebelum ujian dimulai. Hal ini penting untuk menyamakan pemahaman agar kegiatan berjalan tertib.
+
+### Penanganan Kendala Jaringan Selama Ujian Berlangsung
+
+Pelaksanaan ujian berjalan lancar meskipun terdapat kendala jaringan. Beberapa titik ruang ujian mengalami penurunan kualitas koneksi dalam durasi tertentu. Panitia segera melakukan penanganan dengan memindahkan beberapa perangkat ke area yang lebih stabil. Server lokal tetap berfungsi sehingga gangguan tidak mempengaruhi penyimpanan data. Pengawasan teknis dilakukan secara bergilir untuk memastikan seluruh perangkat tetap terhubung. Kendala jaringan tidak menghambat proses ujian secara keseluruhan. Siswa tetap dapat menyelesaikan soal sesuai waktu yang ditentukan.
+
+### Strategi Antisipasi untuk Mengurangi Risiko Teknis
+
+Madrasah menetapkan beberapa langkah antisipasi untuk meminimalkan risiko teknis. Langkah yang diterapkan antara lain
+
+1. Pemeriksaan perangkat sebelum sesi dimulai
+2. Penyiapan jaringan cadangan
+3. Penempatan teknisi di setiap blok ruang ujian
+4. Penyediaan komputer sebagai opsi bagi siswa yang mengalami kendala perangkat pribadi
+5. Pengaturan ulang jadwal bagi siswa yang gagal login karena gangguan teknis
+
+Strategi ini memberi ruang yang cukup untuk menyelesaikan kendala yang muncul. Prosedur penanganan kendala dibuat sederhana agar tidak menghambat jalannya ujian.
+
+### Kolaborasi MA Miftahul Huda dan MA Al Karomah
+
+Keterlibatan mitra madrasah yaitu MA Al Karomah memberi gambaran lebih luas mengenai penerapan sumatif berbasis Android. Kedua madrasah menerapkan sistem yang sama karena berbagi platform dan mekanisme soal. Koordinasi antar madrasah dilakukan sejak sebelum penilaian dimulai. Tim teknis dari kedua lembaga saling memberi masukan dan berbagi solusi teknis. Kegiatan berjalan selaras karena kedua madrasah memiliki tujuan yang sama yaitu meningkatkan mutu evaluasi. Penggunaan sistem digital memberi konsistensi dalam proses penilaian di dua lembaga.
+
+### Pemanfaatan Rekapitulasi Nilai Digital untuk Analisis Pembelajaran
+
+Sumatif berbasis Android membantu proses evaluasi yang lebih terarah. Guru dapat melihat rekap nilai dalam waktu singkat tanpa proses pemeriksaan manual. Data tersimpan dalam server sehingga memudahkan analisis capaian kompetensi. Hasil sumatif menjadi dasar bagi guru dalam merancang tindak lanjut pembelajaran pada semester berikutnya. Sistem digital memberi transparansi yang lebih baik bagi madrasah dalam memantau hasil evaluasi. Perbaikan sistem dapat dilakukan berdasarkan data nyata yang dihasilkan selama kegiatan.
+
+### Dampak Positif Penerapan Sumatif Berbasis Android
+
+Panitia menyatakan bahwa penggunaan sistem digital pada sumatif akhir semester ganjil menunjukkan perubahan positif. Siswa terlihat lebih tenang dalam mengerjakan soal karena tampilan aplikasi yang sederhana. Pengawas dapat memantau melalui dashboard sehingga tidak memerlukan banyak dokumen. Proses rekapitulasi nilai lebih cepat dan akurat. Sistem juga mengurangi penggunaan kertas sehingga lebih efisien. Pengalaman ini memberi dasar bagi madrasah untuk terus meningkatkan kualitas pelaksanaan.
+
+### Perencanaan Pelaksanaan Berikutnya
+
+Pelaksanaan sumatif akhir semester ganjil di MA Miftahul Huda menunjukkan bahwa penerapan teknologi dapat berjalan dengan baik selama perencanaan dilakukan secara matang. Kendala jaringan yang muncul dapat ditangani melalui kesiapan teknis. Keterlibatan MA Al Karomah sebagai mitra menunjukkan komitmen bersama dalam pengembangan sistem penilaian yang modern. Evaluasi berbasis Android menjadi langkah strategis untuk meningkatkan mutu pendidikan. Madrasah menargetkan pelaksanaan berikutnya dapat lebih stabil dan lebih tertata. Seluruh pihak yang terlibat diharapkan terus memberi dukungan agar kegiatan evaluasi selalu berjalan efektif.
