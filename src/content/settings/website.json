@@ -84,9 +84,9 @@
       "bgTransparent": "solid"
     },
     "schoolInfo": {
-      "name": "SMAN 1 INDONESIA",
-      "logo": "/uploads/logo-sma.png",
-      "logoAlt": "Logo Sekolah",
+      "name": "MA MIFTAHUL HUDA",
+      "logo": "/uploads/logo.webp",
+      "logoAlt": "Logo miftahul huda tambak jaya sanyir",
       "logoWidthDesktop": 40,
       "logoWidthMobile": 40,
       "showName": true
