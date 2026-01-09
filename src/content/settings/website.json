@@ -155,13 +155,13 @@
   },
   "themeColors": {
     "background": "#F6F6F6",
-    "primary": "#419B36",
-    "secondary": "#146909",
+    "primary": "#2E6731",
+    "secondary": "#419B36",
     "surface": "#F6F6F6",
     "textBase": "#111827",
-    "textHeading": "#146909",
+    "textHeading": "#2E6731",
     "textMuted": "#6b7280",
-    "link": "#146909",
+    "link": "#2E6731",
     "linkHover": "#419B36",
     "border": "#D4D4D4"
   }
