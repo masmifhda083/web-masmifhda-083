@@ -1,4 +1,4 @@
-//FILE: tina/config.ts
+//file: tina/config.ts
 import { defineConfig } from "tinacms"
 import { SOCIAL_ICON_REGISTRY } from "../src/config/socialIcons"
 
