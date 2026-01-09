@@ -140,10 +140,10 @@
       "favicon": "/uploads/logo.webp"
     },
     "globalMeta": {
-      "titleTemplate": "%s | Sma Negeri 1 Indonesia",
-      "defaultTitle": "Sma Negeri 1 Indonesia",
-      "defaultDescription": "Sekolah Negeri Unggulan",
-      "defaultKeywords": "Sma Negeri 1 Indonesia"
+      "titleTemplate": "%s | Ma Miftahul Huda Tambak Jaya ",
+      "defaultTitle": "Ma Miftahul Huda Tambak Jaya ",
+      "defaultDescription": "Mewujudkan Pendidikan Yang Bermanfaat, Baik Di Dunia Maupun Akhirat",
+      "defaultKeywords": "Ma Miftahul Huda Tambak Jaya "
     },
     "openGraph": {
       "type": "website"
