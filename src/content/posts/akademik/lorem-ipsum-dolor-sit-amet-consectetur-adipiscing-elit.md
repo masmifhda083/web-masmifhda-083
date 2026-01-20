@@ -1,8 +1,8 @@
 ---
 customCategory: akademik
 title: Pelaksanaan Sumatif Akhir Semester Ganjil Berbasis Android di MA Miftahul Huda
-author: src/content/authors/sela.md
-pubdate: 2025-11-24T00:00:00.000Z
+author: null
+pubdate: '2025-11-24T00:00:00.000Z'
 description: >-
   Sumatif akhir semester ganjil menjadi bagian penting dalam evaluasi
   pembelajaran di MA Miftahul Huda. Tahun ini madrasah menerapkan sistem
@@ -10,6 +10,7 @@ description: >-
 category: akademik
 heroImage: /uploads/mifda-15.webp
 ---
+
 
 Sumatif akhir semester ganjil menjadi bagian penting dalam evaluasi pembelajaran di MA Miftahul Huda. Tahun ini madrasah menerapkan sistem berbasis Android atau Computer Based Test. Pelaksanaan ini menjadi langkah menuju pengelolaan ujian yang lebih efisien dan terukur. Sistem digital memberi kemudahan dalam distribusi soal, pengawasan, dan pengolahan nilai. Madrasah berupaya memastikan kegiatan berjalan sesuai standar yang ditetapkan. Sumatif ini tidak hanya dilaksanakan oleh MA Miftahul Huda. Mitra madrasah yaitu MA Al Karomah juga menerapkan sistem yang sama dalam waktu bersamaan.
 
