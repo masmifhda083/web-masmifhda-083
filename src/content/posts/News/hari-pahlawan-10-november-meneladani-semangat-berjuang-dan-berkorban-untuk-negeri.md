@@ -2,8 +2,8 @@
 title: >-
   Hari Pahlawan 10 November: Meneladani Semangat Berjuang dan Berkorban untuk
   Negeri
-author: null
-pubdate: '2025-11-10T00:00:00.000Z'
+author: src/content/authors/admin.md
+pubdate: 2025-11-10T00:00:00.000Z
 description: >-
   Setiap tanggal 10 November, bangsa Indonesia memperingati Hari Pahlawan
   sebagai bentuk penghormatan kepada para pejuang yang telah mengorbankan jiwa
@@ -11,7 +11,6 @@ description: >-
 category: news
 heroImage: /uploads/poster.webp
 ---
-
 
 Setiap tanggal 10 November, bangsa Indonesia memperingati Hari Pahlawan sebagai bentuk penghormatan kepada para pejuang yang telah mengorbankan jiwa dan raga demi kemerdekaan bangsa. Hari Pahlawan bukan sekadar rutinitas peringatan sejarah, tetapi momen untuk menumbuhkan kembali semangat perjuangan, rasa cinta tanah air, dan kesadaran bahwa kemerdekaan bukan hadiah, melainkan hasil pengorbanan yang tidak ternilai.
 
@@ -47,8 +46,6 @@ Meneladani Pahlawan dengan Aksi Nyata Semangat kepahlawanan dapat diwujudkan dal
 
 Mari lanjutkan perjuangan para pahlawan dengan prestasi, akhlak mulia, dan kontribusi nyata untuk agama, bangsa, dan negara.
 
-> Bangsa yang besar adalah bangsa yang menghargai jasa para pahlawannya.”
-
-> — Ir. Soekarno
+> Bangsa yang besar adalah bangsa yang menghargai jasa para pahlawannya.”— Ir. Soekarno
 
 Semoga Allah SWT memberi kekuatan kepada seluruh civitas akademika MA Miftahul Huda untuk terus berkarya, berjuang dalam kebaikan, dan menjadi pahlawan masa kini bagi lingkungan dan bangsa.
