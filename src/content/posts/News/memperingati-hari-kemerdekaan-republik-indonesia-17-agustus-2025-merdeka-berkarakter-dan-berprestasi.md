@@ -2,14 +2,15 @@
 title: >-
   Memperingati Hari Kemerdekaan Republik Indonesia 17 Agustus 2025: Merdeka,
   Berkarakter, dan Berprestasi
-author: src/content/authors/sela.md
-pubdate: 2025-08-17T00:00:00.000Z
+author: null
+pubdate: '2025-08-17T00:00:00.000Z'
 description: >-
   Pada tanggal 17 Agustus 2025, bangsa Indonesia kembali memperingati Hari Ulang
   Tahun ke-80 Kemerdekaan Republik Indonesia. 
 category: news
 heroImage: /uploads/mifda-1.webp
 ---
+
 
 Pada tanggal 17 Agustus 2025, bangsa Indonesia kembali memperingati Hari Ulang Tahun ke-80 Kemerdekaan Republik Indonesia. Peringatan ini bukan sekadar seremonial tahunan, tetapi momentum untuk mengenang perjuangan para pahlawan, sekaligus menguatkan tekad membangun negeri dengan ilmu, akhlak, dan karakter bangsa.
 
