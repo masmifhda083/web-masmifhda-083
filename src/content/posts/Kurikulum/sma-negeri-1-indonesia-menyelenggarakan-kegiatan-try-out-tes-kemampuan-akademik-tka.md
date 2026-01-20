@@ -3,8 +3,8 @@ customCategory: kurikulum
 title: >-
   SMA Negeri 1 Indonesia menyelenggarakan kegiatan Try Out Tes Kemampuan
   Akademik /TKA
-author: src/content/authors/sela.md
-pubdate: 2025-12-23T00:00:00.000Z
+author: null
+pubdate: '2025-12-23T00:00:00.000Z'
 description: >-
   Dalam rangka mempersiapkan peserta didik menghadapi seleksi masuk perguruan
   tinggi, SMA Negeri 41 Jakarta menyelenggarakan kegiatan Try Out Tes Kemampuan
@@ -12,6 +12,7 @@ description: >-
 category: kurikulum
 heroImage: /uploads/WhatsApp Image 2025-12-03 at 08.44.53 (2).jpeg
 ---
+
 
 Dalam rangka mempersiapkan peserta didik menghadapi seleksi masuk perguruan tinggi, SMA Negeri 41 Jakarta menyelenggarakan kegiatan Try Out Tes Kemampuan Akademik /TKA Mata Pelajaran Pilihan. Kegiatan ini bertujuan untuk melatih kesiapan siswa dalam menjawab soal-soal berbasis asesmen akademik sesuai dengan bidang studi yang diminati. Try Out TKA dilaksanakan pada Rabu, 22 Oktober 2025, dan diikuti oleh seluruh siswa kelas XII. Peserta dibagi berdasarkan kelompok mata pelajaran pilihan, seperti Matematika, Fisika, Kimia, Biologi, Ekonomi, Geografi, dan Sosiologi, sesuai dengan jurusan yang akan mereka ambil di jenjang pendidikan tinggi. Melalui kegiatan ini, siswa tidak hanya berlatih mengerjakan soal, tetapi juga belajar mengatur strategi waktu, meningkatkan kemampuan berpikir kritis, serta menilai sejauh mana pemahaman materi yang telah diperoleh selama proses pembelajaran di sekolah.
 
