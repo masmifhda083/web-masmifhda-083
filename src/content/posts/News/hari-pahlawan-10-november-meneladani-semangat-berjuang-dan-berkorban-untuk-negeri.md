@@ -2,8 +2,8 @@
 title: >-
   Hari Pahlawan 10 November: Meneladani Semangat Berjuang dan Berkorban untuk
   Negeri
-author: src/content/authors/sela.md
-pubdate: 2025-11-10T00:00:00.000Z
+author: null
+pubdate: '2025-11-10T00:00:00.000Z'
 description: >-
   Setiap tanggal 10 November, bangsa Indonesia memperingati Hari Pahlawan
   sebagai bentuk penghormatan kepada para pejuang yang telah mengorbankan jiwa
@@ -11,6 +11,7 @@ description: >-
 category: news
 heroImage: /uploads/poster.webp
 ---
+
 
 Setiap tanggal 10 November, bangsa Indonesia memperingati Hari Pahlawan sebagai bentuk penghormatan kepada para pejuang yang telah mengorbankan jiwa dan raga demi kemerdekaan bangsa. Hari Pahlawan bukan sekadar rutinitas peringatan sejarah, tetapi momen untuk menumbuhkan kembali semangat perjuangan, rasa cinta tanah air, dan kesadaran bahwa kemerdekaan bukan hadiah, melainkan hasil pengorbanan yang tidak ternilai.
 
