@@ -67,10 +67,6 @@
         "isActive": false
       },
       {
-        "label": "Kurikulum",
-        "href": "/posts/Kurikulum"
-      },
-      {
         "label": "Kontak",
         "href": "/contact",
         "isActive": false
