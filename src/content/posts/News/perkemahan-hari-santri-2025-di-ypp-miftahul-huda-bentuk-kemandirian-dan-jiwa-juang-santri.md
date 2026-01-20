@@ -2,8 +2,8 @@
 title: >-
   Perkemahan Hari Santri 2025 di YPP Miftahul Huda: Bentuk Kemandirian dan Jiwa
   Juang Santri
-author: src/content/authors/sela.md
-pubdate: 2025-10-22T00:00:00.000Z
+author: null
+pubdate: '2025-10-22T00:00:00.000Z'
 description: >-
   Dalam rangka memperingati Hari Santri Nasional 22 Oktober 2025, Yayasan Pondok
   Pesantren (YPP) Miftahul Huda menyelenggarakan Perkemahan Hari Santri yang
@@ -11,6 +11,7 @@ description: >-
 category: news
 heroImage: /uploads/bakar.jpeg
 ---
+
 
 Dalam rangka memperingati Hari Santri Nasional 22 Oktober 2025, Yayasan Pondok Pesantren (YPP) Miftahul Huda menyelenggarakan Perkemahan Hari Santri yang dilaksanakan pada malam puncak Hari Santri. Kegiatan ini diikuti oleh Pasukan Penggalang dari MTs Miftahul Huda dan Ambalan Penegak dari MA Miftahul Huda. Kegiatan perkemahan ini menjadi ajang pembinaan karakter santri melalui pendidikan kepramukaan yang sarat dengan nilai kemandirian, kedisiplinan, kebersamaan, dan akhlak Islami. Tahun ini, Hari Santri mengusung tema:
 
