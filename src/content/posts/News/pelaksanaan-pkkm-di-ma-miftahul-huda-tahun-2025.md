@@ -1,7 +1,7 @@
 ---
 title: Pelaksanaan PKKM di MA Miftahul Huda Tahun 2025
-author: src/content/authors/sela.md
-pubdate: 2025-11-18T00:00:00.000Z
+author: null
+pubdate: '2025-11-18T00:00:00.000Z'
 description: >-
   Pada Selasa, 18 November 2025, MA Miftahul Huda melaksanakan kegiatan
   Penilaian Kinerja Kepala Madrasah (PKKM) sebagai bagian dari upaya peningkatan
@@ -9,6 +9,7 @@ description: >-
 category: news
 heroImage: /uploads/mifda-14.webp
 ---
+
 
 Pada Selasa, 18 November 2025, MA Miftahul Huda melaksanakan kegiatan Penilaian Kinerja Kepala Madrasah (PKKM) sebagai bagian dari upaya peningkatan mutu pengelolaan madrasah. Kegiatan ini merupakan agenda penting dalam menilai kinerja kepala madrasah secara objektif dan berkelanjutan, mencakup aspek manajerial, supervisi akademik, serta pengembangan kewirausahaan.
 
