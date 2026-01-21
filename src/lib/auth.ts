@@ -1,31 +1,33 @@
 // src/lib/auth.ts
-import crypto from 'crypto';
+// Menggunakan Web Crypto API (kompatibel dengan Cloudflare Pages)
+
 // Simpan credentials di environment variables (lebih aman)
 // Atau di file ini jika tidak ingin pakai env
 
 export const ADMIN_CREDENTIALS = {
-  username: process.env.ADMIN_USERNAME || 'admin',
+  username: import.meta.env.ADMIN_USERNAME || 'admin',
   // Hash untuk password: ppdbAdmin2026
-  passwordHash: process.env.ADMIN_PASSWORD_HASH || 'd2800b126f83def9f9544d3bf2a99ca06b6706bd974f7234bd67d994e9109a41'
+  passwordHash: import.meta.env.ADMIN_PASSWORD_HASH || 'd2800b126f83def9f9544d3bf2a99ca06b6706bd974f7234bd67d994e9109a41'
 };
 
 // Secret key untuk session (gunakan environment variable)
-export const SESSION_SECRET = process.env.SESSION_SECRET || 'ppdb-secret-key-change-this';
+export const SESSION_SECRET = import.meta.env.SESSION_SECRET || 'ppdb-secret-key-change-this';
 
 // Session expiration (30 menit)
 export const SESSION_EXPIRY = 30 * 60 * 1000; // 30 menit dalam milidetik
 
-// Helper untuk hash password sederhana (dalam production gunakan bcrypt)
-export function hashPassword(password: string): string {
-  return crypto
-    .createHash('sha256')
-    .update(password)
-    .digest('hex');
+// Helper untuk hash password menggunakan Web Crypto API (kompatibel Cloudflare)
+export async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 // Cek credentials
-export function verifyCredentials(username: string, password: string): boolean {
-  const hashedInput = hashPassword(password);
+export async function verifyCredentials(username: string, password: string): Promise<boolean> {
+  const hashedInput = await hashPassword(password);
   return (
     username === ADMIN_CREDENTIALS.username &&
     hashedInput === ADMIN_CREDENTIALS.passwordHash

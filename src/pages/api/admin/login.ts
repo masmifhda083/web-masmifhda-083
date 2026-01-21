@@ -6,7 +6,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   try {
     const data = await request.json();
     const { username, password } = data;
-    
+
     if (!username || !password) {
       return new Response(JSON.stringify({
         success: false,
@@ -16,10 +16,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         headers: { 'Content-Type': 'application/json' }
       });
     }
-    
+
     // Verify credentials
-    const isValid = verifyCredentials(username, password);
-    
+    const isValid = await verifyCredentials(username, password);
+
     if (!isValid) {
       return new Response(JSON.stringify({
         success: false,
@@ -29,10 +29,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         headers: { 'Content-Type': 'application/json' }
       });
     }
-    
+
     // Create session
     const sessionId = createSession(username);
-    
+
     // Set cookie
     cookies.set('session_id', sessionId, {
       httpOnly: true,
@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       maxAge: 30 * 60, // 30 menit
       path: '/'
     });
-    
+
     return new Response(JSON.stringify({
       success: true,
       message: 'Login berhasil'
@@ -49,9 +49,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
-    
+
   } catch (error: any) {
-    
+
     return new Response(JSON.stringify({
       success: false,
       message: 'Terjadi kesalahan server'
