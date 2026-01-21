@@ -6,10 +6,10 @@ import Highlight from "../components/Highlight.astro";
 import Contact from "../components/Contact.astro";
 import "../styles/global.css";
 import { getCollection } from "astro:content";
-import websiteSettings from '../content/settings/website.json';
+import websiteSettings from "../content/settings/website.json";
 import HeroSection from "../components/HeroSection.astro";
-import StaffList from '../components/StaffList.astro';
-import Year from '../components/Year.astro'
+import StaffList from "../components/StaffList.astro";
+import Year from "../components/Year.astro";
 const allPosts = await getCollection("posts");
 
 // Proses posts untuk mendapatkan category dan slug yang benar
@@ -76,8 +76,6 @@ const latestPosts = processedPosts
     return dateB - dateA;
   })
   .slice(0, 6); // 6 post terbaru
-
-
 ---
 
 <Layout>
@@ -85,61 +83,93 @@ const latestPosts = processedPosts
   <Highlight />
   <section class="bg-primary">
     <div class="container mx-auto px-4 py-12">
-      <h2 class="text-3xl text-surface text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2">Berita Terbaru</h2>
-        <LatestPosts posts={latestPosts} maxPosts={4} showDescription={true}/>
+      <h2
+        class="text-3xl text-surface text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2"
+      >
+        Berita Terbaru
+      </h2>
+      <LatestPosts posts={latestPosts} maxPosts={4} showDescription={true} />
     </div>
   </section>
   <section>
     <div class="container mx-auto px-4 py-8">
-      <div class="mt-12 max-w-3xl mx-auto  md:[&>div>article>div]:w-64! md:[&>div>article>div]:h-36! md:[&>div>article>div]:text-[14px]! md:[&>div>article>div>h3]:text-xl! md:[&>div>article>div>p]:text-[14px]!">
-          <h2 class="text-3xl text-primary text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-primary before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2">Prestasi Siswa</h2>
-          <LatestPosts posts={prestasiPosts} maxPosts={4} showDescription={true} layout="sidebar"/>
-        </div>
-       <div data-animate="fade" class="mt-8 text-center">
-        <a href="/posts/prestasi" class="inline-block bg-primary px-6 py-3 rounded-lg hover:bg-secondary transition-colors">
+      <div
+        class="mt-12 max-w-3xl mx-auto md:[&>div>article>div]:w-64! md:[&>div>article>div]:h-36! md:[&>div>article>div]:text-[14px]! md:[&>div>article>div>h3]:text-xl! md:[&>div>article>div>p]:text-[14px]!"
+      >
+        <h2
+          class="text-3xl text-primary text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-primary before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2"
+        >
+          Prestasi Siswa
+        </h2>
+        <LatestPosts
+          posts={prestasiPosts}
+          maxPosts={4}
+          showDescription={true}
+          layout="sidebar"
+        />
+      </div>
+      <div data-animate="fade" class="mt-8 text-center">
+        <a
+          href="/posts/prestasi"
+          class="inline-block bg-primary px-6 py-3 rounded-lg hover:bg-secondary transition-colors"
+        >
           <button class="text-surface">Lihat Semua Prestasi</button>
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="py-24 bg-primary text-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-20" data-animate="fade">
+        <h2 class="text-4xl font-bold mb-6">Wadah Kreativitas Siswa</h2>
+        <p class="text-lg opacity-80 leading-relaxed">
+          Lebih dari sekadar akademik, kami mengasah bakat dan minat siswa
+          melalui berbagai kegiatan ekstrakurikuler yang bervariasi.
+        </p>
+      </div>
+      <ExtracurricularList />
+    </div>
+  </section>
+  <section
+    class="relative bg-cover bg-center py-20 px-6 before:content-[''] before:absolute before:bg-primary before:opacity-50 before:inset-0 before:w-full before:h-full"
+    style="background-image: url(https://images.unsplash.com/photo-1494949649109-ecfc3b8c35df?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);"
+  >
+    <div class="container relative py-12 w-full mx-auto">
+      <div class="text-surface text-center relative">
+        <h1 data-animate="fade" class="text-3xl md:text-4xl font-bold mb-4">
+          Penerimaan Peserta Didik Baru <Year />
+        </h1>
+        <p data-animate="fade" class="text-lg mb-8">
+          Klik link berikut untuk informasi dan syarat pendaftaran siswa baru
+        </p>
+        <a href="/ppdb">
+          <span
+            class="bg-surface text-primary rounded-sm py-2 px-4"
+            data-animate="fade">FORMULIR PENDAFTARAN</span
+          >
         </a>
       </div>
     </div>
   </section>
   <section class="bg-primary">
     <div class="container mx-auto px-4 py-20">
-      <h1 class="text-3xl text-surface text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2">Ekstrakulikuler</h1>
-        <ExtracurricularList/>
-    </div>
-  </section>
-  <section class="relative bg-cover bg-center py-20 px-6 before:content-[''] before:absolute before:bg-primary before:opacity-50 before:inset-0 before:w-full before:h-full" style="background-image: url(https://images.unsplash.com/photo-1494949649109-ecfc3b8c35df?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);">
-    <div class="container relative py-12 w-full mx-auto">
-      <div class="text-surface text-center relative"> 
-          <h1 data-animate="fade" class="text-3xl md:text-4xl font-bold mb-4">Penerimaan Peserta Didik Baru <Year/></h1>
-          <p data-animate="fade" class="text-lg mb-8">
-              Klik link berikut untuk informasi dan syarat pendaftaran siswa baru
-          </p>
-          <a href="/ppdb">
-              <span class="bg-surface text-primary rounded-sm py-2 px-4" data-animate="fade">FORMULIR PENDAFTARAN</span>
-          </a>
-      </div>
-    </div>
-</section>
-  <section class="bg-primary">
-    <div class="container mx-auto px-4 py-20">
-      <h2 class="text-3xl text-surface text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2">Tenaga Pendidik</h2>
-        <StaffList /> 
+      <h2
+        class="text-3xl text-surface text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2"
+      >
+        Tenaga Pendidik
+      </h2>
+      <StaffList />
     </div>
   </section>
   <Contact />
 
   <script>
-  import { initScrollAnimations } from "../scripts/scrollAnimations.js"
+    import { initScrollAnimations } from "../scripts/scrollAnimations.js";
 
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      initScrollAnimations()
-    }, 50)
-  })
-</script>
-
-
-
-
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        initScrollAnimations();
+      }, 50);
+    });
+  </script>
 </Layout>

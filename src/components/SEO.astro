@@ -119,21 +119,46 @@ const orgStructuredData = parseStructuredData(seoData?.structuredData?.organizat
 const websiteStructuredData = parseStructuredData(seoData?.structuredData?.website);
 ---
 
-<!-- Favicon -->
+<!-- Favicon & Icons -->
 <link rel="icon" href={siteInfo.favicon} type="image/x-icon" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+<!-- Preconnect & DNS Prefetch for Performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+<link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+<!-- External Stylesheets -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"/>
 
 <!-- Basic Meta Tags -->
 <title>{pageTitle}</title>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content={pageDescription} />
+<meta name="theme-color" content="#1a1a2e" />
+<meta name="format-detection" content="telephone=no" />
 {globalMeta.defaultKeywords && <meta name="keywords" content={globalMeta.defaultKeywords} />}
 {globalMeta.author && <meta name="author" content={globalMeta.author} />}
 {noindex && <meta name="robots" content={robotsContent} />}
 
+<!-- Apple Mobile Web App -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content={siteInfo.siteName} />
+
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalUrl} />
+
+<!-- Sitemap & RSS -->
+<link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+<!-- Language Alternate -->
+<link rel="alternate" hreflang="id" href={siteInfo.siteUrl} />
+<link rel="alternate" hreflang="x-default" href={siteInfo.siteUrl} />
 
 <!-- Open Graph Meta Tags -->
 <meta property="og:title" content={pageTitle} />
@@ -247,29 +272,46 @@ const websiteStructuredData = parseStructuredData(seoData?.structuredData?.websi
 )}
 
 <!-- Page-specific structured data -->
-<script type="application/ld+json">
-{JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": pageTitle,
-  "description": pageDescription,
-  "url": fullUrl,
-  "publisher": {
-    "@type": "EducationalOrganization",
-    "name": siteInfo.siteName,
-    "url": siteInfo.siteUrl
-  }
-})}
-</script>
-
-<!-- GTM noscript -->
-{analytics.gtmId && (
-  <noscript>
-    <iframe 
-      src={`https://www.googletagmanager.com/ns.html?id=${analytics.gtmId}`} 
-      height="0" 
-      width="0" 
-      style="display:none;visibility:hidden"
-    />
-  </noscript>
+{pageType === 'website' ? (
+  <script type="application/ld+json">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": pageTitle,
+    "description": pageDescription,
+    "url": fullUrl,
+    "publisher": {
+      "@type": "EducationalOrganization",
+      "name": siteInfo.siteName,
+      "url": siteInfo.siteUrl
+    }
+  })}
+  </script>
+) : (
+  <script type="application/ld+json">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": pageTitle,
+    "description": pageDescription,
+    "url": fullUrl,
+    "image": pageImage ? getFullImageUrl(pageImage) : undefined,
+    "datePublished": publishedTime || undefined,
+    "dateModified": modifiedTime || publishedTime || undefined,
+    "author": {
+      "@type": "Organization",
+      "name": globalMeta.author || siteInfo.siteName
+    },
+    "publisher": {
+      "@type": "EducationalOrganization",
+      "name": siteInfo.siteName,
+      "url": siteInfo.siteUrl,
+      "logo": siteInfo.siteLogo ? {
+        "@type": "ImageObject",
+        "url": getFullImageUrl(siteInfo.siteLogo)
+      } : undefined
+    },
+    "keywords": tags.length > 0 ? tags.join(", ") : undefined
+  })}
+  </script>
 )}

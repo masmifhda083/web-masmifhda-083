@@ -1,30 +1,32 @@
 ---
-import { getCollection, render } from "astro:content"
-import Article from "../../../layouts/Article.astro"
+import { getCollection, render } from "astro:content";
+import Article from "../../../layouts/Article.astro";
 export const prerender = true;
 export async function getStaticPaths() {
-  const posts = await getCollection("posts")
+  const posts = await getCollection("posts");
 
-  return posts.map(post => {
-    const category = (post.data.category || "uncategorized").toLowerCase()
-    const slug = post.id.split("/").pop()
+  return posts.map((post) => {
+    const category = (post.data.category || "uncategorized").toLowerCase();
+    const slug = post.id.split("/").pop();
 
     return {
       params: { category, slug },
-      props: { post }
-    }
-  })
+      props: { post },
+    };
+  });
 }
 
-const { post } = Astro.props
-if (!post) return Astro.redirect("/posts")
+const { post } = Astro.props;
+if (!post) return Astro.redirect("/posts");
 
-const { Content, headings } = await render(post)
+const { Content, headings } = await render(post);
 
-const slug = post.id.split("/").pop()
-const category = (post.data.category || "uncategorized").toLowerCase()
-const url = `/posts/${category}/${slug}`
+const slug = post.id.split("/").pop();
+const category = (post.data.category || "uncategorized").toLowerCase();
+const path = `/posts/${category}/${slug}`;
+const url = new URL(path, Astro.site).href;
 ---
+
 <Article
   title={post.data.title}
   author={post.data.author}

@@ -3,15 +3,15 @@
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
 import SEO from "../components/SEO.astro";
-import Slider from "../components/Slider.astro"
-import settings from "../content/settings/website.json"
+import Slider from "../components/Slider.astro";
+import settings from "../content/settings/website.json";
 import SpeedDial from "../components/SpeedDial.astro";
-import contact from "../content/contact/index.json"
+import GTMNoscript from "../components/GTMNoscript.astro";
+import contact from "../content/contact/index.json";
 
-const socialLinks =
-  contact?.socialMedia?.links ?? []
+const socialLinks = contact?.socialMedia?.links ?? [];
 
-const c = settings.themeColors
+const c = settings.themeColors;
 import "../styles/global.css";
 import "@fontsource/poppins";
 import "@fontsource/mr-dafoe";
@@ -26,7 +26,8 @@ const { title, description } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="id"
+<html
+  lang="id"
   style={`
     --color-bg: ${c.background};
     --color-surface: ${c.surface};
@@ -43,7 +44,6 @@ const { title, description } = Astro.props;
   <head>
     <SEO title={title} description={description} url={Astro.url.pathname} />
     <style is:global>
-      
       .prose {
         max-width: none;
       }
@@ -53,6 +53,7 @@ const { title, description } = Astro.props;
     </style>
   </head>
   <body class="bg-body">
+    <GTMNoscript />
     <Navbar />
     <main role="main">
       <slot />

@@ -3,7 +3,6 @@ import db from '../../../lib/db';
 
 export const GET: APIRoute = async ({ url }) => {
   const tahun = url.searchParams.get('tahun');
-  const jurusan = url.searchParams.get('jurusan');
 
   let where: string[] = [];
   let args: any[] = [];
@@ -13,11 +12,6 @@ export const GET: APIRoute = async ({ url }) => {
     args.push(tahun);
   }
 
-  if (jurusan) {
-    where.push('jurusan = ?');
-    args.push(jurusan);
-  }
-
   const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
 
   const result = await db.execute({
@@ -25,7 +19,6 @@ export const GET: APIRoute = async ({ url }) => {
       SELECT
         kode_pendaftaran,
         tahun_ppdb,
-        jurusan,
         nama_lengkap,
         nama_panggilan,
         email,
@@ -39,13 +32,12 @@ export const GET: APIRoute = async ({ url }) => {
     args
   });
 
-  let csv = 'Kode,Tahun,Jurusan,Nama Lengkap,Nama Panggilan,Email,HP,Status,Tanggal\n';
+  let csv = 'Kode,Tahun,Nama Lengkap,Nama Panggilan,Email,HP,Status,Tanggal\n';
 
   for (const row of result.rows) {
     csv += [
       row.kode_pendaftaran,
       row.tahun_ppdb,
-      row.jurusan,
       row.nama_lengkap,
       row.nama_panggilan,
       row.email,
@@ -57,8 +49,7 @@ export const GET: APIRoute = async ({ url }) => {
       .join(',') + '\n';
   }
 
-  const filename =
-    `ppdb_${tahun || 'semua'}_${jurusan || 'semua'}.csv`;
+  const filename = `ppdb_${tahun || 'semua'}.csv`;
 
   return new Response(csv, {
     status: 200,

@@ -1,0 +1,27 @@
+---
+// src/components/GTMNoscript.astro
+// GTM noscript fallback - harus diletakkan di dalam <body>
+import { getCollection } from "astro:content";
+
+let gtmId = "";
+
+try {
+    const settingsCollection = await getCollection("settings");
+    gtmId = settingsCollection[0]?.data?.seo?.analytics?.gtmId || "";
+} catch {
+    gtmId = "";
+}
+---
+
+{
+    gtmId && (
+        <noscript>
+            <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+            />
+        </noscript>
+    )
+}

@@ -5,7 +5,8 @@ import crypto from 'crypto';
 
 export const ADMIN_CREDENTIALS = {
   username: process.env.ADMIN_USERNAME || 'admin',
-  passwordHash: process.env.ADMIN_PASSWORD_HASH || ''
+  // Hash untuk password: ppdbAdmin2026
+  passwordHash: process.env.ADMIN_PASSWORD_HASH || 'd2800b126f83def9f9544d3bf2a99ca06b6706bd974f7234bd67d994e9109a41'
 };
 
 // Secret key untuk session (gunakan environment variable)
@@ -43,25 +44,25 @@ const sessions = new Map<string, SessionData>();
 export function createSession(username: string): string {
   const sessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
   const expiresAt = Date.now() + SESSION_EXPIRY;
-  
+
   sessions.set(sessionId, { username, expiresAt });
-  
+
   // Cleanup expired sessions setiap 5 menit
   setTimeout(() => cleanupSessions(), 5 * 60 * 1000);
-  
+
   return sessionId;
 }
 
 export function verifySession(sessionId: string): boolean {
   const session = sessions.get(sessionId);
-  
+
   if (!session) return false;
-  
+
   if (Date.now() > session.expiresAt) {
     sessions.delete(sessionId);
     return false;
   }
-  
+
   // Perpanjang session
   session.expiresAt = Date.now() + SESSION_EXPIRY;
   return true;

@@ -8,7 +8,6 @@ const db = createClient({
 
 export interface UserData {
   tahun_ppdb: string;
-  jurusan: string;
   nama_lengkap: string;
   nama_panggilan: string;
   tempat_lahir: string;
@@ -70,7 +69,7 @@ export async function insertUser(userData: UserData) {
     args: [
       kodePendaftaran,
       userData.tahun_ppdb,
-      userData.jurusan,
+      '', // jurusan dikosongkan
       userData.nama_lengkap,
       userData.nama_panggilan,
       userData.tempat_lahir,
@@ -137,6 +136,17 @@ export async function updateUserStatus(id: number, status: string) {
   };
 }
 
+export async function deleteUser(id: number) {
+  const result = await db.execute({
+    sql: 'DELETE FROM users WHERE id = ?',
+    args: [id]
+  });
+
+  return {
+    success: result.rowsAffected > 0
+  };
+}
+
 export async function getUserByKode(kode: string) {
   try {
 
@@ -169,7 +179,6 @@ export async function getAllUsers() {
       id,
       kode_pendaftaran,
       tahun_ppdb,
-      jurusan,
       nama_lengkap,
       nama_panggilan,
       email,

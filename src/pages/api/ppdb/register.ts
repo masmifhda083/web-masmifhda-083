@@ -12,7 +12,7 @@ export const POST: APIRoute = async ({ request }) => {
 
         // Validasi required fields
         const requiredFields = [
-            'tahun_ppdb', 'jurusan', 'nama_lengkap', 'nama_panggilan', 'tempat_lahir',
+            'tahun_ppdb', 'nama_lengkap', 'nama_panggilan', 'tempat_lahir',
             'tanggal_lahir', 'jenis_kelamin', 'agama', 'nomor_hp', 'email',
             'alamat_lengkap', 'asal_sekolah', 'alamat_sekolah', 'nama_ayah',
             'telepon_ayah', 'pekerjaan_ayah', 'alamat_ayah', 'nama_ibu',
@@ -28,13 +28,6 @@ export const POST: APIRoute = async ({ request }) => {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
-        const validJurusan = ['IPA', 'IPS', 'Bahasa'];
-        if (!validJurusan.includes(data.jurusan)) {
-            return new Response(JSON.stringify({
-                success: false,
-                message: 'Jurusan tidak valid'
-            }), { status: 400 });
         }
 
         // Validasi pernyataan
