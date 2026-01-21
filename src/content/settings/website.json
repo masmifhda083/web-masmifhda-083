@@ -67,10 +67,6 @@
         "isActive": false
       },
       {
-        "label": "Kurikulum",
-        "href": "/posts/Kurikulum"
-      },
-      {
         "label": "Kontak",
         "href": "/contact",
         "isActive": false
@@ -78,15 +74,15 @@
     ],
     "style": {
       "bgColor": "#F6F6F6",
-      "textColor": "#3D5272",
-      "hoverColor": "#6689BF",
+      "textColor": "#419B36",
+      "hoverColor": "#146909",
       "borderColor": "#e5e7eb",
       "bgTransparent": "solid"
     },
     "schoolInfo": {
-      "name": "SMAN 1 INDONESIA",
-      "logo": "/uploads/logo-sma.png",
-      "logoAlt": "Logo Sekolah",
+      "name": "MA MIFTAHUL HUDA",
+      "logo": "/uploads/logo.webp",
+      "logoAlt": "Logo miftahul huda tambak jaya sanyir",
       "logoWidthDesktop": 40,
       "logoWidthMobile": 40,
       "showName": true
@@ -95,26 +91,26 @@
   "slider": {
     "images": [
       {
-        "url": "/uploads/smanegeri1indonesia.png",
+        "url": "/uploads/cover.webp",
+        "alt": "ma miftahul huda",
+        "caption": ""
+      },
+      {
+        "url": "/uploads/mifda-1.webp",
         "alt": "Slider Image",
         "caption": ""
       },
       {
-        "url": "/uploads/peter-robbins-nKxFAgpvhOw-unsplash.jpg",
-        "alt": "Slider Image",
-        "caption": ""
-      },
-      {
-        "url": "/uploads/zoshua-colah-bz4vI87iRQc-unsplash.jpg",
+        "url": "/uploads/mifda-15.webp",
         "alt": "Slider Image",
         "caption": ""
       }
     ],
     "schoolInfo": {
-      "name": "SMA NEGERI 01 ",
-      "city": "INDONESIA",
-      "motto": "SEKOLAH UNGGULAN BERBASIS KARAKTER",
-      "welcomeMessage": "Welcome to",
+      "name": "MA MIFTAHUL HUDA",
+      "city": "TAMBAK JAYA",
+      "motto": "Mewujudkan Pendidikan Yang Bermanfaat Dunia dan Akhirat",
+      "welcomeMessage": "Selamat Datang di",
       "textSettings": {
         "color": "#FFFFFF",
         "fontFamily": {
@@ -133,35 +129,36 @@
   },
   "seo": {
     "siteInfo": {
-      "siteName": "Sma Negeri 1 Indonesia",
-      "siteUrl": "https://smanegeri1indonesia.sch.id",
-      "siteDescription": "Sekolah Unggulan Berbasis Karakter",
-      "siteLogo": "/uploads/logo-sma.png",
-      "favicon": "/uploads/logo-sma.png"
+      "siteName": "Ma Miftahul Huda",
+      "siteUrl": "https://masmifhda.sch.id/",
+      "siteDescription": "Mewujudkan Pendidikan Yang Bermanfaat Dunia dan Akhirat",
+      "siteLogo": "/uploads/logo.webp",
+      "favicon": "/uploads/logo.webp"
     },
     "globalMeta": {
-      "titleTemplate": "%s | Sma Negeri 1 Indonesia",
-      "defaultTitle": "Sma Negeri 1 Indonesia",
-      "defaultDescription": "Sekolah Negeri Unggulan",
-      "defaultKeywords": "Sma Negeri 1 Indonesia"
+      "titleTemplate": "%s | MA MIFTAHUL HUDA",
+      "defaultTitle": "MA MIFTAHUL HUDA",
+      "defaultDescription": "Mewujudkan Pendidikan Yang Bermanfaat Dunia dan Akhirat",
+      "defaultKeywords": "Ma Miftahul Huda Tambak Jaya "
     },
     "openGraph": {
-      "type": "website"
+      "type": "website",
+      "image": "/uploads/cover.webp"
     }
   },
   "footer": {
-    "schoolName": "SMA NEGERI 1 INDONESIA"
+    "schoolName": "MA MIFTAHUL HUDA"
   },
   "themeColors": {
     "background": "#F6F6F6",
-    "primary": "#254166",
-    "secondary": "#6689BF",
+    "primary": "#2E6731",
+    "secondary": "#419B36",
     "surface": "#F6F6F6",
     "textBase": "#111827",
-    "textHeading": "#3D5272",
+    "textHeading": "#2E6731",
     "textMuted": "#6b7280",
-    "link": "#3D5272",
-    "linkHover": "#6689BF",
+    "link": "#2E6731",
+    "linkHover": "#419B36",
     "border": "#D4D4D4"
   }
 }

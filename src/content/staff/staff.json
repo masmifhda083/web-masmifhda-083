@@ -1,44 +1,109 @@
 {
   "teachers": [
     {
-      "name": "Budi Santoso",
-      "avatar": "/uploads/humberto-chavez-F_CnS-8NlZQ-unsplash.jpg",
+      "name": "Ahmad Rifa’i, M.Pd.\t",
+      "avatar": "/uploads/kepsek.webp",
       "role": "kepala-sekolah"
     },
     {
-      "name": "Siti Rahayu",
-      "avatar": "/uploads/model.png",
-      "role": "wakil-kepala"
-    },
-    {
-      "name": "Setia Budi",
-      "avatar": "/uploads/danny-ocean-ehUYU820lcA-unsplash.jpg",
-      "role": "pend.-biologi"
-    },
-    {
-      "name": "Ayu Ningsih",
-      "avatar": "/uploads/aksin-famizani-FkfBOZrTDYA-unsplash.jpg",
+      "name": "Drs. Hamim Hasyim.\t",
+      "avatar": "/uploads/guru-2.webp",
       "role": "pend.-agama-islam"
     },
     {
-      "name": "Sri Arum",
-      "avatar": "/uploads/doctake-9J9LFdkvhU4-unsplash.jpg",
-      "role": "pend.-bahasa-inggris"
+      "name": "Endang Kurniasih, S.E.",
+      "avatar": "/uploads/guru-3.webp",
+      "role": "pend.-ekonomi"
     },
     {
-      "name": "Ridwan Angkasa",
-      "avatar": "/uploads/janko-ferlic-G-jo31ESuRE-unsplash.jpg",
-      "role": "pend.-matematika"
+      "name": "Abidin, S.Pd.\t",
+      "avatar": "/uploads/guru-4.webp",
+      "role": "guru-mapel"
     },
     {
-      "name": "Nina Selia Putri",
-      "avatar": "/uploads/muhammad-faiz-zulkeflee-KrR7xEn4HV8-unsplash.jpg",
+      "name": "Bashori, S,Pd,I, M.Pd.\t",
+      "avatar": "/uploads/guru-5.webp",
+      "role": "pend.-agama-islam"
+    },
+    {
+      "name": "Didi Hartono, S.Pd.\t",
+      "avatar": "/uploads/guru-6.webp",
+      "role": "pend.-agama-islam"
+    },
+    {
+      "name": "Saipudin Aziz, S.Pd.\t",
+      "avatar": "/uploads/guru-7.webp",
+      "role": "penjaskes"
+    },
+    {
+      "name": "Sulis Setiani, S.Pd.",
+      "avatar": "/uploads/guru-10.webp",
       "role": "pend.-fisika"
     },
     {
-      "name": "Agung Sedayu",
-      "avatar": "/uploads/hoi-an-photographer-O3uN6fIuTig-unsplash.jpg",
-      "role": "pend.-ekonomi"
+      "name": "Siti Aisah, S.Pd.I.",
+      "avatar": "/uploads/guru-8.webp",
+      "role": "pend.-agama-islam"
+    },
+    {
+      "name": "Ari Romadlon, S.Pd.",
+      "avatar": "/uploads/guru-9.webp",
+      "role": "pend.-agama-islam"
+    },
+    {
+      "name": "Nizammudin, S.Pd.",
+      "avatar": "/uploads/guru-11.webp",
+      "role": "wali-kelas"
+    },
+    {
+      "name": "Indah Yunita Sari, S.Pd.\t",
+      "avatar": "/uploads/guru-12.webp",
+      "role": "pend.-biologi"
+    },
+    {
+      "name": "Nafsyiatun, S.Pd.\t",
+      "avatar": "/uploads/guru-14.webp",
+      "role": "pend.-agama-islam"
+    },
+    {
+      "name": "M. Aziz Sulaiman, S.Pd.",
+      "avatar": "/uploads/guru-15.webp",
+      "role": "guru-mapel"
+    },
+    {
+      "name": "Nia Purnamasari, S.Pd.",
+      "avatar": "/uploads/guru-13.webp",
+      "role": "pend.-b-indonesia"
+    },
+    {
+      "name": "Wahidin, S.Pd.",
+      "avatar": "/uploads/placeholder.webp",
+      "role": "guru-mapel"
+    },
+    {
+      "name": "Julaini, S.Pd.",
+      "avatar": "/uploads/placeholder.webp",
+      "role": "pend.-bahasa-inggris"
+    },
+    {
+      "name": "Ahmad Nabhan, S.Pd.",
+      "avatar": "/uploads/placeholder.webp",
+      "role": "pend.-agama-islam"
+    },
+    {
+      "name": "Syawaludin, S.Pd.",
+      "avatar": "/uploads/guru-16.webp",
+      "role": "pend.-matematika"
+    },
+    {
+      "name": "Jumhadi",
+      "avatar": "/uploads/placeholder.webp",
+      "role": "staf-tata-usaha"
+    },
+    {
+      "name": "Riono",
+      "avatar": "/uploads/placeholder.webp",
+      "role": "staf-tata-usaha"
     }
   ]
 }
