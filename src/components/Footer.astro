@@ -1,12 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
 
 // Ambil data settings
-const settingsData = await getCollection('settings');
+const settingsData = await getCollection("settings");
 const settings = settingsData[0]?.data || {};
 
 // Ambil nama sekolah dengan cara yang lebih aman
-let schoolName = 'Nama Sekolah';
+let schoolName = "Nama Sekolah";
 
 if (settings.footer?.schoolName) {
     schoolName = settings.footer.schoolName;
@@ -16,17 +16,32 @@ if (settings.footer?.schoolName) {
     schoolName = settings.slider.schoolInfo.name;
 }
 
-
 // Tahun otomatis
 const currentYear = new Date().getFullYear();
 ---
 
 <footer role="contentinfo" class="bg-primary">
     <div class="container w-full mx-auto py-4">
-        <p class="block text-sm text-surface text-center">
-            © {currentYear}
-            <a href="/" aria-label="footer"> <span class="text-surface hover:text-secondary">{schoolName}</span></a>
-            . All Rights Reserved.
-        </p>
+        <div
+            class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4"
+        >
+            <p class="text-sm text-surface text-center">
+                © {currentYear}
+                <a href="/" aria-label="footer">
+                    <span class="text-surface hover:text-secondary"
+                        >{schoolName}</span
+                    ></a
+                >
+                . All Rights Reserved.
+            </p>
+            <span class="hidden md:inline text-surface/50">|</span>
+            <a href="/privacy-policy">
+                <p
+                    class="text-sm text-surface/80 hover:text-secondary transition-colors"
+                >
+                    Kebijakan Privasi
+                </p>
+            </a>
+        </div>
     </div>
 </footer>

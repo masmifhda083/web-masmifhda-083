@@ -1,0 +1,355 @@
+---
+import Layout from "../layouts/Layout.astro";
+import settings from "../content/settings/website.json";
+import contactData from "../content/contact/index.json";
+
+const siteName = settings.seo?.siteInfo?.siteName || "MA Miftahul Huda";
+const siteUrl = settings.seo?.siteInfo?.siteUrl || "https://masmifhda.sch.id";
+
+const contactDetails = contactData?.contactInfo?.details ?? [];
+const emailInfo = contactDetails.find((d: any) => d.type === "email");
+const addressInfo = contactDetails.find((d: any) => d.type === "address");
+
+const lastUpdated = "25 Januari 2026";
+---
+
+<Layout
+    title="Kebijakan Privasi"
+    description="Kebijakan Privasi MA Miftahul Huda - Informasi tentang bagaimana kami mengumpulkan, menggunakan, dan melindungi data Anda."
+>
+    <section class="py-16 md:py-24">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-3xl md:text-4xl font-bold text-heading mb-4">
+                    Kebijakan Privasi
+                </h1>
+                <p class="text-muted">
+                    Terakhir diperbarui: {lastUpdated}
+                </p>
+            </div>
+
+            <!-- Content -->
+            <div class="prose prose-lg max-w-none space-y-8">
+                <!-- Introduction -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Pendahuluan
+                    </h2>
+                    <p class="text-base leading-relaxed">
+                        <strong>{siteName}</strong> ("kami", "kita", atau "sekolah")
+                        berkomitmen untuk melindungi privasi Anda. Kebijakan Privasi
+                        ini menjelaskan bagaimana kami mengumpulkan, menggunakan,
+                        mengungkapkan, dan melindungi informasi pribadi Anda ketika
+                        Anda mengunjungi website kami di
+                        <a
+                            href={siteUrl}
+                            class="text-primary hover:text-primary-hover"
+                            >{siteUrl}</a
+                        >.
+                    </p>
+                    <p class="text-base leading-relaxed mt-4">
+                        Dengan menggunakan website kami, Anda menyetujui praktik
+                        yang dijelaskan dalam Kebijakan Privasi ini.
+                    </p>
+                </section>
+
+                <!-- Information We Collect -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Informasi yang Kami Kumpulkan
+                    </h2>
+
+                    <h3 class="text-lg font-medium text-heading mt-6 mb-3">
+                        1. Informasi yang Anda Berikan
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-base">
+                        <li>
+                            Data pendaftaran PPDB (nama, alamat, tanggal lahir,
+                            data orang tua/wali)
+                        </li>
+                        <li>
+                            Informasi kontak (email, nomor telepon) saat
+                            menghubungi kami
+                        </li>
+                        <li>Pesan dan komentar melalui formulir kontak</li>
+                    </ul>
+
+                    <h3 class="text-lg font-medium text-heading mt-6 mb-3">
+                        2. Informasi yang Dikumpulkan Secara Otomatis
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-base">
+                        <li>Alamat IP dan lokasi geografis umum</li>
+                        <li>Jenis browser dan perangkat yang digunakan</li>
+                        <li>Halaman yang dikunjungi dan waktu kunjungan</li>
+                        <li>
+                            Sumber rujukan (dari mana Anda mengakses website
+                            kami)
+                        </li>
+                    </ul>
+
+                    <h3 class="text-lg font-medium text-heading mt-6 mb-3">
+                        3. Cookies dan Teknologi Pelacakan
+                    </h3>
+                    <p class="text-base leading-relaxed">
+                        Kami menggunakan cookies dan teknologi serupa untuk
+                        meningkatkan pengalaman pengguna, menganalisis lalu
+                        lintas website, dan untuk keperluan analitik melalui
+                        layanan seperti Google Analytics.
+                    </p>
+                </section>
+
+                <!-- How We Use Information -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Bagaimana Kami Menggunakan Informasi
+                    </h2>
+                    <p class="text-base leading-relaxed mb-4">
+                        Kami menggunakan informasi yang dikumpulkan untuk:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-base">
+                        <li>Memproses pendaftaran siswa baru (PPDB)</li>
+                        <li>Merespons pertanyaan dan permintaan informasi</li>
+                        <li>Mengirimkan informasi penting tentang sekolah</li>
+                        <li>Meningkatkan layanan dan konten website</li>
+                        <li>
+                            Menganalisis penggunaan website untuk peningkatan
+                            kualitas
+                        </li>
+                        <li>Mematuhi kewajiban hukum yang berlaku</li>
+                    </ul>
+                </section>
+
+                <!-- Data Sharing -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Berbagi Informasi
+                    </h2>
+                    <p class="text-base leading-relaxed mb-4">
+                        Kami <strong
+                            >tidak menjual, menyewakan, atau memperdagangkan</strong
+                        > informasi pribadi Anda kepada pihak ketiga. Namun, kami
+                        dapat berbagi informasi dalam situasi berikut:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-base">
+                        <li>
+                            <strong>Dengan Yayasan:</strong> Untuk keperluan administrasi
+                            pendidikan
+                        </li>
+                        <li>
+                            <strong>Dengan Dinas Pendidikan:</strong> Untuk pelaporan
+                            data siswa sesuai regulasi
+                        </li>
+                        <li>
+                            <strong>Penyedia Layanan:</strong> Dengan pihak ketiga
+                            yang membantu operasional website (hosting, analytics)
+                        </li>
+                        <li>
+                            <strong>Kewajiban Hukum:</strong> Jika diwajibkan oleh
+                            hukum atau proses hukum yang berlaku
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Data Security -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Keamanan Data
+                    </h2>
+                    <p class="text-base leading-relaxed">
+                        Kami menerapkan langkah-langkah keamanan yang wajar
+                        untuk melindungi informasi pribadi Anda dari akses yang
+                        tidak sah, perubahan, pengungkapan, atau penghancuran.
+                        Langkah-langkah ini meliputi:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-base mt-4">
+                        <li>Enkripsi SSL/TLS untuk transmisi data</li>
+                        <li>
+                            Akses terbatas ke data pribadi hanya untuk staf yang
+                            berwenang
+                        </li>
+                        <li>Pembaruan keamanan berkala pada sistem</li>
+                    </ul>
+                    <p class="text-base leading-relaxed mt-4 text-muted">
+                        Namun, tidak ada metode transmisi melalui internet yang
+                        100% aman, dan kami tidak dapat menjamin keamanan
+                        absolut.
+                    </p>
+                </section>
+
+                <!-- Children's Privacy -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Privasi Anak-anak
+                    </h2>
+                    <p class="text-base leading-relaxed">
+                        Sebagai lembaga pendidikan, kami mungkin mengumpulkan
+                        informasi tentang siswa yang berusia di bawah 18 tahun.
+                        Pengumpulan data tersebut dilakukan dengan persetujuan
+                        orang tua/wali sebagai bagian dari proses pendaftaran
+                        dan administrasi pendidikan.
+                    </p>
+                    <p class="text-base leading-relaxed mt-4">
+                        Orang tua/wali memiliki hak untuk mengakses,
+                        memperbaiki, atau meminta penghapusan data anak mereka
+                        dengan menghubungi kami.
+                    </p>
+                </section>
+
+                <!-- Your Rights -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Hak Anda
+                    </h2>
+                    <p class="text-base leading-relaxed mb-4">
+                        Anda memiliki hak-hak berikut terkait data pribadi Anda:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-base">
+                        <li>
+                            <strong>Hak Akses:</strong> Meminta salinan data pribadi
+                            Anda yang kami simpan
+                        </li>
+                        <li>
+                            <strong>Hak Koreksi:</strong> Meminta perbaikan data yang
+                            tidak akurat
+                        </li>
+                        <li>
+                            <strong>Hak Penghapusan:</strong> Meminta penghapusan
+                            data pribadi Anda (dengan batasan tertentu)
+                        </li>
+                        <li>
+                            <strong>Hak Keberatan:</strong> Menolak penggunaan data
+                            Anda untuk tujuan tertentu
+                        </li>
+                    </ul>
+                    <p class="text-base leading-relaxed mt-4">
+                        Untuk menggunakan hak-hak ini, silakan hubungi kami
+                        melalui informasi kontak di bawah.
+                    </p>
+                </section>
+
+                <!-- Third Party Links -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Tautan ke Situs Pihak Ketiga
+                    </h2>
+                    <p class="text-base leading-relaxed">
+                        Website kami mungkin berisi tautan ke situs pihak
+                        ketiga. Kami tidak bertanggung jawab atas praktik
+                        privasi atau konten situs-situs tersebut. Kami
+                        menyarankan Anda untuk membaca kebijakan privasi setiap
+                        situs yang Anda kunjungi.
+                    </p>
+                </section>
+
+                <!-- Policy Changes -->
+                <section
+                    class="bg-surface rounded-xl p-6 md:p-8 border border-border"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Perubahan Kebijakan Privasi
+                    </h2>
+                    <p class="text-base leading-relaxed">
+                        Kami dapat memperbarui Kebijakan Privasi ini dari waktu
+                        ke waktu. Perubahan akan diposting di halaman ini dengan
+                        tanggal "Terakhir diperbarui" yang baru. Kami mendorong
+                        Anda untuk meninjau kebijakan ini secara berkala.
+                    </p>
+                </section>
+
+                <!-- Contact -->
+                <section
+                    class="bg-primary/5 rounded-xl p-6 md:p-8 border border-primary/20"
+                >
+                    <h2 class="text-xl font-semibold text-heading mb-4">
+                        Hubungi Kami
+                    </h2>
+                    <p class="text-base leading-relaxed mb-4">
+                        Jika Anda memiliki pertanyaan tentang Kebijakan Privasi
+                        ini atau ingin menggunakan hak-hak Anda, silakan hubungi
+                        kami:
+                    </p>
+                    <div class="space-y-2 text-base">
+                        <p><strong>{siteName}</strong></p>
+                        {addressInfo?.value && <p>{addressInfo.value}</p>}
+                        {
+                            emailInfo?.value && (
+                                <p>
+                                    Email:{" "}
+                                    <a
+                                        href={`mailto:${emailInfo.value}`}
+                                        class="text-primary hover:text-primary-hover"
+                                    >
+                                        {emailInfo.value}
+                                    </a>
+                                </p>
+                            )
+                        }
+                    </div>
+                </section>
+            </div>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a
+                    href="/"
+                    class="inline-flex items-center gap-2 text-primary hover:text-primary-hover font-medium"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    Kembali ke Beranda
+                </a>
+            </div>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    .prose h2 {
+        color: var(--color-text-heading);
+    }
+
+    .prose h3 {
+        color: var(--color-text-heading);
+    }
+
+    .prose p,
+    .prose li {
+        color: var(--color-text-base);
+    }
+
+    .prose a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .prose a:hover {
+        color: var(--color-link-hover);
+        text-decoration: underline;
+    }
+</style>

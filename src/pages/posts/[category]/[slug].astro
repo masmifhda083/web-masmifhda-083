@@ -36,6 +36,8 @@ const url = new URL(path, Astro.site).href;
   url={url}
   image={post.data.heroImage}
   headings={headings}
+  category={category}
+  slug={slug}
 >
   <Content />
 </Article>

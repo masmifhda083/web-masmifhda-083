@@ -1,6 +1,12 @@
 ---
 // src/components/SEO.astro
 import { getCollection } from 'astro:content';
+import contactData from '../content/contact/index.json';
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
 
 interface SEOProps {
   title?: string;
@@ -13,6 +19,7 @@ interface SEOProps {
   tags?: string[];
   noindex?: boolean;
   canonical?: string;
+  breadcrumbs?: BreadcrumbItem[];
 }
 
 const { 
@@ -25,7 +32,8 @@ const {
   modifiedTime,
   tags = [],
   noindex = false,
-  canonical = ''
+  canonical = '',
+  breadcrumbs = []
 } = Astro.props;
 
 const parseStructuredData = (dataString: string | undefined) => {
@@ -117,6 +125,197 @@ const getFullImageUrl = (imgPath: string) => {
 
 const orgStructuredData = parseStructuredData(seoData?.structuredData?.organization);
 const websiteStructuredData = parseStructuredData(seoData?.structuredData?.website);
+
+// Extract contact information
+const contactDetails = contactData?.contactInfo?.details ?? [];
+const phoneInfo = contactDetails.find((d: any) => d.type === 'phone');
+const emailInfo = contactDetails.find((d: any) => d.type === 'email');
+const addressInfo = contactDetails.find((d: any) => d.type === 'address');
+
+// Extract social media links
+const socialLinks = contactData?.socialMedia?.links ?? [];
+const sameAsLinks = socialLinks.map((link: any) => link.url).filter(Boolean);
+
+// Extract opening hours
+const operatingHours = contactData?.hours?.days ?? [];
+const openingHoursSpec = operatingHours.map((h: any) => {
+  // Parse days like "Senin - Jumat" to dayOfWeek array
+  const dayMap: Record<string, string> = {
+    'senin': 'Monday',
+    'selasa': 'Tuesday',
+    'rabu': 'Wednesday',
+    'kamis': 'Thursday',
+    'jumat': 'Friday',
+    'sabtu': 'Saturday',
+    'minggu': 'Sunday'
+  };
+  
+  let daysOfWeek: string[] = [];
+  const dayStr = h.day?.toLowerCase() ?? '';
+  
+  if (dayStr.includes(' - ')) {
+    const [startDay, endDay] = dayStr.split(' - ').map((d: string) => d.trim());
+    const dayOrder = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+    const startIdx = dayOrder.indexOf(startDay);
+    const endIdx = dayOrder.indexOf(endDay);
+    if (startIdx !== -1 && endIdx !== -1) {
+      for (let i = startIdx; i <= endIdx; i++) {
+        daysOfWeek.push(dayMap[dayOrder[i]]);
+      }
+    }
+  } else {
+    const mapped = dayMap[dayStr];
+    if (mapped) daysOfWeek.push(mapped);
+  }
+
+  // Parse time like "08:00 - 14:00 WIB"
+  const timeStr = h.time ?? '';
+  const timeMatch = timeStr.match(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/);
+  
+  return {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": daysOfWeek,
+    "opens": timeMatch ? timeMatch[1] : "08:00",
+    "closes": timeMatch ? timeMatch[2] : "14:00"
+  };
+}).filter((spec: any) => spec.dayOfWeek.length > 0);
+
+// Enhanced Organization Schema for E-E-A-T
+const enhancedOrgSchema = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "@id": `${siteInfo.siteUrl}/#organization`,
+  "name": siteInfo.siteName,
+  "alternateName": "MASMIFHDA",
+  "url": siteInfo.siteUrl,
+  "logo": {
+    "@type": "ImageObject",
+    "url": getFullImageUrl(siteInfo.siteLogo),
+    "width": 200,
+    "height": 200
+  },
+  "image": getFullImageUrl(siteInfo.siteLogo),
+  "description": siteInfo.siteDescription || globalMeta.defaultDescription,
+  ...(emailInfo?.value && { "email": emailInfo.value }),
+  ...(phoneInfo?.value && { "telephone": phoneInfo.value }),
+  ...(addressInfo?.value && {
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": addressInfo.value,
+      "addressLocality": "Way Tenong",
+      "addressRegion": "Lampung Barat",
+      "addressCountry": "ID"
+    }
+  }),
+  ...(sameAsLinks.length > 0 && { "sameAs": sameAsLinks }),
+  ...(openingHoursSpec.length > 0 && { "openingHoursSpecification": openingHoursSpec }),
+  "contactPoint": [
+    ...(phoneInfo?.value ? [{
+      "@type": "ContactPoint",
+      "telephone": phoneInfo.value,
+      "contactType": "customer service",
+      "availableLanguage": ["Indonesian"]
+    }] : []),
+    ...(emailInfo?.value ? [{
+      "@type": "ContactPoint",
+      "email": emailInfo.value,
+      "contactType": "customer service",
+      "availableLanguage": ["Indonesian"]
+    }] : [])
+  ],
+  "areaServed": {
+    "@type": "Place",
+    "name": "Lampung Barat, Indonesia"
+  },
+  "founder": {
+    "@type": "Organization",
+    "name": "Yayasan Mathla'ul Anwar"
+  }
+};
+
+// Generate BreadcrumbList Schema
+const generateBreadcrumbSchema = () => {
+  // If breadcrumbs are provided, use them
+  if (breadcrumbs && breadcrumbs.length > 0) {
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((item, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": item.name,
+        "item": `${siteInfo.siteUrl}${item.url.startsWith('/') ? item.url : '/' + item.url}`
+      }))
+    };
+  }
+
+  // Auto-generate breadcrumbs from URL path
+  const currentPath = url || Astro.url.pathname;
+  if (!currentPath || currentPath === '/') {
+    return null; // No breadcrumbs for homepage
+  }
+
+  const pathSegments = currentPath.split('/').filter(Boolean);
+  const breadcrumbItems = [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Beranda",
+      "item": siteInfo.siteUrl
+    }
+  ];
+
+  // Map common path segments to readable names
+  const segmentNameMap: Record<string, string> = {
+    'posts': 'Artikel',
+    'news': 'Berita',
+    'pengumuman': 'Pengumuman',
+    'prestasi': 'Prestasi',
+    'about': 'Tentang Kami',
+    'contact': 'Kontak',
+    'gallery': 'Galeri',
+    'ppdb': 'PPDB',
+    'page': 'Halaman'
+  };
+
+  let accumulatedPath = '';
+  pathSegments.forEach((segment, index) => {
+    // Skip numeric segments (like page numbers) or slugs for the path building
+    if (/^\d+$/.test(segment)) {
+      return;
+    }
+
+    accumulatedPath += '/' + segment;
+    
+    // Get readable name
+    let readableName = segmentNameMap[segment.toLowerCase()] || 
+      segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+
+    // For the last segment, use the page title if available
+    if (index === pathSegments.length - 1 && title) {
+      readableName = title;
+    }
+
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": breadcrumbItems.length + 1,
+      "name": readableName,
+      "item": `${siteInfo.siteUrl}${accumulatedPath}`
+    });
+  });
+
+  if (breadcrumbItems.length <= 1) {
+    return null;
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbItems
+  };
+};
+
+const breadcrumbSchema = generateBreadcrumbSchema();
 ---
 
 <!-- Favicon & Icons -->
@@ -269,6 +468,14 @@ const websiteStructuredData = parseStructuredData(seoData?.structuredData?.websi
   <script type="application/ld+json">
     {JSON.stringify(websiteStructuredData)}
   </script>
+)}
+
+<!-- Enhanced E-E-A-T Organization Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(enhancedOrgSchema)} />
+
+<!-- BreadcrumbList Schema for Navigation -->
+{breadcrumbSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
 )}
 
 <!-- Page-specific structured data -->

@@ -1,124 +1,386 @@
 ---
 // FILE: src/layouts/Article.astro
-import Layout from "./Layout.astro"
-import Sidebar from "../components/Sidebar.astro"
-import FormattedDate from "../components/FormattedDate.astro"
-import ShareButtons from "../components/ShareButtons.astro"
-import { getCollection } from "astro:content"
-import { Image } from "astro:assets"
+import Layout from "./Layout.astro";
+import Sidebar from "../components/Sidebar.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import ShareButtons from "../components/ShareButtons.astro";
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
 
 interface ArticleProps {
-  title?: string
-  author?: string  // username author
-  pubdate?: Date | null
-  heroImage?: string | null
-  description?: string
-  body?: string
-  url?: string
-  image?: string
-  category?: string
+  title?: string;
+  author?: string; // username author
+  pubdate?: Date | null;
+  heroImage?: string | null;
+  description?: string;
+  body?: string;
+  url?: string;
+  image?: string;
+  category?: string;
+  slug?: string;
 }
 
-const props = Astro.props as ArticleProps
-const { 
-  title, 
-  author: authorUsername, 
-  pubdate, 
-  heroImage, 
-  description, 
-  url,  
-  category 
-} = props
+const props = Astro.props as ArticleProps;
+const {
+  title,
+  author: authorUsername,
+  pubdate,
+  heroImage,
+  description,
+  url,
+  category,
+  slug: currentSlug,
+} = props;
 
 // Normalize date
-const pubdateDate = pubdate ? new Date(pubdate) : null
+const pubdateDate = pubdate ? new Date(pubdate) : null;
 
 // Normalize image
-const heroSrc = typeof heroImage === 'string' ? heroImage : undefined
+const heroSrc = typeof heroImage === "string" ? heroImage : undefined;
 
 // Get author data
 let authorData = null;
 if (authorUsername) {
   try {
     const authors = await getCollection("authors");
-    const author = authors.find(a => a.data.username === authorUsername);
+    const author = authors.find((a) => a.data.username === authorUsername);
     authorData = author?.data ?? null;
-  } catch (error) {
-  }
+  } catch (error) {}
 }
 
+// Get related posts (same category, excluding current post)
+interface RelatedPost {
+  slug: string;
+  category: string;
+  data: {
+    title?: string;
+    heroImage?: string;
+    pubdate?: Date;
+    description?: string;
+  };
+}
+
+let relatedPosts: RelatedPost[] = [];
+if (category) {
+  try {
+    const allPosts = await getCollection("posts");
+
+    // Process posts to get category and slug
+    const processedPosts = allPosts.map((post) => {
+      const filePath = post.filePath ?? "";
+      let postCategory = "";
+      let postSlug = "";
+
+      if (filePath.startsWith("src/content/posts/")) {
+        const relPath = filePath.replace(/^src\/content\/posts\//, "");
+        const parts = relPath.split("/");
+        if (parts.length >= 2) {
+          postCategory = parts[0];
+          postSlug = parts
+            .slice(1)
+            .join("/")
+            .replace(/\.mdx?$/, "");
+        }
+      }
+
+      if (!postCategory && post.data.category) {
+        postCategory = post.data.category;
+      }
+
+      if (!postSlug) {
+        postSlug = post.id.split("/").pop() ?? "";
+      }
+
+      return {
+        slug: postSlug,
+        category: postCategory,
+        data: post.data,
+      };
+    });
+
+    // Filter by same category, exclude current post, sort by date
+    relatedPosts = processedPosts
+      .filter(
+        (post) =>
+          post.category.toLowerCase() === category.toLowerCase() &&
+          post.slug !== currentSlug,
+      )
+      .sort((a, b) => {
+        const dateA = new Date(a.data.pubdate ?? 0).getTime();
+        const dateB = new Date(b.data.pubdate ?? 0).getTime();
+        return dateB - dateA;
+      })
+      .slice(0, 4); // Maximum 4 related posts
+  } catch (error) {}
+}
 ---
 
-<Layout 
-  title={title} 
-  description={description}
->
+<Layout title={title} description={description}>
   <section class="py-12">
-    <div class="container px-6 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6">
+    <div
+      class="container px-6 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6"
+    >
       <div class="w-full lg:w-3/4 space-y-3 px-2">
-        <h1 class="text-2xl md:text-3xl lg:text-3xl font-bold text-primary">{title}</h1>
+        <!-- Breadcrumb Navigation -->
+        <nav aria-label="Breadcrumb" class="mb-2">
+          <ol class="flex items-center flex-wrap text-sm gap-1">
+            <li>
+              <a
+                href="/"
+                class="text-muted hover:text-primary transition-colors flex items-center gap-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                  ></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Home
+              </a>
+            </li>
+            {
+              category && (
+                <>
+                  <li class="text-muted">›</li>
+                  <li>
+                    <a
+                      href={`/posts/${category}`}
+                      class="text-primary font-medium capitalize"
+                    >
+                      {category}
+                    </a>
+                  </li>
+                </>
+              )
+            }
+          </ol>
+        </nav>
+
+        <h1 class="text-2xl md:text-3xl lg:text-3xl font-bold text-primary">
+          {title}
+        </h1>
 
         <div class="flex flex-wrap items-center gap-4 mb-4">
-          {authorData && (
-            <a 
-              href={`/author/${authorData.username}`}
-              class="flex items-center gap-1 group hover:opacity-80 transition"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" class="text-muted " width="18" height="18" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></g></svg>
-              <div>
-                <p class="font-medium text-muted group-hover:text-primary">
-                  {authorData.name}
-                </p>
-              </div>
-            </a>
-          )}
-          
+          {
+            authorData && (
+              <a
+                href={`/author/${authorData.username}`}
+                class="flex items-center gap-1 group hover:opacity-80 transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="text-muted "
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                >
+                  <g
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  >
+                    <>
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </>
+                  </g>
+                </svg>
+                <div>
+                  <p class="font-medium text-muted group-hover:text-primary">
+                    {authorData.name}
+                  </p>
+                </div>
+              </a>
+            )
+          }
+
           {/* FALLBACK */}
-          {!authorData && authorUsername && (
-            <div class="flex items-center gap-2 text-muted">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1">
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </g>
-              </svg>
-              <span>{authorUsername}</span>
-            </div>
-          )}
+          {
+            !authorData && authorUsername && (
+              <div class="flex items-center gap-2 text-muted">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                >
+                  <g
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </g>
+                </svg>
+                <span>{authorUsername}</span>
+              </div>
+            )
+          }
 
           <div class="flex items-center gap-2 text-muted">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
                 <circle cx="12" cy="12" r="10"></circle>
                 <path d="m15 16l-2.414-2.414A2 2 0 0 1 12 12.172V6"></path>
               </g>
             </svg>
             <FormattedDate date={pubdateDate} />
           </div>
-          
-          {category && (
-            <span class="bg-surface text-primary text-sm px-3 py-1 rounded-full">
-              {category}
-            </span>
-          )}
+
+          {
+            category && (
+              <span class="bg-surface text-primary text-sm px-3 py-1 rounded-full">
+                {category}
+              </span>
+            )
+          }
         </div>
 
-        {heroSrc && (
-          <div class="relative w-full aspect-video overflow-hidden rounded-lg mb-6">
-            
-            <Image
-              src={heroSrc}
-              alt={title ?? ""}
-              width="1200" height="675"
-              class="w-full h-full object-cover object-center"
-            />
-          </div>
-        )}
+        {
+          heroSrc && (
+            <div class="relative w-full aspect-video overflow-hidden rounded-lg mb-6">
+              <Image
+                src={heroSrc}
+                alt={title ?? ""}
+                width="1200"
+                height="675"
+                class="w-full h-full object-cover object-center"
+              />
+            </div>
+          )
+        }
 
-        <article class="prose prose-headings:text-primary prose-p:text-justify max-w-none">
+        <!-- Table of Contents -->
+        <nav
+          id="table-of-contents"
+          class="toc-container hidden bg-surface border border-border rounded-xl p-5 mb-6"
+        >
+          <div class="flex items-center justify-between mb-3">
+            <h2
+              class="text-lg font-semibold text-heading flex items-center gap-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+              Daftar Isi
+            </h2>
+            <button
+              id="toc-toggle"
+              class="text-muted hover:text-primary transition-colors p-1"
+              aria-label="Toggle Table of Contents"
+            >
+              <svg
+                id="toc-chevron"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="transition-transform"
+              >
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </button>
+          </div>
+          <ol id="toc-list" class="toc-list space-y-1 text-sm"></ol>
+        </nav>
+
+        <article
+          id="article-content"
+          class="prose prose-headings:text-primary prose-p:text-justify max-w-none"
+        >
           <slot />
         </article>
 
+        <!-- Artikel Terkait Section -->
+        {
+          relatedPosts.length > 0 && (
+            <div
+              id="related-posts-container"
+              class="hidden my-8 p-5 bg-surface border border-border rounded-xl"
+            >
+              <div class="flex items-center gap-3 mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-primary"
+                >
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+                <h3 class="text-lg font-semibold text-heading m-0">
+                  Artikel Terkait
+                </h3>
+              </div>
+
+              <ul class="space-y-1 list-none p-0 m-0">
+                {relatedPosts.map((post) => (
+                  <li class="m-0 p-0">
+                    <a
+                      href={`/posts/${post.category}/${post.slug}`}
+                      class="group flex items-center no-underline"
+                    >
+                      <span class="text-sm text-heading group-hover:text-primary transition-colors line-clamp-1">
+                        {post.data.title}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
 
         <div class="mt-8">
           <ShareButtons url={url} title={title ?? ""} />
@@ -129,3 +391,216 @@ if (authorUsername) {
     </div>
   </section>
 </Layout>
+
+<style>
+  .toc-container {
+    scroll-margin-top: 2rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding-left: 0;
+    counter-reset: toc-counter;
+  }
+
+  .toc-list li {
+    counter-increment: toc-counter;
+    position: relative;
+  }
+
+  .toc-list li::before {
+    content: counter(toc-counter) ".";
+    position: absolute;
+    left: 0;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .toc-list li a {
+    display: block;
+    padding: 0.375rem 0;
+    padding-left: 1.5rem;
+    color: var(--color-text-base);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .toc-list li a:hover {
+    color: var(--color-primary);
+    border-left-color: var(--color-primary);
+    background-color: var(--color-primary);
+    background-color: rgba(var(--color-primary-rgb, 46, 103, 49), 0.05);
+  }
+
+  .toc-list li.toc-h3 a {
+    padding-left: 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  .toc-list li.toc-h3::before {
+    left: 1rem;
+    font-size: 0.75rem;
+  }
+
+  .toc-list li.toc-h4 a {
+    padding-left: 3.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+  }
+
+  .toc-list li.toc-h4::before {
+    left: 2rem;
+    font-size: 0.6875rem;
+  }
+
+  .toc-list li.toc-active a {
+    color: var(--color-primary);
+    border-left-color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  #toc-chevron.collapsed {
+    transform: rotate(180deg);
+  }
+
+  #toc-list.collapsed {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const articleContent = document.getElementById("article-content");
+    const tocContainer = document.getElementById("table-of-contents");
+    const tocList = document.getElementById("toc-list");
+    const tocToggle = document.getElementById("toc-toggle");
+    const tocChevron = document.getElementById("toc-chevron");
+
+    if (!articleContent || !tocList || !tocContainer) return;
+
+    // Find all headings in the article
+    const headings = articleContent.querySelectorAll("h2, h3, h4");
+
+    // Only show TOC if there are at least 2 headings
+    if (headings.length < 2) {
+      tocContainer.style.display = "none";
+      return;
+    }
+
+    // Show TOC container
+    tocContainer.classList.remove("hidden");
+
+    // Generate TOC items
+    headings.forEach((heading, index) => {
+      // Create ID if doesn't exist
+      if (!heading.id) {
+        heading.id = `heading-${index + 1}`;
+      }
+
+      const li = document.createElement("li");
+      const tagName = heading.tagName.toLowerCase();
+      li.classList.add(`toc-${tagName}`);
+
+      const link = document.createElement("a");
+      link.href = `#${heading.id}`;
+      link.textContent = heading.textContent || "";
+
+      // Smooth scroll on click
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = document.getElementById(heading.id);
+        if (target) {
+          const offset = 80; // Offset for fixed header
+          const targetPosition =
+            target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: "smooth",
+          });
+          // Update URL hash
+          history.pushState(null, "", `#${heading.id}`);
+        }
+      });
+
+      li.appendChild(link);
+      tocList.appendChild(li);
+    });
+
+    // Toggle functionality
+    if (tocToggle && tocChevron) {
+      tocToggle.addEventListener("click", () => {
+        tocList.classList.toggle("collapsed");
+        tocChevron.classList.toggle("collapsed");
+      });
+    }
+
+    // Highlight active heading on scroll
+    const observerOptions = {
+      root: null,
+      rootMargin: "-80px 0px -70% 0px",
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        const id = entry.target.id;
+        const tocItem = tocList.querySelector(
+          `a[href="#${id}"]`,
+        )?.parentElement;
+
+        if (entry.isIntersecting) {
+          // Remove active from all
+          tocList
+            .querySelectorAll("li")
+            .forEach((li) => li.classList.remove("toc-active"));
+          // Add active to current
+          tocItem?.classList.add("toc-active");
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+    headings.forEach((heading) => observer.observe(heading));
+
+    // Move Related Posts to middle of article
+    const relatedPostsContainer = document.getElementById(
+      "related-posts-container",
+    );
+    if (relatedPostsContainer && articleContent) {
+      // Get all paragraphs in the article
+      const paragraphs = articleContent.querySelectorAll("p");
+
+      if (paragraphs.length >= 4) {
+        // Insert after ~50% of paragraphs, minimum after 3rd paragraph
+        const insertIndex = Math.max(3, Math.floor(paragraphs.length / 2));
+        const targetParagraph = paragraphs[insertIndex - 1];
+
+        if (targetParagraph && targetParagraph.parentNode) {
+          // Show and move the container
+          relatedPostsContainer.classList.remove("hidden");
+          targetParagraph.parentNode.insertBefore(
+            relatedPostsContainer,
+            targetParagraph.nextSibling,
+          );
+        }
+      } else if (paragraphs.length >= 2) {
+        // For shorter articles, insert after 2nd paragraph
+        const targetParagraph = paragraphs[1];
+        if (targetParagraph && targetParagraph.parentNode) {
+          relatedPostsContainer.classList.remove("hidden");
+          targetParagraph.parentNode.insertBefore(
+            relatedPostsContainer,
+            targetParagraph.nextSibling,
+          );
+        }
+      } else {
+        // If article is too short, just show it where it is
+        relatedPostsContainer.classList.remove("hidden");
+      }
+    }
+  });
+</script>

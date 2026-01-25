@@ -1,0 +1,108 @@
+---
+//src/pages/about/gallery/page/[page].astro
+export const prerender = true;
+import Layout from "../../../../layouts/Layout.astro";
+import Breadcrumb from "../../../../components/Breadcrumb.astro";
+import Pagination from "../../../../components/Pagination.astro";
+import { getEntry } from "astro:content";
+import { paginate } from "../../../../utils/pagination";
+
+export async function getStaticPaths() {
+    const about = await getEntry("about", "index");
+    if (!about) return [];
+
+    const allGallery = about.data.gallery.items;
+    const pageSize = 6;
+    const totalPages = Math.ceil(allGallery.length / pageSize);
+
+    const paths = [];
+
+    // Generate paths for page 2 onwards (page 1 is handled by gallery.astro)
+    for (let page = 2; page <= totalPages; page++) {
+        paths.push({
+            params: { page: String(page) },
+            props: { page, totalPages, allGallery },
+        });
+    }
+
+    return paths;
+}
+
+const { page } = Astro.params;
+const { totalPages, allGallery } = Astro.props;
+
+const backgroundImage =
+    allGallery.length > 0 ? allGallery[allGallery.length - 1].image : undefined;
+
+// Pagination settings
+const pageSize = 6;
+const currentPage = parseInt(page);
+
+const pagination = paginate({
+    totalItems: allGallery.length,
+    currentPage,
+    pageSize,
+});
+
+const gallery = allGallery.slice(pagination.start, pagination.end);
+const baseUrl = "/about/gallery";
+
+const title = "Galeri Kegiatan";
+---
+
+<Layout title={`${title} - Halaman ${currentPage}`}>
+    <section class="relative py-12 px-4">
+        <div
+            class="container relative w-full h-screen mx-auto rounded-2xl bg-cover bg-center before:content-[''] before:absolute before:bg-black before:opacity-70 before:inset-0 before:rounded-2xl before:w-full before:h-full"
+            style={`background-image: url(${backgroundImage})`}
+        >
+            <div
+                class="relative w-full h-full flex flex-col items-center justify-center"
+            >
+                <h1
+                    class="text-xl md:text-3xl text-surface text-center p-2 font-semibold"
+                >
+                    {title}
+                </h1>
+                <Breadcrumb
+                    title={title}
+                    parent={{ label: "About", href: "/about" }}
+                />
+            </div>
+        </div>
+    </section>
+    <section class="py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {
+                    gallery.map((item) => (
+                        <figure>
+                            <div class="relative w-full shadow rounded overflow-hidden">
+                                <img
+                                    src={item.image}
+                                    alt={item.title}
+                                    class="object-cover aspect-video hover:scale-125 hover:-skew-3 transition-transform duration-300"
+                                />
+                                <span class="absolute bottom-2 left-1/2 -translate-x-1/2 w-max bg-surface rounded-full text-xs text-primary font-bold px-3 py-2 text-center">
+                                    {item.title}
+                                </span>
+                            </div>
+                        </figure>
+                    ))
+                }
+            </div>
+
+            {
+                pagination.totalPages > 1 && (
+                    <div class="mt-10 flex justify-center">
+                        <Pagination
+                            currentPage={pagination.currentPage}
+                            totalPages={pagination.totalPages}
+                            baseUrl={baseUrl}
+                        />
+                    </div>
+                )
+            }
+        </div>
+    </section>
+</Layout>

@@ -1,50 +1,54 @@
 ---
 // file: src/components/Pagination.astro
-const {
-  currentPage,
-  totalPages,
-  category
-} = Astro.props
+// Reusable pagination component - accepts baseUrl for flexibility
 
-const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string; // e.g., "/posts/kategori" or "/posts" or "/gallery"
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+// Helper to generate page URL
+const getPageUrl = (page: number) => {
+  if (page === 1) {
+    return baseUrl;
+  }
+  return `${baseUrl}/page/${page}`;
+};
 ---
 
 <nav class="flex gap-2">
-  {currentPage > 1 && (
-    <a
-      href={
-        currentPage - 1 === 1
-          ? `/posts/${category}`
-          : `/posts/${category}/page/${currentPage - 1}`
-      }
-      class=""
-    >
-      <p class="bg-primary text-surface px-3 py-1 border rounded">Prev</p>
-      
-    </a>
-  )}
+  {
+    currentPage > 1 && (
+      <a href={getPageUrl(currentPage - 1)} class="">
+        <p class="bg-primary text-surface px-3 py-1 border rounded">Prev</p>
+      </a>
+    )
+  }
 
-  {pages.map(page => (
-    <a
-      href={
-        page === 1
-          ? `/posts/${category}`
-          : `/posts/${category}/page/${page}`
-      }
-      
-    >
-      <p class={`px-3 py-1 border rounded ${
-        page === currentPage ? "bg-primary text-surface" : ""
-      }`}>{page}</p>
-    </a>
-  ))}
+  {
+    pages.map((page) => (
+      <a href={getPageUrl(page)}>
+        <p
+          class={`px-3 py-1 border rounded ${
+            page === currentPage ? "bg-primary text-surface" : ""
+          }`}
+        >
+          {page}
+        </p>
+      </a>
+    ))
+  }
 
-  {currentPage < totalPages && (
-    <a
-      href={`/posts/${category}/page/${currentPage + 1}`}
-      class=""
-    >
-      <p class="bg-primary text-surface px-3 py-1 border rounded">Next</p>
-    </a>
-  )}
+  {
+    currentPage < totalPages && (
+      <a href={getPageUrl(currentPage + 1)} class="">
+        <p class="bg-primary text-surface px-3 py-1 border rounded">Next</p>
+      </a>
+    )
+  }
 </nav>

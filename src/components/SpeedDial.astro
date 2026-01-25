@@ -1,13 +1,13 @@
 ---
 //file: src/components/SpeedDial.astro
-import { SOCIAL_ICON_REGISTRY } from "../config/socialIcons"
+import { SOCIAL_ICON_REGISTRY } from "../config/socialIcons";
 
 type SocialLink = {
-  iconKey: string
-  url: string
-}
+  iconKey: string;
+  url: string;
+};
 
-const { socialLinks = [] }: { socialLinks?: SocialLink[] } = Astro.props
+const { socialLinks = [] }: { socialLinks?: SocialLink[] } = Astro.props;
 ---
 
 <div id="social-dial" class="fixed z-40" style="right:1rem; bottom:1rem;">
@@ -15,28 +15,32 @@ const { socialLinks = [] }: { socialLinks?: SocialLink[] } = Astro.props
     id="social-dial-menu"
     class="flex flex-col items-center mb-4 space-y-2 hidden"
   >
-    {(socialLinks ?? []).map((item, index) => {
-      const icon = SOCIAL_ICON_REGISTRY[item.iconKey]
-      if (!icon || !item.url) return null
+    {
+      (socialLinks ?? []).map((item, index) => {
+        const icon = SOCIAL_ICON_REGISTRY[item.iconKey];
+        if (!icon || !item.url) return null;
 
-      return (
-        
-        <a href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={icon.label}
-          class="social-media-item flex items-center justify-center w-8 h-8 md:w-12 md:h-12 rounded-2xl bg-secondary shadow-lg hover:shadow-2xl transition-all duration-300" style={`animation-delay:${index * 80}ms`}>
-            <p set:html={icon.svg} class="text-surface"></p>
+        return (
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={icon.label}
+            class="social-media-item flex items-center justify-center w-12 h-12 rounded-2xl bg-secondary shadow-lg hover:shadow-2xl transition-all duration-300"
+            style={`animation-delay:${index * 80}ms`}
+          >
+            <p set:html={icon.svg} class="text-surface" />
           </a>
-      )
-    })}
+        );
+      })
+    }
   </div>
 
   <button
     id="social-dial-toggle"
     type="button"
     aria-label="btnsdi"
-    class="flex items-center justify-center border w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary text-surface shadow-2xl"
+    class="flex items-center justify-center border w-14 h-14 rounded-full bg-primary text-surface shadow-2xl"
     aria-expanded="false"
   >
     <svg
@@ -47,25 +51,25 @@ const { socialLinks = [] }: { socialLinks?: SocialLink[] } = Astro.props
       stroke="currentColor"
       stroke-width="2.5"
     >
-      <path d="M5 12h14"/>
-      <path d="M12 5v14"/>
+      <path d="M5 12h14"></path>
+      <path d="M12 5v14"></path>
     </svg>
   </button>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("social-dial-toggle");
-  const menu = document.getElementById("social-dial-menu");
-  const icon = document.getElementById("social-dial-icon");
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("social-dial-toggle");
+    const menu = document.getElementById("social-dial-menu");
+    const icon = document.getElementById("social-dial-icon");
 
-  if (!toggle || !menu) return;
+    if (!toggle || !menu) return;
 
-  let isOpen = false;
+    let isOpen = false;
 
-  // Add animation styles dynamically
-  const style = document.createElement('style');
-  style.textContent = `
+    // Add animation styles dynamically
+    const style = document.createElement("style");
+    style.textContent = `
     @keyframes slideUpFade {
       from {
         opacity: 0;
@@ -98,63 +102,67 @@ document.addEventListener("DOMContentLoaded", () => {
       animation: bounce 0.6s ease;
     }
   `;
-  document.head.appendChild(style);
+    document.head.appendChild(style);
 
-  // Toggle menu function
-  const toggleMenu = () => {
-    isOpen = !isOpen;
-    
-    if (isOpen) {
-      // Open menu
-      menu.classList.remove('hidden');
-      icon.style.transform = 'rotate(135deg)';
-      toggle.setAttribute('aria-expanded', 'true');
-      toggle.classList.add('from-blue-500', 'via-purple-500', 'to-pink-400');
-      
-      // Add staggered animation to items
-      const items = menu.querySelectorAll('.social-media-item');
-      items.forEach((item, index) => {
-        item.style.animationDelay = `${index * 0.08}s`;
+    // Toggle menu function
+    const toggleMenu = () => {
+      isOpen = !isOpen;
+
+      if (isOpen) {
+        // Open menu
+        menu.classList.remove("hidden");
+        icon.style.transform = "rotate(135deg)";
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.classList.add("from-blue-500", "via-purple-500", "to-pink-400");
+
+        // Add staggered animation to items
+        const items = menu.querySelectorAll(".social-media-item");
+        items.forEach((item, index) => {
+          item.style.animationDelay = `${index * 0.08}s`;
+        });
+      } else {
+        // Close menu
+        menu.classList.add("hidden");
+        icon.style.transform = "rotate(0deg)";
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.classList.remove(
+          "from-blue-500",
+          "via-purple-500",
+          "to-pink-400",
+        );
+      }
+    };
+
+    // Event listeners
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!toggle.contains(e.target) && !menu.contains(e.target) && isOpen) {
+        toggleMenu();
+      }
+    });
+
+    // Keyboard support
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isOpen) {
+        toggleMenu();
+        toggle.focus();
+      }
+    });
+
+    // Add hover effect to menu items
+    menu.querySelectorAll("a").forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        item.classList.add("shadow-3xl", "z-20");
       });
-    } else {
-      // Close menu
-      menu.classList.add('hidden');
-      icon.style.transform = 'rotate(0deg)';
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.classList.remove('from-blue-500', 'via-purple-500', 'to-pink-400');
-    }
-  };
 
-  // Event listeners
-  toggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu();
-  });
-
-  // Close when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!toggle.contains(e.target) && !menu.contains(e.target) && isOpen) {
-      toggleMenu();
-    }
-  });
-
-  // Keyboard support
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isOpen) {
-      toggleMenu();
-      toggle.focus();
-    }
-  });
-
-  // Add hover effect to menu items
-  menu.querySelectorAll('a').forEach(item => {
-    item.addEventListener('mouseenter', () => {
-      item.classList.add('shadow-3xl', 'z-20');
-    });
-    
-    item.addEventListener('mouseleave', () => {
-      item.classList.remove('shadow-3xl', 'z-20');
+      item.addEventListener("mouseleave", () => {
+        item.classList.remove("shadow-3xl", "z-20");
+      });
     });
   });
-});
 </script>
