@@ -13,6 +13,6 @@ schedule:
   location: Madrasah
 instructor:
   name: M.Aziz Sulaiman
-  position: Pendidikan Komputer
+  position: Pembina Multimedia
 ---
 
