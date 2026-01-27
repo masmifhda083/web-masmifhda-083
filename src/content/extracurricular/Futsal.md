@@ -1,6 +1,7 @@
 ---
 title: Futsal
 shortName: Futsal
+thumbnail: /uploads/72eeb483fe694a2703b301b63a085605 (1).png
 description: >-
   merupakan salah satu aktivitas olahraga di sekolah yang bertujuan untuk
   meningkatkan kebugaran fisik, ketangkasan, dan kerja sama tim. Melalui latihan
