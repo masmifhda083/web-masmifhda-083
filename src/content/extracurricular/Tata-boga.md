@@ -1,6 +1,7 @@
 ---
 title: Tata boga
 shortName: Tata boga
+thumbnail: /uploads/IMG20250613133253_BURST000_COVER-scaled.jpg
 description: >-
   Kegiatan tata boga bertujuan melatih siswa dalam mengolah makanan dengan baik,
   higienis, dan kreatif. Melalui kegiatan ini, siswa belajar mengenal alat dan
