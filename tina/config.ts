@@ -1535,6 +1535,12 @@ export default defineConfig({
                     label: 'Google Analytics ID',
                     name: 'gaId',
                   },
+                  {
+                    type: 'string',
+                    label: 'Google Tag Manager ID',
+                    name: 'gtmId',
+                    description: 'Format: GTM-XXXXXX',
+                  },
                 ],
               },
             ],
