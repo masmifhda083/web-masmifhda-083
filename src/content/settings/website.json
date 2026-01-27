@@ -147,7 +147,8 @@
       "image": "/uploads/cover.webp"
     },
     "analytics": {
-      "gaId": "GTM-TS6S77WG"
+      "gaId": "G-ML2YKK4FMF",
+      "gtmId": "GTM-TS6S77WG"
     }
   },
   "footer": {
