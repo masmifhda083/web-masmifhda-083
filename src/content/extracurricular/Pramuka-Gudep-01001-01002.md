@@ -3,14 +3,23 @@ title: Pramuka
 shortName: Pramuka
 thumbnail: /uploads/pramuka.jpg
 description: >-
-  Organisasi kepanduan yang membentuk karakter disiplin, mandiri, dan
-  bertanggung jawab melalui berbagai kegiatan outdoor dan kepemimpinan.
+  Organisasi kepanduan yang membentuk karakter disiplin, manKegiatan Pramuka
+  merupakan kegiatan ekstrakurikuler yang bertujuan membentuk karakter siswa
+  agar disiplin, mandiri, bertanggung jawab, serta memiliki jiwa kepemimpinan.
+  Melalui kegiatan ini, siswa dilatih keterampilan kepramukaan, kerja sama, dan
+  kepedulian sosial.
+
+
+  Kegiatan Pramuka dilaksanakan secara rutin dan terarah berdasarkan nilai-nilai
+  Tri Satya dan Dasa Dharma, sehingga diharapkan mampu membentuk peserta didik
+  yang berkarakter, berakhlak baik, dan cinta tanah air.diri, dan bertanggung
+  jawab melalui berbagai kegiatan outdoor dan kepemimpinan.
 schedule:
   day: Jumat
   time: 15.00 -17.00
   location: Madrasah
 instructor:
-  name: 'Budi Santoso, S.Pd.'
+  name: Indah Yunitasari
   position: Guru Pembina Pramuka
 gallery:
   - image: /uploads/bakar.jpeg
@@ -32,7 +41,7 @@ Pramuka di sekolah kami merupakan wadah pembentukan karakter siswa melalui berba
 
 ###### Visi:
 
-Membentuk generasi muda yang berkarakter, mandiri, dan bertanggung jawab.
+Membentuk generasi muda yang beriman, berakhlak mulia, disiplin, mandiri, bertanggung jawab, serta memiliki jiwa kepemimpinan dan cinta tanah air.
 
 ###### Misi:
 
