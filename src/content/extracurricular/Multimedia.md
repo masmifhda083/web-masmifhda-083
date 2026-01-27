@@ -1,6 +1,7 @@
 ---
 title: Multimedia
 shortName: Multimedia
+thumbnail: /uploads/IMG_6127.PNG
 description: >-
   Kegiatan multimedia merupakan aktivitas pembelajaran yang melatih siswa dalam
   mengolah konten digital seperti desain grafis, foto, video, dan media kreatif
