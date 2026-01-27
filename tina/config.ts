@@ -1,4 +1,5 @@
 //file: tina/config.ts
+// Trigger Tina Schema Update
 import { defineConfig } from "tinacms"
 import { SOCIAL_ICON_REGISTRY } from "../src/config/socialIcons"
 

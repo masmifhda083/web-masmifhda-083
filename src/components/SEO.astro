@@ -88,7 +88,7 @@ const twitter = seoData?.twitter || {
   creator: "",
 };
 
-const analytics = seoData?.analytics || {
+const analyticsConfig = seoData?.analytics || {
   gaId: "",
   gtmId: "",
   googleSiteVerification: "",
@@ -451,40 +451,43 @@ const breadcrumbSchema = generateBreadcrumbSchema();
 
 <!-- Site Verification -->
 {
-  analytics.googleSiteVerification && (
+  analyticsConfig.googleSiteVerification && (
     <meta
       name="google-site-verification"
-      content={analytics.googleSiteVerification}
+      content={analyticsConfig.googleSiteVerification}
     />
   )
 }
 
 {
-  analytics.bingSiteVerification && (
-    <meta name="msvalidate.01" content={analytics.bingSiteVerification} />
+  analyticsConfig.bingSiteVerification && (
+    <meta name="msvalidate.01" content={analyticsConfig.bingSiteVerification} />
   )
 }
 
 {
-  analytics.yandexVerification && (
-    <meta name="yandex-verification" content={analytics.yandexVerification} />
+  analyticsConfig.yandexVerification && (
+    <meta
+      name="yandex-verification"
+      content={analyticsConfig.yandexVerification}
+    />
   )
 }
 
 <!-- Google Analytics -->
 {
-  analytics.gaId && (
+  analyticsConfig.gaId && (
     <>
       <script
         async
-        src={`https://www.googletagmanager.com/gtag/js?id=${analytics.gaId}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${analyticsConfig.gaId}`}
       />
       <script>
         {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '${analytics.gaId}');
+        gtag('config', '${analyticsConfig.gaId}');
       `}
       </script>
     </>
@@ -493,7 +496,7 @@ const breadcrumbSchema = generateBreadcrumbSchema();
 
 <!-- Google Tag Manager -->
 {
-  analytics.gtmId && (
+  analyticsConfig.gtmId && (
     <>
       <script>
         {`(function(w,d,s,l,i){
@@ -504,7 +507,7 @@ const breadcrumbSchema = generateBreadcrumbSchema();
         j.async=true;
         j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
         if(f.parentNode) f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','${analytics.gtmId}');`}
+      })(window,document,'script','dataLayer','${analyticsConfig.gtmId}');`}
       </script>
     </>
   )
