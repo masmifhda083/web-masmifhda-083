@@ -41,7 +41,7 @@ Pramuka di sekolah kami merupakan wadah pembentukan karakter siswa melalui berba
 
 ###### Visi:
 
-Membentuk generasi muda yang berkarakter, mandiri, dan bertanggung jawab.
+Membentuk generasi muda yang beriman, berakhlak mulia, disiplin, mandiri, bertanggung jawab, serta memiliki jiwa kepemimpinan dan cinta tanah air.
 
 ###### Misi:
 
