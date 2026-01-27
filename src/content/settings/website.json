@@ -145,6 +145,9 @@
     "openGraph": {
       "type": "website",
       "image": "/uploads/cover.webp"
+    },
+    "analytics": {
+      "gaId": "GTM-TS6S77WG"
     }
   },
   "footer": {
