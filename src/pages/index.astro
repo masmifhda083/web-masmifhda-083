@@ -10,6 +10,7 @@ import websiteSettings from "../content/settings/website.json";
 import HeroSection from "../components/HeroSection.astro";
 import StaffList from "../components/StaffList.astro";
 import Year from "../components/Year.astro";
+import GallerySlider from "../components/GallerySlider.astro";
 const allPosts = await getCollection("posts");
 
 // Proses posts untuk mendapatkan category dan slug yang benar
@@ -121,15 +122,28 @@ const latestPosts = processedPosts
   <section class="py-24 bg-primary text-white">
     <div class="container mx-auto px-4">
       <div class="text-center max-w-3xl mx-auto mb-20" data-animate="fade">
-        <h2 class="text-4xl font-bold mb-6">Wadah Kreativitas Siswa</h2>
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+          Wadah Kreativitas Siswa
+        </h2>
         <p class="text-lg opacity-80 leading-relaxed">
           Lebih dari sekadar akademik, kami mengasah bakat dan minat siswa
           melalui berbagai kegiatan ekstrakurikuler yang bervariasi.
         </p>
       </div>
       <ExtracurricularList />
+
+      <div data-animate="fade" class="mt-12 text-center">
+        <a href="/extracurricular" class="">
+          <p
+            class="text-primary bg-surface hover:text-surface hover:bg-secondary inline-block px-4 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+          >
+            Semua Ekstrakurikuler
+          </p>
+        </a>
+      </div>
     </div>
   </section>
+  <GallerySlider />
   <section
     class="relative bg-cover bg-center py-20 px-6 before:content-[''] before:absolute before:bg-primary before:opacity-50 before:inset-0 before:w-full before:h-full"
     style="background-image: url(https://images.unsplash.com/photo-1494949649109-ecfc3b8c35df?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);"

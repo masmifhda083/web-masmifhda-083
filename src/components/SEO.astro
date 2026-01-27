@@ -1,7 +1,7 @@
 ---
 // src/components/SEO.astro
-import { getCollection } from 'astro:content';
-import contactData from '../content/contact/index.json';
+import { getCollection } from "astro:content";
+import contactData from "../content/contact/index.json";
 
 interface BreadcrumbItem {
   name: string;
@@ -13,7 +13,7 @@ interface SEOProps {
   description?: string;
   image?: string;
   url?: string;
-  type?: 'website' | 'article';
+  type?: "website" | "article";
   publishedTime?: string;
   modifiedTime?: string;
   tags?: string[];
@@ -22,18 +22,18 @@ interface SEOProps {
   breadcrumbs?: BreadcrumbItem[];
 }
 
-const { 
-  title = '',
-  description = '',
-  image = '',
-  url = '',
-  type = 'website',
+const {
+  title = "",
+  description = "",
+  image = "",
+  url = "",
+  type = "website",
   publishedTime,
   modifiedTime,
   tags = [],
   noindex = false,
-  canonical = '',
-  breadcrumbs = []
+  canonical = "",
+  breadcrumbs = [],
 } = Astro.props;
 
 const parseStructuredData = (dataString: string | undefined) => {
@@ -97,40 +97,44 @@ const analytics = seoData?.analytics || {
 };
 
 // Generate meta tags
-const pageTitle = title 
-  ? globalMeta.titleTemplate.replace('%s', title)
+const pageTitle = title
+  ? globalMeta.titleTemplate.replace("%s", title)
   : globalMeta.defaultTitle;
 
 const pageDescription = description || globalMeta.defaultDescription;
 const pageImage = image || openGraph.image || siteInfo.siteLogo;
-const fullUrl = url 
-  ? `${siteInfo.siteUrl}${url.startsWith('/') ? url : '/' + url}`
+const fullUrl = url
+  ? `${siteInfo.siteUrl}${url.startsWith("/") ? url : "/" + url}`
   : siteInfo.siteUrl;
 const pageType = type;
 
 // Generate canonical URL
-const canonicalUrl = canonical 
-  ? `${siteInfo.siteUrl}${canonical.startsWith('/') ? canonical : '/' + canonical}`
+const canonicalUrl = canonical
+  ? `${siteInfo.siteUrl}${canonical.startsWith("/") ? canonical : "/" + canonical}`
   : fullUrl;
 
 // Robots meta
-const robotsContent = noindex ? 'noindex, nofollow' : 'index, follow';
+const robotsContent = noindex ? "noindex, nofollow" : "index, follow";
 
 // Helper untuk URL gambar lengkap
 const getFullImageUrl = (imgPath: string) => {
-  if (!imgPath) return '';
-  if (imgPath.startsWith('http')) return imgPath;
-  return `${siteInfo.siteUrl}${imgPath.startsWith('/') ? imgPath : '/' + imgPath}`;
+  if (!imgPath) return "";
+  if (imgPath.startsWith("http")) return imgPath;
+  return `${siteInfo.siteUrl}${imgPath.startsWith("/") ? imgPath : "/" + imgPath}`;
 };
 
-const orgStructuredData = parseStructuredData(seoData?.structuredData?.organization);
-const websiteStructuredData = parseStructuredData(seoData?.structuredData?.website);
+const orgStructuredData = parseStructuredData(
+  seoData?.structuredData?.organization,
+);
+const websiteStructuredData = parseStructuredData(
+  seoData?.structuredData?.website,
+);
 
 // Extract contact information
 const contactDetails = contactData?.contactInfo?.details ?? [];
-const phoneInfo = contactDetails.find((d: any) => d.type === 'phone');
-const emailInfo = contactDetails.find((d: any) => d.type === 'email');
-const addressInfo = contactDetails.find((d: any) => d.type === 'address');
+const phoneInfo = contactDetails.find((d: any) => d.type === "phone");
+const emailInfo = contactDetails.find((d: any) => d.type === "email");
+const addressInfo = contactDetails.find((d: any) => d.type === "address");
 
 // Extract social media links
 const socialLinks = contactData?.socialMedia?.links ?? [];
@@ -138,99 +142,121 @@ const sameAsLinks = socialLinks.map((link: any) => link.url).filter(Boolean);
 
 // Extract opening hours
 const operatingHours = contactData?.hours?.days ?? [];
-const openingHoursSpec = operatingHours.map((h: any) => {
-  // Parse days like "Senin - Jumat" to dayOfWeek array
-  const dayMap: Record<string, string> = {
-    'senin': 'Monday',
-    'selasa': 'Tuesday',
-    'rabu': 'Wednesday',
-    'kamis': 'Thursday',
-    'jumat': 'Friday',
-    'sabtu': 'Saturday',
-    'minggu': 'Sunday'
-  };
-  
-  let daysOfWeek: string[] = [];
-  const dayStr = h.day?.toLowerCase() ?? '';
-  
-  if (dayStr.includes(' - ')) {
-    const [startDay, endDay] = dayStr.split(' - ').map((d: string) => d.trim());
-    const dayOrder = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
-    const startIdx = dayOrder.indexOf(startDay);
-    const endIdx = dayOrder.indexOf(endDay);
-    if (startIdx !== -1 && endIdx !== -1) {
-      for (let i = startIdx; i <= endIdx; i++) {
-        daysOfWeek.push(dayMap[dayOrder[i]]);
-      }
-    }
-  } else {
-    const mapped = dayMap[dayStr];
-    if (mapped) daysOfWeek.push(mapped);
-  }
+const openingHoursSpec = operatingHours
+  .map((h: any) => {
+    // Parse days like "Senin - Jumat" to dayOfWeek array
+    const dayMap: Record<string, string> = {
+      senin: "Monday",
+      selasa: "Tuesday",
+      rabu: "Wednesday",
+      kamis: "Thursday",
+      jumat: "Friday",
+      sabtu: "Saturday",
+      minggu: "Sunday",
+    };
 
-  // Parse time like "08:00 - 14:00 WIB"
-  const timeStr = h.time ?? '';
-  const timeMatch = timeStr.match(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/);
-  
-  return {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": daysOfWeek,
-    "opens": timeMatch ? timeMatch[1] : "08:00",
-    "closes": timeMatch ? timeMatch[2] : "14:00"
-  };
-}).filter((spec: any) => spec.dayOfWeek.length > 0);
+    let daysOfWeek: string[] = [];
+    const dayStr = h.day?.toLowerCase() ?? "";
+
+    if (dayStr.includes(" - ")) {
+      const [startDay, endDay] = dayStr
+        .split(" - ")
+        .map((d: string) => d.trim());
+      const dayOrder = [
+        "senin",
+        "selasa",
+        "rabu",
+        "kamis",
+        "jumat",
+        "sabtu",
+        "minggu",
+      ];
+      const startIdx = dayOrder.indexOf(startDay);
+      const endIdx = dayOrder.indexOf(endDay);
+      if (startIdx !== -1 && endIdx !== -1) {
+        for (let i = startIdx; i <= endIdx; i++) {
+          daysOfWeek.push(dayMap[dayOrder[i]]);
+        }
+      }
+    } else {
+      const mapped = dayMap[dayStr];
+      if (mapped) daysOfWeek.push(mapped);
+    }
+
+    // Parse time like "08:00 - 14:00 WIB"
+    const timeStr = h.time ?? "";
+    const timeMatch = timeStr.match(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/);
+
+    return {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: daysOfWeek,
+      opens: timeMatch ? timeMatch[1] : "08:00",
+      closes: timeMatch ? timeMatch[2] : "14:00",
+    };
+  })
+  .filter((spec: any) => spec.dayOfWeek.length > 0);
 
 // Enhanced Organization Schema for E-E-A-T
 const enhancedOrgSchema = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
   "@id": `${siteInfo.siteUrl}/#organization`,
-  "name": siteInfo.siteName,
-  "alternateName": "MASMIFHDA",
-  "url": siteInfo.siteUrl,
-  "logo": {
+  name: siteInfo.siteName,
+  alternateName: "MASMIFHDA",
+  url: siteInfo.siteUrl,
+  logo: {
     "@type": "ImageObject",
-    "url": getFullImageUrl(siteInfo.siteLogo),
-    "width": 200,
-    "height": 200
+    url: getFullImageUrl(siteInfo.siteLogo),
+    width: 200,
+    height: 200,
   },
-  "image": getFullImageUrl(siteInfo.siteLogo),
-  "description": siteInfo.siteDescription || globalMeta.defaultDescription,
-  ...(emailInfo?.value && { "email": emailInfo.value }),
-  ...(phoneInfo?.value && { "telephone": phoneInfo.value }),
+  image: getFullImageUrl(siteInfo.siteLogo),
+  description: siteInfo.siteDescription || globalMeta.defaultDescription,
+  ...(emailInfo?.value && { email: emailInfo.value }),
+  ...(phoneInfo?.value && { telephone: phoneInfo.value }),
   ...(addressInfo?.value && {
-    "address": {
+    address: {
       "@type": "PostalAddress",
-      "streetAddress": addressInfo.value,
-      "addressLocality": "Way Tenong",
-      "addressRegion": "Lampung Barat",
-      "addressCountry": "ID"
-    }
+      streetAddress: addressInfo.value,
+      addressLocality: "Way Tenong",
+      addressRegion: "Lampung Barat",
+      addressCountry: "ID",
+    },
   }),
-  ...(sameAsLinks.length > 0 && { "sameAs": sameAsLinks }),
-  ...(openingHoursSpec.length > 0 && { "openingHoursSpecification": openingHoursSpec }),
-  "contactPoint": [
-    ...(phoneInfo?.value ? [{
-      "@type": "ContactPoint",
-      "telephone": phoneInfo.value,
-      "contactType": "customer service",
-      "availableLanguage": ["Indonesian"]
-    }] : []),
-    ...(emailInfo?.value ? [{
-      "@type": "ContactPoint",
-      "email": emailInfo.value,
-      "contactType": "customer service",
-      "availableLanguage": ["Indonesian"]
-    }] : [])
+  ...(sameAsLinks.length > 0 && { sameAs: sameAsLinks }),
+  ...(openingHoursSpec.length > 0 && {
+    openingHoursSpecification: openingHoursSpec,
+  }),
+  contactPoint: [
+    ...(phoneInfo?.value
+      ? [
+          {
+            "@type": "ContactPoint",
+            telephone: phoneInfo.value,
+            contactType: "customer service",
+            availableLanguage: ["Indonesian"],
+          },
+        ]
+      : []),
+    ...(emailInfo?.value
+      ? [
+          {
+            "@type": "ContactPoint",
+            email: emailInfo.value,
+            contactType: "customer service",
+            availableLanguage: ["Indonesian"],
+          },
+        ]
+      : []),
   ],
-  "areaServed": {
+  areaServed: {
     "@type": "Place",
-    "name": "Lampung Barat, Indonesia"
+    name: "Lampung Barat, Indonesia",
   },
-  "founder": {
+  founder: {
     "@type": "Organization",
-    "name": "Yayasan Mathla'ul Anwar"
-  }
+    name: "Yayasan Mathla'ul Anwar",
+  },
 };
 
 // Generate BreadcrumbList Schema
@@ -240,56 +266,57 @@ const generateBreadcrumbSchema = () => {
     return {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      "itemListElement": breadcrumbs.map((item, index) => ({
+      itemListElement: breadcrumbs.map((item, index) => ({
         "@type": "ListItem",
-        "position": index + 1,
-        "name": item.name,
-        "item": `${siteInfo.siteUrl}${item.url.startsWith('/') ? item.url : '/' + item.url}`
-      }))
+        position: index + 1,
+        name: item.name,
+        item: `${siteInfo.siteUrl}${item.url.startsWith("/") ? item.url : "/" + item.url}`,
+      })),
     };
   }
 
   // Auto-generate breadcrumbs from URL path
   const currentPath = url || Astro.url.pathname;
-  if (!currentPath || currentPath === '/') {
+  if (!currentPath || currentPath === "/") {
     return null; // No breadcrumbs for homepage
   }
 
-  const pathSegments = currentPath.split('/').filter(Boolean);
+  const pathSegments = currentPath.split("/").filter(Boolean);
   const breadcrumbItems = [
     {
       "@type": "ListItem",
-      "position": 1,
-      "name": "Beranda",
-      "item": siteInfo.siteUrl
-    }
+      position: 1,
+      name: "Beranda",
+      item: siteInfo.siteUrl,
+    },
   ];
 
   // Map common path segments to readable names
   const segmentNameMap: Record<string, string> = {
-    'posts': 'Artikel',
-    'news': 'Berita',
-    'pengumuman': 'Pengumuman',
-    'prestasi': 'Prestasi',
-    'about': 'Tentang Kami',
-    'contact': 'Kontak',
-    'gallery': 'Galeri',
-    'ppdb': 'PPDB',
-    'page': 'Halaman'
+    posts: "Artikel",
+    news: "Berita",
+    pengumuman: "Pengumuman",
+    prestasi: "Prestasi",
+    about: "Tentang Kami",
+    contact: "Kontak",
+    gallery: "Galeri",
+    ppdb: "PPDB",
+    page: "Halaman",
   };
 
-  let accumulatedPath = '';
+  let accumulatedPath = "";
   pathSegments.forEach((segment, index) => {
     // Skip numeric segments (like page numbers) or slugs for the path building
     if (/^\d+$/.test(segment)) {
       return;
     }
 
-    accumulatedPath += '/' + segment;
-    
+    accumulatedPath += "/" + segment;
+
     // Get readable name
-    let readableName = segmentNameMap[segment.toLowerCase()] || 
-      segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+    let readableName =
+      segmentNameMap[segment.toLowerCase()] ||
+      segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
 
     // For the last segment, use the page title if available
     if (index === pathSegments.length - 1 && title) {
@@ -298,9 +325,9 @@ const generateBreadcrumbSchema = () => {
 
     breadcrumbItems.push({
       "@type": "ListItem",
-      "position": breadcrumbItems.length + 1,
-      "name": readableName,
-      "item": `${siteInfo.siteUrl}${accumulatedPath}`
+      position: breadcrumbItems.length + 1,
+      name: readableName,
+      item: `${siteInfo.siteUrl}${accumulatedPath}`,
     });
   });
 
@@ -311,7 +338,7 @@ const generateBreadcrumbSchema = () => {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": breadcrumbItems
+    itemListElement: breadcrumbItems,
   };
 };
 
@@ -331,7 +358,10 @@ const breadcrumbSchema = generateBreadcrumbSchema();
 <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
 <!-- External Stylesheets -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"/>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
+/>
 
 <!-- Basic Meta Tags -->
 <title>{pageTitle}</title>
@@ -340,7 +370,11 @@ const breadcrumbSchema = generateBreadcrumbSchema();
 <meta name="description" content={pageDescription} />
 <meta name="theme-color" content="#1a1a2e" />
 <meta name="format-detection" content="telephone=no" />
-{globalMeta.defaultKeywords && <meta name="keywords" content={globalMeta.defaultKeywords} />}
+{
+  globalMeta.defaultKeywords && (
+    <meta name="keywords" content={globalMeta.defaultKeywords} />
+  )
+}
 {globalMeta.author && <meta name="author" content={globalMeta.author} />}
 {noindex && <meta name="robots" content={robotsContent} />}
 
@@ -367,84 +401,102 @@ const breadcrumbSchema = generateBreadcrumbSchema();
 <meta property="og:site_name" content={siteInfo.siteName} />
 {openGraph.locale && <meta property="og:locale" content={openGraph.locale} />}
 
-{pageImage && (
-  <>
-    <meta property="og:image" content={getFullImageUrl(pageImage)} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={pageTitle} />
-  </>
-)}
+{
+  pageImage && (
+    <>
+      <meta property="og:image" content={getFullImageUrl(pageImage)} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={pageTitle} />
+    </>
+  )
+}
 
-{openGraph.fbAppId && (
-  <meta property="fb:app_id" content={openGraph.fbAppId} />
-)}
+{openGraph.fbAppId && <meta property="fb:app_id" content={openGraph.fbAppId} />}
 
-{publishedTime && (
-  <meta property="article:published_time" content={publishedTime} />
-)}
+{
+  publishedTime && (
+    <meta property="article:published_time" content={publishedTime} />
+  )
+}
 
-{modifiedTime && (
-  <meta property="article:modified_time" content={modifiedTime} />
-)}
+{
+  modifiedTime && (
+    <meta property="article:modified_time" content={modifiedTime} />
+  )
+}
 
-{tags.length > 0 && tags.map((tag: string) => (
-  <meta property="article:tag" content={tag} />
-))}
+{
+  tags.length > 0 &&
+    tags.map((tag: string) => <meta property="article:tag" content={tag} />)
+}
 
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content={twitter.card} />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={pageDescription} />
 
-{twitter.site && (
-  <meta name="twitter:site" content={twitter.site} />
-)}
+{twitter.site && <meta name="twitter:site" content={twitter.site} />}
 
-{twitter.creator && (
-  <meta name="twitter:creator" content={twitter.creator} />
-)}
+{twitter.creator && <meta name="twitter:creator" content={twitter.creator} />}
 
-{pageImage && (
-  <>
-    <meta name="twitter:image" content={getFullImageUrl(pageImage)} />
-    <meta name="twitter:image:alt" content={pageTitle} />
-  </>
-)}
+{
+  pageImage && (
+    <>
+      <meta name="twitter:image" content={getFullImageUrl(pageImage)} />
+      <meta name="twitter:image:alt" content={pageTitle} />
+    </>
+  )
+}
 
 <!-- Site Verification -->
-{analytics.googleSiteVerification && (
-  <meta name="google-site-verification" content={analytics.googleSiteVerification} />
-)}
+{
+  analytics.googleSiteVerification && (
+    <meta
+      name="google-site-verification"
+      content={analytics.googleSiteVerification}
+    />
+  )
+}
 
-{analytics.bingSiteVerification && (
-  <meta name="msvalidate.01" content={analytics.bingSiteVerification} />
-)}
+{
+  analytics.bingSiteVerification && (
+    <meta name="msvalidate.01" content={analytics.bingSiteVerification} />
+  )
+}
 
-{analytics.yandexVerification && (
-  <meta name="yandex-verification" content={analytics.yandexVerification} />
-)}
+{
+  analytics.yandexVerification && (
+    <meta name="yandex-verification" content={analytics.yandexVerification} />
+  )
+}
 
 <!-- Google Analytics -->
-{analytics.gaId && (
-  <>
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${analytics.gaId}`} />
-    <script>
-      {`
+{
+  analytics.gaId && (
+    <>
+      <script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${analytics.gaId}`}
+      />
+      <script>
+        {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', '${analytics.gaId}');
       `}
-    </script>
-  </>
-)}
+      </script>
+    </>
+  )
+}
 
 <!-- Google Tag Manager -->
-{analytics.gtmId && (
-  <>
-    <script>
-      {`(function(w,d,s,l,i){
+{
+  analytics.gtmId && (
+    <>
+      <script>
+        {`(function(w,d,s,l,i){
         w[l]=w[l]||[];
         w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
         var f=d.getElementsByTagName(s)[0],
@@ -453,72 +505,88 @@ const breadcrumbSchema = generateBreadcrumbSchema();
         j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
         if(f.parentNode) f.parentNode.insertBefore(j,f);
       })(window,document,'script','dataLayer','${analytics.gtmId}');`}
-    </script>
-  </>
-)}
+      </script>
+    </>
+  )
+}
 
 <!-- Structured Data -->
-{orgStructuredData && (
-  <script type="application/ld+json">
-    {JSON.stringify(orgStructuredData)}
-  </script>
-)}
+{
+  orgStructuredData && (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(orgStructuredData)}
+    />
+  )
+}
 
-{websiteStructuredData && (
-  <script type="application/ld+json">
-    {JSON.stringify(websiteStructuredData)}
-  </script>
-)}
+{
+  websiteStructuredData && (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(websiteStructuredData)}
+    />
+  )
+}
 
 <!-- Enhanced E-E-A-T Organization Schema -->
-<script type="application/ld+json" set:html={JSON.stringify(enhancedOrgSchema)} />
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(enhancedOrgSchema)}
+/>
 
 <!-- BreadcrumbList Schema for Navigation -->
-{breadcrumbSchema && (
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-)}
+{
+  breadcrumbSchema && (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(breadcrumbSchema)}
+    />
+  )
+}
 
 <!-- Page-specific structured data -->
-{pageType === 'website' ? (
-  <script type="application/ld+json">
-  {JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": pageTitle,
-    "description": pageDescription,
-    "url": fullUrl,
-    "publisher": {
-      "@type": "EducationalOrganization",
-      "name": siteInfo.siteName,
-      "url": siteInfo.siteUrl
-    }
-  })}
-  </script>
-) : (
-  <script type="application/ld+json">
-  {JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": pageTitle,
-    "description": pageDescription,
-    "url": fullUrl,
-    "image": pageImage ? getFullImageUrl(pageImage) : undefined,
-    "datePublished": publishedTime || undefined,
-    "dateModified": modifiedTime || publishedTime || undefined,
-    "author": {
-      "@type": "Organization",
-      "name": globalMeta.author || siteInfo.siteName
-    },
-    "publisher": {
-      "@type": "EducationalOrganization",
-      "name": siteInfo.siteName,
-      "url": siteInfo.siteUrl,
-      "logo": siteInfo.siteLogo ? {
-        "@type": "ImageObject",
-        "url": getFullImageUrl(siteInfo.siteLogo)
-      } : undefined
-    },
-    "keywords": tags.length > 0 ? tags.join(", ") : undefined
-  })}
-  </script>
-)}
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(
+    pageType === "website"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: pageTitle,
+          description: pageDescription,
+          url: fullUrl,
+          publisher: {
+            "@type": "EducationalOrganization",
+            name: siteInfo.siteName,
+            url: siteInfo.siteUrl,
+          },
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: pageTitle,
+          description: pageDescription,
+          url: fullUrl,
+          image: pageImage ? getFullImageUrl(pageImage) : undefined,
+          datePublished: publishedTime || undefined,
+          dateModified: modifiedTime || publishedTime || undefined,
+          author: {
+            "@type": "Organization",
+            name: globalMeta.author || siteInfo.siteName,
+          },
+          publisher: {
+            "@type": "EducationalOrganization",
+            name: siteInfo.siteName,
+            url: siteInfo.siteUrl,
+            logo: siteInfo.siteLogo
+              ? {
+                  "@type": "ImageObject",
+                  url: getFullImageUrl(siteInfo.siteLogo),
+                }
+              : undefined,
+          },
+          keywords: tags.length > 0 ? tags.join(", ") : undefined,
+        },
+  )}
+/>

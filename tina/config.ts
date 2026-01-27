@@ -1248,6 +1248,12 @@ export default defineConfig({
                     ui: { component: 'textarea' },
                   },
                   {
+                    type: 'string',
+                    label: 'Status Akreditasi',
+                    name: 'accreditation',
+                    description: 'Contoh: TERAKREDITASI "A"',
+                  },
+                  {
                     type: 'object',
                     label: 'Text Settings',
                     name: 'textSettings',

@@ -290,6 +290,7 @@ const websiteSettingsCollection = defineCollection({
         name: z.string().optional().default("SMA NEGERI 1"),
         city: z.string().optional().default("Semarang"),
         motto: z.string().optional().default("sekolah maju untuk dunia akhirat"),
+        accreditation: z.string().optional().default("TERAKREDITASI A"),
         welcomeMessage: z.string().optional().default("Selamat Datang di Website Kami"),
         // Text settings di dalam schoolInfo
         textSettings: z.object({

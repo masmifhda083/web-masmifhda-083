@@ -21,9 +21,13 @@ const { category } = Astro.params;
 const pageSize = 8;
 const currentPage = 1;
 
-const posts = (await getCollection("posts")).filter(
-  (p) => (p.data.category || "").toLowerCase() === category,
-);
+const posts = (await getCollection("posts"))
+  .filter((p) => (p.data.category || "").toLowerCase() === category)
+  .sort((a, b) => {
+    const dateA = new Date(a.data.pubdate ?? 0).getTime();
+    const dateB = new Date(b.data.pubdate ?? 0).getTime();
+    return dateB - dateA;
+  });
 
 const pagination = paginate({
   totalItems: posts.length,
@@ -34,9 +38,10 @@ const pagination = paginate({
 const pagedPosts = posts.slice(pagination.start, pagination.end);
 
 const baseUrl = `/posts/${category}`;
+const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
 ---
 
-<Layout title={`${category}`}>
+<Layout title={`${formattedCategory}`}>
   <section>
     <div class="container min-h-screen py-12 px-6 mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

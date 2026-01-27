@@ -119,7 +119,7 @@ function isTextTruncated(text: string | undefined, limit: number): boolean {
               </div>
             )}
           <span class="absolute top-0 right-0">
-                <a href={`/posts/${post.category}/`}>
+                <a href={`/posts/${categorySlug}/`}>
                   <p class="bg-surface text-primary text-xs px-2 py-1 rounded-tr-md capitalize">{post.category}</p>
                 </a>
               </span>
@@ -282,7 +282,7 @@ function isTextTruncated(text: string | undefined, limit: number): boolean {
             )}
             
             <div class="absolute top-0 right-0 inline-block text-[10px]">
-              <a href={`/posts/${post.category}/`} class="">
+              <a href={`/posts/${categorySlug}/`} class="">
                 <p class="bg-primary text-surface px-2 py-1 rounded-bl-sm rounded-tr-sm capitalize">{post.category}</p>
               </a>
             </div>

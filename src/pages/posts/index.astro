@@ -54,29 +54,14 @@ for (const post of allPosts) {
 
     // Cara 1: Coba ambil dari post.slug
     if (post.slug) {
-      // Jika slug berupa path (folder/subfolder/slug), ambil bagian terakhir
-      if (typeof post.slug === "string") {
-        const parts = post.slug.split("/").filter(Boolean);
-        postSlug = parts[parts.length - 1];
-      } else {
-        postSlug = String(post.slug);
-      }
+      postSlug = post.slug;
     }
 
-    // Cara 2: Jika masih kosong, coba buat dari title
-    if (!postSlug && post.data?.title) {
-      postSlug = post.data.title
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .trim();
-    }
-
-    // Cara 3: Fallback menggunakan ID atau index
+    // Cara 2: Fallback ke ID (paling akurat untuk loader: glob)
     if (!postSlug) {
-      // Gunakan post.id jika ada
-      postSlug = post.id || `post-${post.slug || "unknown"}`;
+      postSlug = post.id.split("/").pop() || "";
+      // Remove extension if present in ID (safe check)
+      postSlug = postSlug.replace(/\.[^/.]+$/, "");
     }
 
     // Validasi slug

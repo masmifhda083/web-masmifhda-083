@@ -1,0 +1,130 @@
+---
+import { getEntry } from "astro:content";
+import "@splidejs/splide/css";
+
+const about = await getEntry("about", "index");
+const galleryItems = about?.data?.gallery?.items || [];
+
+if (!galleryItems.length) {
+    return null;
+}
+---
+
+<section class="py-20 bg-surface overflow-hidden">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12" data-animate="fade">
+            <h2
+                class="text-3xl text-primary text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-primary before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2"
+            >
+                Galeri Kegiatan
+            </h2>
+            <p class="text-base text-muted max-w-2xl mx-auto mt-6">
+                Dokumentasi kegiatan dan momen berharga di sekolah kami
+            </p>
+        </div>
+
+        <div class="splide gallery-splide" aria-label="School Gallery">
+            <div class="splide__track">
+                <ul class="splide__list">
+                    {
+                        galleryItems.map((item) => (
+                            <li class="splide__slide">
+                                <div class="group relative rounded-xl overflow-hidden shadow-lg aspect-video cursor-pointer">
+                                    <img
+                                        src={item.image}
+                                        alt={item.title}
+                                        class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                                    />
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                                        <h3 class="text-white text-xl font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                            {item.title}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import Splide from "@splidejs/splide";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const el = document.querySelector(".gallery-splide");
+        if (el) {
+            new Splide(el as HTMLElement, {
+                type: "loop",
+                perPage: 3,
+                perMove: 1,
+                gap: "2rem",
+                autoplay: true,
+                interval: 4000,
+                pauseOnHover: true,
+                padding: "1rem",
+                breakpoints: {
+                    1024: {
+                        perPage: 2,
+                        gap: "1.5rem",
+                    },
+                    640: {
+                        perPage: 1,
+                        gap: "1rem",
+                        padding: "0rem",
+                    },
+                },
+            }).mount();
+        }
+    });
+</script>
+
+<style>
+    /* Custom Splide Styles for Premium Feel */
+    .splide__pagination {
+        bottom: -2.5rem;
+    }
+
+    .splide__pagination__page {
+        background: #cbd5e1; /* slate-300 */
+        opacity: 0.7;
+        width: 10px;
+        height: 10px;
+        margin: 0 6px;
+        transition: all 0.3s ease;
+    }
+
+    .splide__pagination__page.is-active {
+        background: var(--color-primary, #2563eb);
+        transform: scale(1.4);
+        opacity: 1;
+    }
+
+    .splide__arrow {
+        background: rgba(255, 255, 255, 0.9);
+        opacity: 0;
+        transition: all 0.3s ease;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .gallery-splide:hover .splide__arrow {
+        opacity: 1;
+    }
+
+    .splide__arrow svg {
+        fill: var(--color-primary, #2563eb);
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
+    .splide__arrow--prev {
+        left: -1rem;
+    }
+
+    .splide__arrow--next {
+        right: -1rem;
+    }
+</style>
