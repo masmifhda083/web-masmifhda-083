@@ -268,8 +268,7 @@ const websiteSettingsCollection = defineCollection({
         image: z.string().optional()
       }).optional(),
       analytics: z.object({
-        gaId: z.string().optional(),
-        gtmId: z.string().optional()
+        gaId: z.string().optional()
       }).optional()
     }).optional(),
     slider: z.object({
