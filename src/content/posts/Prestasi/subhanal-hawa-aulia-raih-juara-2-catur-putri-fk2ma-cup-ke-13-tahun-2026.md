@@ -3,7 +3,7 @@ title: Subhanal Hawa Aulia Raih Juara 2 Catur Putri FK2MA Cup ke 13 tahun 2026
 author: src/content/authors/admin.md
 pubdate: 2026-02-10T00:00:00.000Z
 description: Subhanal Hawa Aulia meraih juara 2 catur putri FK2MA Cup ke 13 tahun 2026 di MA Al Hasimiyah Air Hitam.
-category: Pretasi
+category: Prestasi
 heroImage: /uploads/file_0000000086f072069ff83554eb127a57.png
 ---
 
