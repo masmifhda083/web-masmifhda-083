@@ -3,7 +3,7 @@ title: Volly Putra MA Miftahul Huda Pertahanan Gelar Juara FK2MA 2026
 author: src/content/authors/admin.md
 pubdate: 2026-02-10T00:00:00.000Z
 description: Tim volly putra MA Miftahul Huda kembali meraih juara 1 FK2MA 2026 usai mengalahkan MA Al Ma’arif Suoh.
-category: Pretasi
+category: Prestasi
 heroImage: /uploads/IMG_20260210_181024_474.jpg
 ---
 
