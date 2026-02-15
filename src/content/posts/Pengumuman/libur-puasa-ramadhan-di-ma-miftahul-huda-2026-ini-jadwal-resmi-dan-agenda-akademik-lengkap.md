@@ -37,21 +37,10 @@ Pihak yang terlibat dalam pelaksanaan kebijakan ini meliputi kepala madrasah, de
 
 Cara mempersiapkan diri menghadapi jadwal libur puasa dan PAT.
 
-1. Catat tanggal penting.
-
-Pastikan siswa dan orang tua menyimpan jadwal 16 sampai 23 Februari 2026 sebagai periode libur puasa.
-
-1. Susun rencana belajar.
-
-Gunakan masa sebelum 2 Maret 2026 untuk persiapan PAT Semester Genap Kelas XII.
-
-1. Pantau informasi resmi madrasah.
-
-Ikuti pengumuman terbaru melalui wali kelas atau media informasi resmi MA Miftahul Huda.
-
-1. Atur waktu ibadah dan belajar.
-
-Manfaatkan Ramadhan untuk meningkatkan disiplin waktu tanpa mengabaikan kewajiban akademik.
+1. Catat tanggal penting. Pastikan siswa dan orang tua menyimpan jadwal 16 sampai 23 Februari 2026 sebagai periode libur puasa.
+2. Susun rencana belajar. Gunakan masa sebelum 2 Maret 2026 untuk persiapan PAT Semester Genap Kelas XII.
+3. Pantau informasi resmi madrasah. Ikuti pengumuman terbaru melalui wali kelas atau media informasi resmi MA Miftahul Huda.
+4. Atur waktu ibadah dan belajar. Manfaatkan Ramadhan untuk meningkatkan disiplin waktu tanpa mengabaikan kewajiban akademik.
 
 Jadwal libur puasa dan agenda akademik Ramadhan 2026 di MA Miftahul Huda telah ditetapkan secara resmi. Siswa dan orang tua perlu memperhatikan tanggal penting agar proses belajar tetap optimal.
 
