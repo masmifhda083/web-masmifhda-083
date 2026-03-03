@@ -102,14 +102,21 @@ const pageTitle = title
 
 const pageDescription = description || globalMeta.defaultDescription;
 const pageImage = image || openGraph.image || siteInfo.siteLogo;
+// Clean base URL to prevent double slashes (e.g., https://domain.com//path)
+const baseUrl = (siteInfo.siteUrl || "https://masmifhda.sch.id").replace(
+  /\/+$/,
+  "",
+);
+
 const fullUrl = url
-  ? `${siteInfo.siteUrl}${url.startsWith("/") ? url : "/" + url}`
-  : siteInfo.siteUrl;
+  ? `${baseUrl}${url.startsWith("/") ? url : "/" + url}`
+  : baseUrl;
+
 const pageType = type;
 
 // Generate canonical URL
 const canonicalUrl = canonical
-  ? `${siteInfo.siteUrl}${canonical.startsWith("/") ? canonical : "/" + canonical}`
+  ? `${baseUrl}${canonical.startsWith("/") ? canonical : "/" + canonical}`
   : fullUrl;
 
 // Robots meta
@@ -119,7 +126,7 @@ const robotsContent = noindex ? "noindex, nofollow" : "index, follow";
 const getFullImageUrl = (imgPath: string) => {
   if (!imgPath) return "";
   if (imgPath.startsWith("http")) return imgPath;
-  return `${siteInfo.siteUrl}${imgPath.startsWith("/") ? imgPath : "/" + imgPath}`;
+  return `${baseUrl}${imgPath.startsWith("/") ? imgPath : "/" + imgPath}`;
 };
 
 const orgStructuredData = parseStructuredData(
@@ -199,10 +206,10 @@ const openingHoursSpec = operatingHours
 const enhancedOrgSchema = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
-  "@id": `${siteInfo.siteUrl}/#organization`,
+  "@id": `${baseUrl}/#organization`,
   name: siteInfo.siteName,
   alternateName: "MASMIFHDA",
-  url: siteInfo.siteUrl,
+  url: baseUrl,
   logo: {
     "@type": "ImageObject",
     url: getFullImageUrl(siteInfo.siteLogo),
@@ -269,7 +276,7 @@ const generateBreadcrumbSchema = () => {
         "@type": "ListItem",
         position: index + 1,
         name: item.name,
-        item: `${siteInfo.siteUrl}${item.url.startsWith("/") ? item.url : "/" + item.url}`,
+        item: `${baseUrl}${item.url.startsWith("/") ? item.url : "/" + item.url}`,
       })),
     };
   }
@@ -286,7 +293,7 @@ const generateBreadcrumbSchema = () => {
       "@type": "ListItem",
       position: 1,
       name: "Beranda",
-      item: siteInfo.siteUrl,
+      item: baseUrl,
     },
   ];
 
@@ -326,7 +333,7 @@ const generateBreadcrumbSchema = () => {
       "@type": "ListItem",
       position: breadcrumbItems.length + 1,
       name: readableName,
-      item: `${siteInfo.siteUrl}${accumulatedPath}`,
+      item: `${baseUrl}${accumulatedPath}`,
     });
   });
 
@@ -389,8 +396,8 @@ const breadcrumbSchema = generateBreadcrumbSchema();
 <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
 <!-- Language Alternate -->
-<link rel="alternate" hreflang="id" href={siteInfo.siteUrl} />
-<link rel="alternate" hreflang="x-default" href={siteInfo.siteUrl} />
+<link rel="alternate" hreflang="id" href={baseUrl} />
+<link rel="alternate" hreflang="x-default" href={baseUrl} />
 
 <!-- Open Graph Meta Tags -->
 <meta property="og:title" content={pageTitle} />
@@ -542,7 +549,7 @@ const breadcrumbSchema = generateBreadcrumbSchema();
           publisher: {
             "@type": "EducationalOrganization",
             name: siteInfo.siteName,
-            url: siteInfo.siteUrl,
+            url: baseUrl,
           },
         }
       : {
@@ -561,7 +568,7 @@ const breadcrumbSchema = generateBreadcrumbSchema();
           publisher: {
             "@type": "EducationalOrganization",
             name: siteInfo.siteName,
-            url: siteInfo.siteUrl,
+            url: baseUrl,
             logo: siteInfo.siteLogo
               ? {
                   "@type": "ImageObject",
