@@ -5,7 +5,7 @@ pubdate: 2026-03-01T00:00:00.000Z
 description: 'Kabar gembira bagi calon murid dan orang tua yang mencari institusi pendidikan menengah atas berbasis Islam berkualitas di Lampung Barat! Madrasah Aliyah (MA) Miftahul Huda Kampus Sanyir, yang merupakan bagian tak terpisahkan dari keluarga besar MA Miftahul Huda Tambak Jaya, secara resmi membuka Sistem Penerimaan Murid Baru (SPMB) Gelombang 2 untuk Tahun Ajaran 2026-2027'
 category: pengumuman
 status: published
-heroImage: /uploads/mifda-15.webp
+heroImage: /uploads/spmb-ma-miftahul-huda-gelombang-2.webp
 ---
 
 Kabar gembira bagi calon murid dan orang tua yang mencari institusi pendidikan menengah atas berbasis Islam berkualitas di Lampung Barat! Madrasah Aliyah (MA) Miftahul Huda Kampus Sanyir, yang merupakan bagian tak terpisahkan dari keluarga besar YPP Miftahul Huda Mathla'ul Anwar, secara resmi membuka Sistem Penerimaan Murid Baru (SPMB) Gelombang 2 untuk Tahun Ajaran 2026-2027. Periode pendaftaran krusial ini akan berlangsung dari tanggal 01 Maret hingga 30 April 2026, menawarkan kesempatan emas bagi putra-putri terbaik bangsa untuk bergabung dalam lingkungan belajar yang inspiratif dan berakhlak mulia.
