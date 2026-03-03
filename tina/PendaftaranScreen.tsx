@@ -160,7 +160,7 @@ export const PendaftaranScreen = () => {
     });
 
     const styles = `
-        .admin-container { padding: 32px; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #f8fafc; min-height: 100vh; color: #0f172a; box-sizing: border-box; }
+        .admin-container { padding: 32px; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #f8fafc; min-height: 100vh; max-height: 100vh; overflow-y: auto; color: #0f172a; box-sizing: border-box; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
         .admin-title { font-size: 28px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; margin: 0; }
         
