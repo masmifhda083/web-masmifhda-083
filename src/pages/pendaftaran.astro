@@ -625,5 +625,131 @@ const settings = pendaftaranData[0]?.data?.pendaftaranData || {
         </div>
       </div>
     </div>
+
+    <script>
+      const form = document.getElementById(
+        "registrationForm",
+      ) as HTMLFormElement;
+      const submitBtn = document.getElementById(
+        "submitBtn",
+      ) as HTMLButtonElement;
+      const resultModal = document.getElementById("resultModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalMessage = document.getElementById("modalMessage");
+      const modalIconSuccess = document.getElementById("modalIconSuccess");
+      const modalIconError = document.getElementById("modalIconError");
+      const checkStatusBtn = document.getElementById("checkStatusBtn");
+      const registrationIdDiv = document.getElementById("registrationId");
+      const idValue = document.getElementById("idValue");
+
+      // Close Modal Function
+      window.closeModal = function () {
+        if (resultModal) {
+          resultModal.classList.add("hidden");
+          resultModal.classList.remove("flex");
+        }
+      };
+
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // 1. Disable submit button & state processing
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Memproses...
+          `;
+          }
+
+          try {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            // API Endpoint
+            const response = await fetch("/api/pendaftaran/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            // 2. Setup Modal Content based on result
+            if (resultModal && modalTitle && modalMessage) {
+              resultModal.classList.remove("hidden");
+              resultModal.classList.add("flex");
+
+              if (response.ok) {
+                // Sukses
+                modalTitle.textContent = "Pendaftaran Berhasil!";
+                modalMessage.textContent =
+                  "Terima kasih, data Anda telah kami terima.";
+
+                if (modalIconSuccess)
+                  modalIconSuccess.classList.remove("hidden");
+                if (modalIconSuccess) modalIconSuccess.classList.add("flex");
+                if (modalIconError) modalIconError.classList.add("hidden");
+                if (modalIconError) modalIconError.classList.remove("flex");
+
+                if (result.pendaftaran_id) {
+                  if (registrationIdDiv)
+                    registrationIdDiv.classList.remove("hidden");
+                  if (idValue) idValue.textContent = result.pendaftaran_id;
+                }
+                if (checkStatusBtn) checkStatusBtn.classList.remove("hidden");
+
+                form.reset();
+              } else {
+                // Error
+                modalTitle.textContent = "Pendaftaran Gagal";
+                modalMessage.textContent =
+                  result.error || "Terjadi kesalahan saat memproses data.";
+
+                if (modalIconError) modalIconError.classList.remove("hidden");
+                if (modalIconError) modalIconError.classList.add("flex");
+                if (modalIconSuccess) modalIconSuccess.classList.add("hidden");
+                if (modalIconSuccess) modalIconSuccess.classList.remove("flex");
+
+                if (registrationIdDiv)
+                  registrationIdDiv.classList.add("hidden");
+                if (checkStatusBtn) checkStatusBtn.classList.add("hidden");
+              }
+            }
+          } catch (error) {
+            console.error("Error submitting form:", error);
+
+            if (resultModal && modalTitle && modalMessage) {
+              resultModal.classList.remove("hidden");
+              resultModal.classList.add("flex");
+
+              modalTitle.textContent = "Koneksi Bermasalah";
+              modalMessage.textContent =
+                "Tidak dapat terhubung ke server. Silakan coba lagi.";
+
+              if (modalIconError) modalIconError.classList.remove("hidden");
+              if (modalIconError) modalIconError.classList.add("flex");
+              if (modalIconSuccess) modalIconSuccess.classList.add("hidden");
+              if (modalIconSuccess) modalIconSuccess.classList.remove("flex");
+
+              if (registrationIdDiv) registrationIdDiv.classList.add("hidden");
+              if (checkStatusBtn) checkStatusBtn.classList.add("hidden");
+            }
+          } finally {
+            // 3. Restore Button State
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = "Kirim Pendaftaran";
+            }
+          }
+        });
+      }
+    </script>
   </div>
 </Layout>
