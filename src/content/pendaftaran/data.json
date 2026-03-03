@@ -46,7 +46,12 @@
     "academicYear": "2026-2027",
     "registrationOpen": true,
     "registrationPeriod": "Gelombang II 1 Maret - 30 April 2026",
-    "testDate": "Coming Soon"
+    "testDate": "Coming Soon",
+    "requirements": [
+      {
+        "requirement": "Foto copy Kartu Keluarga"
+      }
+    ]
   },
   "highlightPamflet": {
     "customImage": "/uploads/spmb-ma-miftahul-huda-gelombang-2.webp"
