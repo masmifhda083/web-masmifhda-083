@@ -37,10 +37,10 @@ const animation = slider.animation || { autoSlide: true, slideInterval: 3000, ma
 // Generate unique ID untuk slider
 const sliderId = `hero-slider-${Math.random().toString(36).substring(2, 11)}`;
 
-// Ambil data PPDB untuk teks button
-const ppdbCollection = await getCollection('ppdb');
-const ppdbData = ppdbCollection[0]?.data?.datappdb;
-const ppdbText = ppdbData?.ppdbAlias || "PPDB";
+// Ambil data pendaftaran untuk teks button
+const pendaftaranCollection = await getCollection('pendaftaran');
+const pendaftaranData = pendaftaranCollection[0]?.data?.pendaftaranData;
+const pendaftaranText = pendaftaranData?.pendaftaranAlias || "Pendaftaran";
 
 // Variabel untuk animation duration calculation
 const marqueeDuration = `calc(10s / ${animation.marqueeSpeed || 15} * 15)`;
@@ -83,7 +83,7 @@ const marqueeDuration = `calc(10s / ${animation.marqueeSpeed || 15} * 15)`;
                   <marquee scrollamount="7" direction="left">{schoolInfo.name}</marquee>
                   <marquee scrollamount="7" direction="right">{schoolInfo.city}</marquee>
                   </div>
-                  <p class="text-md mb-4 max-w-prose">
+                  <p class="text-md mb-4 max-w-prose mx-auto">
                     {schoolInfo.motto}
                   </p>
                   
@@ -98,7 +98,7 @@ const marqueeDuration = `calc(10s / ${animation.marqueeSpeed || 15} * 15)`;
                   )}
                   <div class="flex flex-col sm:flex-row justify-center gap-4 mt-12 w-full max-w-md mx-auto *:rounded-md *:py-2 *:px-6 *:uppercase *:text-surface *:w-full">
                     <a href="/about" aria-label="Detail" class="group bg-primary transition-all ease-linear duration-500 hover:bg-secondary"><button class="text-surface">Detail Profile</button></a>
-                    <a href="/ppdb" aria-label="Detail" class="group font-bold tracking-widest border border-border relative before:content-[''] before:absolute before:inset-0 before:w-0 before:h-0 before:rounded-md before:-z-10 before:transition-all before:ease-linear before:duration-500 hover:before:bg-surface hover:before:w-full hover:before:h-full"><button class="text-surface group-hover:text-primary">{ppdbText}</button></a>
+                    <a href="/pendaftaran" aria-label="Detail" class="group font-bold tracking-widest border border-border relative before:content-[''] before:absolute before:inset-0 before:w-0 before:h-0 before:rounded-md before:-z-10 before:transition-all before:ease-linear before:duration-500 hover:before:bg-surface hover:before:w-full hover:before:h-full"><button class="text-surface group-hover:text-primary">{pendaftaranText}</button></a>
                   </div>
                 </div>
               </div>

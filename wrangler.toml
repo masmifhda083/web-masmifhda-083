@@ -1,0 +1,9 @@
+name = "web-sekolah"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
+
+[vars]
+# Placeholder for environment variables usually set in Cloudflare Dashboard
+# TURSO_DATABASE_URL = ""
+# TURSO_AUTH_TOKEN = ""

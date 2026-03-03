@@ -1,0 +1,55 @@
+{
+  "hero": {
+    "title": "OSIS MA Miftahul Huda",
+    "description": "Wadah aspirasi dan kreativitas santri MA Miftahul Huda Tambak Jaya.",
+    "heroImage": "/uploads/cover.webp"
+  },
+  "visiMisi": {
+    "visi": "Mewujudkan OSIS MA Miftahul Huda yang aktif, progresif, dan berlandaskan nilai-nilai keislaman.",
+    "misi": [
+      "Meningkatkan ketaqwaan kepada Allah SWT.",
+      "Mengembangkan bakat dan minat siswa melalui kegiatan ekstrakurikuler.",
+      "Membangun komunikasi yang harmonis antara siswa, guru, dan pengurus."
+    ]
+  },
+  "pembina": [
+    {
+      "name": "Bapak Pembina 1, S.Pd.",
+      "role": "Pembina OSIS",
+      "avatar": "/uploads/placeholder.webp"
+    }
+  ],
+  "pengurusInti": [
+    {
+      "name": "Ketua OSIS",
+      "role": "Ketua",
+      "avatar": "/uploads/placeholder.webp"
+    },
+    {
+      "name": "Wakil Ketua",
+      "role": "Wakil Ketua",
+      "avatar": "/uploads/placeholder.webp"
+    },
+    {
+      "name": "Sekretaris",
+      "role": "Sekretaris",
+      "avatar": "/uploads/placeholder.webp"
+    },
+    {
+      "name": "Bendahara",
+      "role": "Bendahara",
+      "avatar": "/uploads/placeholder.webp"
+    }
+  ],
+  "sekbid": [
+    {
+      "name": "Sekbid Ketaqwaan",
+      "koordinator": "Koordinator 1",
+      "sekretaris": "Sekretaris 1",
+      "anggota": [
+        "Anggota 1",
+        "Anggota 2"
+      ]
+    }
+  ]
+}

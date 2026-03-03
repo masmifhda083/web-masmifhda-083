@@ -49,7 +49,7 @@ export const GET: APIRoute = async ({ url }) => {
       .join(',') + '\n';
   }
 
-  const filename = `ppdb_${tahun || 'semua'}.csv`;
+  const filename = `pendaftaran_${tahun || 'semua'}.csv`;
 
   return new Response(csv, {
     status: 200,

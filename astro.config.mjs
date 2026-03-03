@@ -3,7 +3,6 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import cloudflare from "@astrojs/cloudflare"
 import alpinejs from "@astrojs/alpinejs";
-import { onRequest } from './src/middleware/auth';
 import sitemap from "@astrojs/sitemap";
 import robotsTxt from "astro-robots-txt";
 import { readFileSync } from 'node:fs';
@@ -24,9 +23,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     envPrefix: ['TURSO_', 'ADMIN_', 'SESSION_'],
-  },
-  middleware: {
-    onRequest
   },
   output: "server",
   adapter: cloudflare(),

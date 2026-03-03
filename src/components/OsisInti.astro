@@ -1,0 +1,36 @@
+---
+// src/components/OsisInti.astro
+import osisData from "../content/osis/pengurus.json";
+
+const { pengurusInti } = osisData;
+---
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    {
+        pengurusInti.map((member) => (
+            <div class="text-center group" data-animate="fade">
+                <div class="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg border-2 border-surface group-hover:border-secondary transition-all duration-300">
+                    <img
+                        src={member.avatar || "/uploads/placeholder.webp"}
+                        alt={member.name}
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                </div>
+                <h3 class="text-sm md:text-base font-bold text-surface group-hover:text-secondary whitespace-nowrap overflow-hidden text-ellipsis px-2 transition-colors">
+                    {member.name}
+                </h3>
+                <p class="text-[10px] md:text-xs text-surface/70 uppercase tracking-tighter md:tracking-wider">
+                    {member.role}
+                </p>
+            </div>
+        ))
+    }
+</div>
+<div class="mt-8 text-center" data-animate="fade">
+    <a
+        href="/osis"
+        class="inline-block px-6 py-2 rounded-full bg-secondary text-sm font-semibold hover:bg-white hover:text-secondary transition-all duration-300 shadow-md"
+    >
+        <span class="text-surface">Lihat Semua Pengurus OSIS</span>
+    </a>
+</div>

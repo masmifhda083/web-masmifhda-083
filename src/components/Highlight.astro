@@ -1,128 +1,133 @@
 ---
 // file: src/components/Highlight.astro
-import type { CollectionEntry } from 'astro:content';
-import { getEntry, getCollection } from 'astro:content';
-import LatestPosts from './LatestPosts.astro';
+import type { CollectionEntry } from "astro:content";
+import { getEntry, getCollection } from "astro:content";
+import LatestPosts from "./LatestPosts.astro";
 
 interface PostData {
-  title: string
-  author?: string
-  pubdate?: Date | string
-  heroImage?: string
-  description?: string
-  category?: string
+  title: string;
+  author?: string;
+  pubdate?: Date | string;
+  heroImage?: string;
+  description?: string;
+  category?: string;
 }
 
 interface Post {
-  slug: string
-  category: string
-  data: PostData
+  slug: string;
+  category: string;
+  data: PostData;
 }
 
 function getSafeImageSrc(path: string | undefined): string {
-  if (!path) return '/uploads/default-thumb.jpg';
-  return path.startsWith('/') ? path : `/${path}`;
+  if (!path) return "/uploads/default-thumb.jpg";
+  return path.startsWith("/") ? path : `/${path}`;
 }
 
-// 1. Ambil data PPDB settings - PERHATIAN: di export sebagai 'ppdb'
-  const ppdbData = await getCollection('ppdb').catch(() => []);
-  const ppdbSettings = ppdbData.find(item => item.id === 'settings') || ppdbData[0];
+// 1. Ambil data pendaftaran settings
+const pendaftaranData = await getCollection("pendaftaran").catch(() => []);
+const pendaftaranSettings =
+  pendaftaranData.find((item) => item.id === "settings") || pendaftaranData[0];
 
+// 2. Ambil semua pamflate
+const allPamflate = await getCollection("pamflate").catch(() => []);
 
-  // 2. Ambil semua pamflate
-  const allPamflate = await getCollection('pamflate').catch(() => []);
+// 3. Proses highlight pamflet
+let pamfletToDisplay = {
+  image: "/uploads/default-pamflet.jpg",
+  title: "Pamflet Pendaftaran",
+  description: "",
+  link: "#",
+  show: true,
+};
 
+// Cek apakah ada settings dan highlight pamflet aktif
+const highlightSettings = pendaftaranSettings?.data?.highlightPamflet;
+const highlightEnabled = highlightSettings?.enabled !== false;
 
-  // 3. Proses highlight pamflet
-  let pamfletToDisplay = {
-    image: '/uploads/default-pamflet.jpg',
-    title: 'Pamflet PPDB',
-    description: '',
-    link: '#',
-    show: true
-  };
+if (highlightEnabled && highlightSettings) {
+  const highlight = highlightSettings;
 
-  // Cek apakah ada settings dan highlight pamflet aktif
-  // Perhatikan struktur data: ppdbSettings.data.highlightPamflet
-  const highlightEnabled = ppdbSettings?.data?.highlightPamflet?.enabled !== false;
-  const hasHighlightData = ppdbSettings?.data?.highlightPamflet;
+  // OPTION 1: Jika menggunakan reference ke koleksi pamflate
+  if (highlight.pamflet) {
+    // Format ID di Astro biasanya: "pamflate/filename"
+    const pamfletId = highlight.pamflet.startsWith("pamflate/")
+      ? highlight.pamflet
+      : `pamflate/${highlight.pamflet}`;
 
+    // Cari berdasarkan ID atau slug
+    const selectedPamflet = allPamflate.find((p) => {
+      return (
+        p.id === pamfletId ||
+        (p as any).slug === highlight.pamflet ||
+        p.id.endsWith(`/${highlight.pamflet}`)
+      );
+    });
 
-  if (highlightEnabled && hasHighlightData) {
-    const highlight = ppdbSettings.data.highlightPamflet;
-    
-    // OPTION 1: Jika menggunakan reference ke koleksi pamflate
-    if (highlight.pamflet) {
-      
-      // Format ID di Astro biasanya: "pamflate/filename"
-      const pamfletId = highlight.pamflet.startsWith('pamflate/') 
-        ? highlight.pamflet 
-        : `pamflate/${highlight.pamflet}`;
-      
-      // Cari berdasarkan ID atau slug
-      const selectedPamflet = allPamflate.find(p => {
-        return p.id === pamfletId || 
-              p.slug === highlight.pamflet ||
-              p.id.endsWith(`/${highlight.pamflet}`);
-      });
-      
-      if (selectedPamflet) {
-        pamfletToDisplay.image = getSafeImageSrc(selectedPamflet.data.heroImage);
-        pamfletToDisplay.title = selectedPamflet.data.title;
-        pamfletToDisplay.description = selectedPamflet.data.description || '';
-        pamfletToDisplay.link = `/pamflate/${selectedPamflet.slug}`;
+    if (selectedPamflet) {
+      const pData = selectedPamflet.data as any;
+      pamfletToDisplay.image = getSafeImageSrc(pData.heroImage);
+      pamfletToDisplay.title = pData.title || "Pamflet Pendaftaran";
+      pamfletToDisplay.description = pData.description || "";
+      pamfletToDisplay.link = `/pamflate/${selectedPamflet.id}`;
+      pamfletToDisplay.show = true;
+    } else {
+      // Fallback ke custom
+      if (highlight.customImage) {
+        const hCustom = highlight as any;
+        pamfletToDisplay.image = getSafeImageSrc(highlight.customImage);
+        pamfletToDisplay.title = hCustom.customTitle || "Pamflet Pendaftaran";
+        pamfletToDisplay.description = hCustom.customDescription || "";
+        pamfletToDisplay.link = hCustom.customLink || "#";
         pamfletToDisplay.show = true;
-      } else {
-        // Fallback ke custom
-        if (highlight.customImage) {
-          pamfletToDisplay.image = getSafeImageSrc(highlight.customImage);
-          pamfletToDisplay.title = highlight.customTitle || 'Pamflet PPDB';
-          pamfletToDisplay.description = highlight.customDescription || '';
-          pamfletToDisplay.link = highlight.customLink || '#';
-          pamfletToDisplay.show = true;
-        }
       }
-    } 
-    // OPTION 2: Jika menggunakan custom image langsung
-    else if (highlight.customImage) {
-      pamfletToDisplay.image = getSafeImageSrc(highlight.customImage);
-      pamfletToDisplay.title = highlight.customTitle || 'Pamflet PPDB';
-      pamfletToDisplay.description = highlight.customDescription || '';
-      pamfletToDisplay.link = highlight.customLink || '#';
-      pamfletToDisplay.show = true;
     }
   }
+  // OPTION 2: Jika menggunakan custom image langsung
+  else if (highlight.customImage) {
+    const hCustom = highlight as any;
+    pamfletToDisplay.image = getSafeImageSrc(highlight.customImage);
+    pamfletToDisplay.title = hCustom.customTitle || "Pamflet Pendaftaran";
+    pamfletToDisplay.description = hCustom.customDescription || "";
+    pamfletToDisplay.link = hCustom.customLink || "#";
+    pamfletToDisplay.show = true;
+  }
+}
 
-  // 4. Fallback: Jika belum dapat pamflet, cari yang terbaru dengan kategori PPDB
-  if (!pamfletToDisplay.show || pamfletToDisplay.image === '/uploads/default-pamflet.jpg') {
-    
-    const ppdbPamflets = allPamflate
-      .filter(p => {
-        // Cek kategori PPDB
-        const isPpdbCategory = p.data.category === 'ppdb';
-        // Cek aktif
-        const isActive = p.data.active !== false;
-        // Cek punya gambar
-        const hasImage = !!p.data.heroImage;
-        
-        return isPpdbCategory && isActive && hasImage;
-      })
-      .sort((a, b) => {
-        const dateA = new Date(a.data.pubDate || 0).getTime();
-        const dateB = new Date(b.data.pubDate || 0).getTime();
-        return dateB - dateA; // Terbaru dulu
-      });
-    
-    
-    if (ppdbPamflets.length > 0) {
-      const latestPamflet = ppdbPamflets[0];
-      pamfletToDisplay.image = getSafeImageSrc(latestPamflet.data.heroImage);
-      pamfletToDisplay.title = latestPamflet.data.title;
-      pamfletToDisplay.description = latestPamflet.data.description || '';
-      pamfletToDisplay.link = `/pamflate/${latestPamflet.slug}`;
-      pamfletToDisplay.show = true;
-    }
+// 4. Fallback: Jika belum dapat pamflet, cari yang terbaru dengan kategori pendaftaran
+if (
+  !pamfletToDisplay.show ||
+  pamfletToDisplay.image === "/uploads/default-pamflet.jpg"
+) {
+  const pendaftaranPamflets = allPamflate
+    .filter((p) => {
+      const data = p.data as any;
+      // Cek kategori pendaftaran
+      const isPendaftaranCategory =
+        data.category === "pendaftaran" || data.category === "spmb";
+      // Cek aktif
+      const isActive = data.active !== false;
+      // Cek punya gambar
+      const hasImage = !!data.heroImage;
+
+      return isPendaftaranCategory && isActive && hasImage;
+    })
+    .sort((a, b) => {
+      const dateA = new Date((a.data as any).pubDate || 0).getTime();
+      const dateB = new Date((b.data as any).pubDate || 0).getTime();
+      return dateB - dateA; // Terbaru dulu
+    });
+
+  if (pendaftaranPamflets.length > 0) {
+    const latestPamflet = pendaftaranPamflets[0];
+    const latestData = latestPamflet.data as any;
+    pamfletToDisplay.image = getSafeImageSrc(latestData.heroImage);
+    pamfletToDisplay.title = latestData.title || "Pamflet Pendaftaran";
+    pamfletToDisplay.description = latestData.description || "";
+    pamfletToDisplay.link = `/pamflate/${latestPamflet.id}`;
+    pamfletToDisplay.show = true;
   }
+}
 
 // Ambil data profile (sambutan kepala sekolah)
 const about = await getEntry("about", "index");
@@ -137,27 +142,32 @@ const styledExcerpt = sambutanKepsek
   ? getStyledExcerpt(sambutanKepsek.body, 200)
   : { __html: "Sambutan kepala sekolah akan segera tersedia..." };
 function getStyledExcerpt(body: string | undefined, limit: number) {
-  if (!body) return { __html: "Sambutan kepala sekolah akan segera tersedia..." };
-  
+  if (!body)
+    return { __html: "Sambutan kepala sekolah akan segera tersedia..." };
+
   let cleanText = body
-    .replace(/^#+\s+/gm, '')
-    .replace(/\*\*/g, '')
-    .replace(/\*/g, '')
-    .replace(/<[^>]*>/g, '')
+    .replace(/^#+\s+/gm, "")
+    .replace(/\*\*/g, "")
+    .replace(/\*/g, "")
+    .replace(/<[^>]*>/g, "")
     .trim();
 
-  const paragraphs = cleanText.split(/\n\s*\n/).filter(p => p.trim().length > 0);
-  
-  let result = '';
+  const paragraphs = cleanText
+    .split(/\n\s*\n/)
+    .filter((p) => p.trim().length > 0);
+
+  let result = "";
   let totalLength = 0;
-  
+
   for (let i = 0; i < paragraphs.length; i++) {
     const paragraph = paragraphs[i].trim();
-    const lines = paragraph.split('\n').filter(line => line.trim().length > 0);
-    
+    const lines = paragraph
+      .split("\n")
+      .filter((line) => line.trim().length > 0);
+
     for (let j = 0; j < lines.length; j++) {
       const line = lines[j].trim();
-      
+
       if (totalLength + line.length > limit && i > 0) {
         const remaining = limit - totalLength;
         if (remaining > 10) {
@@ -165,23 +175,23 @@ function getStyledExcerpt(body: string | undefined, limit: number) {
         }
         return { __html: result };
       }
-      
-      if (line.toLowerCase().includes('bismillah')) {
+
+      if (line.toLowerCase().includes("bismillah")) {
         result += `<span class="font-bold text-md md:text-lg italic text-primary block mb-2">${line}</span>`;
-      } else if (line.toLowerCase().includes('assalamu')) {
+      } else if (line.toLowerCase().includes("assalamu")) {
         result += `<span class="font-bold italic text-sm text-primary block mb-3">${line}</span>`;
       } else {
         result += `<span class="text-muted block">${line}</span>`;
       }
-      
+
       totalLength += line.length;
     }
-    
+
     if (i < paragraphs.length - 1) {
       result += '<div class="mb-2"></div>';
     }
   }
-  
+
   return { __html: result };
 }
 
@@ -232,16 +242,20 @@ const pengumumanPosts = processedPosts
   });
 
 // Fungsi untuk mendapatkan excerpt dengan styling
-
-
 ---
 
 <section>
-  <div class="container mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div
+    class="container mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+  >
     <!-- Kolom 1: Pamflet -->
-    {pamfletToDisplay.show && (
-      <div data-animate="fade" class="bg-white shadow rounded-md overflow-hidden order-last lg:order-0">
-        <img
+    {
+      pamfletToDisplay.show && (
+        <div
+          data-animate="fade"
+          class="bg-white shadow rounded-md overflow-hidden order-last lg:order-0"
+        >
+          <img
             src={pamfletToDisplay.image}
             alt={pamfletToDisplay.title}
             loading="lazy"
@@ -249,54 +263,59 @@ const pengumumanPosts = processedPosts
             class="rounded-md aspect-4/5 object-cover object-top w-full"
             onerror="this.onerror=null;this.src='/uploads/default-thumb.jpg';"
           />
-      </div>
-    )}
+        </div>
+      )
+    }
 
     <!-- Kolom 2: Pengumuman -->
-    <LatestPosts 
-        posts={pengumumanPosts} 
-        maxPosts={3} 
-        layout="sidebar" 
-        showDescription={true} 
-        />
+    <LatestPosts
+      posts={pengumumanPosts}
+      maxPosts={3}
+      layout="sidebar"
+      showDescription={true}
+    />
 
     <!-- Kolom 3: Sambutan Kepala Sekolah -->
-    <div data-animate="fade" class="p-4 shadow rounded-md order-first lg:order-0">
-    <h2 class="text-xl font-bold mb-3 text-primary">
-      {sambutanTitle}
-    </h2>
+    <div
+      data-animate="fade"
+      class="p-4 shadow rounded-md order-first lg:order-0"
+    >
+      <h2 class="text-xl font-bold mb-3 text-primary">
+        {sambutanTitle}
+      </h2>
 
-    <div class="relative overflow-hidden rounded-md mb-3">
-      <img
-        src={sambutanImage}
-        alt="Kepala Sekolah"
-        loading="lazy"
-        class="rounded-md aspect-video object-cover object-center w-full"
-        onerror="this.onerror=null;this.src='/uploads/default-thumb.jpg';"
-      />
+      <div class="relative overflow-hidden rounded-md mb-3">
+        <img
+          src={sambutanImage}
+          alt="Kepala Sekolah"
+          loading="lazy"
+          class="rounded-md aspect-video object-cover object-center w-full"
+          onerror="this.onerror=null;this.src='/uploads/default-thumb.jpg';"
+        />
+      </div>
+
+      <div class="text-sm space-y-2">
+        <div set:html={styledExcerpt.__html} />
+        {
+          sambutanKepsek && (
+            <a
+              href="/about/sambutan"
+              class="inline-block float-end font-semibold hover:underline mt-2"
+            >
+              Selengkapnya →
+            </a>
+          )
+        }
+      </div>
     </div>
-
-    <div class="text-sm space-y-2">
-      <div set:html={styledExcerpt.__html} />
-      {sambutanKepsek && (
-        <a
-          href="/about/sambutan"
-          class="inline-block float-end font-semibold hover:underline mt-2"
-        >
-          Selengkapnya →
-        </a>
-      )}
-    </div>
-  </div>
-
   </div>
 </section>
 
 <style>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 </style>

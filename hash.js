@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-const password = 'ppdbAdmin2026';
+const password = 'masmifhda083';
 
 const hash = crypto
   .createHash('sha256')

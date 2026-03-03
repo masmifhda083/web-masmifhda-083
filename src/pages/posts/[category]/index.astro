@@ -6,6 +6,7 @@ import CardPosts from "../../../components/CardPosts.astro";
 import Pagination from "../../../components/Pagination.astro";
 import { getCollection } from "astro:content";
 import { paginate } from "../../../utils/pagination";
+import { getVisiblePosts } from "../../../utils/postFilter";
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   const categories = new Set(
@@ -21,7 +22,10 @@ const { category } = Astro.params;
 const pageSize = 8;
 const currentPage = 1;
 
-const posts = (await getCollection("posts"))
+const allPosts = await getCollection("posts");
+const visiblePosts = getVisiblePosts(allPosts);
+
+const posts = visiblePosts
   .filter((p) => (p.data.category || "").toLowerCase() === category)
   .sort((a, b) => {
     const dateA = new Date(a.data.pubdate ?? 0).getTime();

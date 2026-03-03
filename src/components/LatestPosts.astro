@@ -2,6 +2,7 @@
 // file: components/LatestPosts.astro
 import FormattedDate from "./FormattedDate.astro";
 import { getCollection } from "astro:content";
+import { getVisiblePosts } from "../utils/postFilter";
 
 interface PostData {
   title: string
@@ -41,7 +42,8 @@ const {
   showAuthorBio = false  // Default false untuk komponen list
 } = Astro.props
 
-const displayedPosts = posts.slice(0, maxPosts)
+const visiblePosts = getVisiblePosts(posts)
+const displayedPosts = visiblePosts.slice(0, maxPosts)
 
 // Fungsi untuk mengambil data author dari koleksi
 async function getAuthorData(username: string): Promise<AuthorData | null> {
@@ -87,14 +89,11 @@ function isTextTruncated(text: string | undefined, limit: number): boolean {
       const img = post.data?.heroImage ?? "/uploads/default-thumb.jpg"
       const pub = post.data?.pubdate ?? null
       const dateObj = pub ? new Date(pub) : null
-      const rawCategory = post.category || post.data.category || "uncategorized"
-      const categorySlug = rawCategory.toLowerCase() || "uncategorized"
-      const categoryLabel =
-        categorySlug === "uncategorized"
-          ? "Uncategorized"
-          : categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)
+      const rawCategory = post.data?.category || "news"
+      const categorySlug = rawCategory.toLowerCase()
+      const categoryLabel = categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)
 
-      const slug = (post.slug || "").toString()
+      const slug = post.slug || post.id?.split("/").pop()?.replace(/\.mdx?$/, "") || post.id
       
       // Ambil data author dari map
       const authorUsername = post.data.author

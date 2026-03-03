@@ -1,0 +1,438 @@
+---
+// src/pages/pendaftaran/status.astro
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+// Ambil data pendaftaran settings dari Tina CMS
+const pendaftaranData = await getCollection("pendaftaran");
+const settings = pendaftaranData[0]?.data?.pendaftaranData || {
+    // Default values jika data tidak ditemukan
+    schoolName: "SMA Negeri 1",
+    academicYear: "2026/2027",
+    registrationPeriod: "1 Oktober - 30 November 2025",
+    testDate: "11 November 2025",
+    testTime: "08:00 - 12:00 WIB",
+    testLocation: "Aula Utama SMAN Indonesia",
+    requirements: [
+        { requirement: "Foto copy Kartu Keluarga" },
+        { requirement: "Foto copy Akta Kelahiran" },
+        { requirement: "Foto copy rapor" },
+        { requirement: "Pas Foto 3x4 (2 lembar)" },
+        {
+            requirement:
+                "Surat keterangan katolik (bagi yang beragama katolik)",
+        },
+        { requirement: "Dokumen dalam map merah (P) / biru (L)" },
+    ],
+    contactPhone: "(0271) 123-456",
+    contactEmail: "pendaftaran@sekolah.example.com",
+    contactAddress: "Jl. Pendidikan No. 123, Kota Anda",
+};
+
+// Siapkan data untuk JavaScript
+const jsPendaftaranData = {
+    registrationPeriod: settings.registrationPeriod || "",
+    testDate: settings.testDate || "",
+    testTime: settings.testTime || "",
+    testLocation: settings.testLocation || "",
+    requirements: settings.requirements || [],
+    contactPhone: settings.contactPhone || "",
+    contactEmail: settings.contactEmail || "",
+    contactAddress: settings.contactAddress || "",
+};
+---
+
+<Layout title="Cek Status Pendaftaran">
+    <!-- Simpan data Pendaftaran di hidden div untuk diakses JavaScript -->
+    <div
+        id="pendaftaran-data"
+        data-pendaftaran={JSON.stringify(jsPendaftaranData)}
+        style="display: none;"
+    >
+    </div>
+
+    <div class="container min-h-screen mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
+                Cek Status Pendaftaran Siswa Baru
+            </h1>
+
+            <div
+                class="bg-white p-8 rounded-xl shadow-lg border border-gray-100"
+            >
+                <div class="mb-6">
+                    <label
+                        for="registrationId"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                        Masukkan Kode Pendaftaran
+                    </label>
+                    <input
+                        type="text"
+                        id="registrationId"
+                        placeholder="Contoh: DAFTAR-1767766226920-R4ET"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                    />
+                    <p class="text-sm text-gray-500 mt-2">
+                        ID pendaftaran didapat setelah mengisi formulir
+                        pendaftaran
+                    </p>
+                </div>
+
+                <button
+                    id="checkBtn"
+                    class="w-full px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+                >
+                    Cek Status
+                </button>
+
+                <div id="statusResult" class="mt-8 hidden">
+                    <!-- Hasil akan ditampilkan di sini -->
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <a
+                    href="/pendaftaran"
+                    class="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                    ← Kembali ke Form Pendaftaran
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pastikan DOM sudah dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            // Load Pendaftaran settings dari data attribute
+            let pendaftaranSettings: any = {};
+            try {
+                const pendaftaranElement =
+                    document.getElementById("pendaftaran-data");
+                if (
+                    pendaftaranElement &&
+                    pendaftaranElement.dataset.pendaftaran
+                ) {
+                    pendaftaranSettings = JSON.parse(
+                        pendaftaranElement.dataset.pendaftaran,
+                    );
+                    console.log(
+                        "Pendaftaran settings loaded:",
+                        pendaftaranSettings,
+                    );
+                }
+            } catch (error) {
+                console.error("Error loading Pendaftaran settings:", error);
+                pendaftaranSettings = {
+                    registrationPeriod: "1 Oktober - 30 November 2025",
+                    testDate: "11 November 2025",
+                    testTime: "08:00 - 12:00 WIB",
+                    testLocation: "Aula Utama SMAN Indonesia",
+                    requirements: [
+                        { requirement: "Foto copy Kartu Keluarga" },
+                        { requirement: "Foto copy Akta Kelahiran" },
+                        { requirement: "Foto copy rapor" },
+                        { requirement: "Pas Foto 3x4 (2 lembar)" },
+                        {
+                            requirement:
+                                "Surat keterangan katolik (bagi yang beragama katolik)",
+                        },
+                        {
+                            requirement:
+                                "Dokumen dalam map merah (P) / biru (L)",
+                        },
+                    ],
+                    contactPhone: "(0271) 123-456",
+                    contactEmail: "pendaftaran@sekolah.example.com",
+                    contactAddress: "Jl. Pendidikan No. 123, Kota Anda",
+                };
+            }
+
+            // Simpan ke window object untuk akses global
+            (window as any).pendaftaran = pendaftaranSettings;
+
+            const checkBtn = document.getElementById(
+                "checkBtn",
+            ) as HTMLButtonElement | null;
+            const registrationId = document.getElementById(
+                "registrationId",
+            ) as HTMLInputElement | null;
+            const statusResult = document.getElementById(
+                "statusResult",
+            ) as HTMLElement | null;
+
+            if (!checkBtn || !registrationId || !statusResult) return;
+
+            // Fungsi untuk cek status
+            async function checkStatus() {
+                if (!registrationId || !checkBtn || !statusResult) return;
+                const kode = registrationId.value.trim();
+
+                if (!kode) {
+                    alert("Masukkan kode pendaftaran terlebih dahulu");
+                    return;
+                }
+
+                // Disable button dan tampilkan loading
+                checkBtn.disabled = true;
+                checkBtn.innerHTML = 'Memeriksa...';
+
+                try {
+                    const response = await fetch(
+                        `/api/pendaftaran/get-status?kode=${encodeURIComponent(kode)}`,
+                    );
+
+                    const result = await response.json();
+
+                    console.log("API Response:", result);
+
+                    // Reset button
+                    checkBtn.disabled = false;
+                    checkBtn.innerHTML = "Cek Status";
+                    checkBtn.classList.remove("opacity-50");
+
+                    // Tampilkan hasil
+                    statusResult.innerHTML = "";
+                    statusResult.classList.remove("hidden");
+
+                    if (result.success && result.data) {
+                        const data = result.data;
+
+                        // Status badge berdasarkan status
+                        let statusClass = "bg-yellow-100 text-yellow-800";
+                        let statusText = "Menunggu Review";
+
+                        if (data.status === "approved") {
+                            statusClass = "bg-green-100 text-green-800";
+                            statusText = "Diterima";
+                        } else if (data.status === "rejected") {
+                            statusClass = "bg-red-100 text-red-800";
+                            statusText = "Ditolak";
+                        } else if (data.status === "review") {
+                            statusClass = "bg-blue-100 text-blue-800";
+                            statusText = "Dalam Review";
+                        }
+
+                        // Format tanggal
+                        const formatDate = (dateString: string) => {
+                            try {
+                                const date = new Date(dateString);
+                                return date.toLocaleDateString("id-ID", {
+                                    weekday: "long",
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                });
+                            } catch {
+                                return dateString;
+                            }
+                        };
+
+                        // Escape HTML untuk keamanan
+                        const escapeHtml = (text: string) => {
+                            const div = document.createElement("div");
+                            div.textContent = text;
+                            return div.innerHTML;
+                        };
+
+                        // Siapkan template untuk info tes (hanya ditampilkan jika status approved)
+                        let testInfoHTML = "";
+                        if (data.status === "approved") {
+                            const pendaftaran = (window as any).pendaftaran;
+                            const requirements = Array.isArray(
+                                pendaftaran.requirements,
+                            )
+                                ? pendaftaran.requirements
+                                : [];
+                        }
+
+                        // Create result container safely
+                        statusResult.innerHTML = '';
+                        const resultContainer = document.createElement("div");
+                        resultContainer.className = "bg-white rounded-xl border border-gray-200 p-6 shadow-sm";
+                       
+                        // Header
+                        const headerHtml = `
+                          <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                            <div>
+                              <h3 class="text-xl font-bold text-gray-800">Status Pendaftaran</h3>
+                              <p class="text-sm text-gray-500">Tanggal: ${escapeHtml(formatDate(data.created_at))}</p>
+                            </div>
+                            <span class="px-4 py-2 rounded-full font-medium ${statusClass}">
+                              ${escapeHtml(statusText)}
+                            </span>
+                          </div>
+                        `;
+
+                        const pendaftaranIdHtml = `
+                          <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-blue-800 mb-1">ID Pendaftaran</p>
+                            <p class="text-lg font-mono font-bold text-blue-900">${escapeHtml(data.kode_pendaftaran)}</p>
+                            <p class="text-xs text-blue-600 mt-2">Gunakan ID ini untuk pengecekan ulang</p>
+                          </div>
+                        `;
+
+                        const dataPribadiHtml = `
+                          <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 pb-2 border-b">Data Pribadi</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div><p class="text-sm text-gray-500">Nama Lengkap</p><p class="font-medium">${escapeHtml(data.nama_lengkap)}</p></div>
+                              <div><p class="text-sm text-gray-500">Nama Panggilan</p><p class="font-medium">${escapeHtml(data.nama_panggilan)}</p></div>
+                              <div><p class="text-sm text-gray-500">Tempat/Tanggal Lahir</p><p class="font-medium">${escapeHtml(data.tempat_lahir)}, ${escapeHtml(data.tanggal_lahir)}</p></div>
+                              <div><p class="text-sm text-gray-500">Jenis Kelamin</p><p class="font-medium">${escapeHtml(data.jenis_kelamin)}</p></div>
+                              <div><p class="text-sm text-gray-500">Agama</p><p class="font-medium">${escapeHtml(data.agama)}</p></div>
+                              <div><p class="text-sm text-gray-500">Kontak</p><p class="font-medium">${escapeHtml(data.nomor_hp)}</p><p class="text-sm">${escapeHtml(data.email)}</p></div>
+                            </div>
+                          </div>
+                        `;
+
+                        const alamatHtml = `
+                          <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 pb-2 border-b">Alamat</h4>
+                            <p class="whitespace-pre-line">${escapeHtml(data.alamat_lengkap)}</p>
+                          </div>
+                        `;
+
+                        const asalSekolahHtml = `
+                          <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 pb-2 border-b">Asal Sekolah</h4>
+                            <p class="font-medium mb-1">${escapeHtml(data.asal_sekolah)}</p>
+                            <p class="text-gray-600 whitespace-pre-line">${escapeHtml(data.alamat_sekolah)}</p>
+                          </div>
+                        `;
+                        
+                        let infoStatusHtml = "";
+                        if (data.status === "pending" || !data.status) {
+                           infoStatusHtml = '<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4"><div class="flex items-start"><div><h4 class="font-bold text-yellow-800 mb-1">Sedang Menunggu Review</h4><p class="text-yellow-700">Pendaftaran Anda sudah diterima dan sedang menunggu proses review oleh admin. Silakan cek kembali dalam 2-3 hari kerja.</p></div></div></div>';
+                        } else if (data.status === "rejected") {
+                           infoStatusHtml = '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><div class="flex items-start"><div><h4 class="font-bold text-red-800 mb-1">Informasi Penting</h4><p class="text-red-700">Silakan menghubungi admin sekolah untuk informasi lebih detail mengenai keputusan ini.</p></div></div></div>';
+                        }
+
+                        resultContainer.innerHTML = 
+                          headerHtml + 
+                          '<div class="space-y-6">' +
+                          pendaftaranIdHtml +
+                          dataPribadiHtml +
+                          alamatHtml +
+                          asalSekolahHtml +
+                          '<div class="mt-6 pt-6 border-t">' +
+                          infoStatusHtml +
+                          '<div id="approvedContainerWrapper"></div>' +
+                          '</div>' +
+                          '</div>' +
+                          '<div class="mt-8 pt-6 border-t border-gray-200 text-center"><button onclick="window.print()" class="px-4 py-2 bg-gray-100 text-gray-800 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-200 inline-flex items-center mr-3">Cetak Status</button></div>';
+
+                        statusResult.appendChild(resultContainer);
+                        
+                        // Dynamically append the large approved HTML context if approved
+                        if (data.status === "approved") {
+                           const appWrap = document.getElementById("approvedContainerWrapper");
+                           if (appWrap) {
+                                let requirementsList = "";
+                                if ((window as any).pendaftaran.requirements && (window as any).pendaftaran.requirements.length > 0) {
+                                     const reqItems = (window as any).pendaftaran.requirements.map(
+                                        (req: any, index: number) => '<li class="flex items-start"><span class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold mr-3 mt-0.5">' + (index + 1) + '</span><span class="text-gray-700">' + escapeHtml(req.requirement || "") + '</span></li>'
+                                    ).join("");
+                                    requirementsList = '<div><h6 class="font-bold text-gray-800 mb-3">📋 Persyaratan</h6><ul class="space-y-2">' + reqItems + '</ul></div>';
+                                }
+
+                                appWrap.innerHTML = `
+                                  <div class="bg-green-50 border border-green-200 rounded-lg p-4 my-6">
+                                    <h4 class="font-bold text-green-800 mb-4 text-lg">🎉 Selamat! Pendaftaran Diterima</h4>
+                                    <div class="bg-white rounded-lg border border-green-100 p-4 mb-4">
+                                      <h5 class="font-bold text-gray-800 mb-3 text-center">📝 Informasi Tes Seleksi</h5>
+                                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <div class="space-y-1"><p class="text-sm font-medium text-gray-600">Periode</p><p class="text-base font-semibold text-gray-800">${escapeHtml((window as any).pendaftaran.registrationPeriod || "-")}</p></div>
+                                        <div class="space-y-1"><p class="text-sm font-medium text-gray-600">Tanggal Tes</p><p class="text-base font-semibold text-gray-800">${escapeHtml((window as any).pendaftaran.testDate || "-")}</p></div>
+                                        <div class="space-y-1"><p class="text-sm font-medium text-gray-600">Waktu Tes</p><p class="text-base font-semibold text-gray-800">${escapeHtml((window as any).pendaftaran.testTime || "-")}</p></div>
+                                        <div class="space-y-1"><p class="text-sm font-medium text-gray-600">Lokasi Tes</p><p class="text-base font-semibold text-gray-800">${escapeHtml((window as any).pendaftaran.testLocation || "-")}</p></div>
+                                      </div>
+                                      <div class="border-t border-gray-200 my-4"></div>
+                                      ${requirementsList}
+                                    </div>
+                                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                        <p class="text-sm font-medium text-yellow-800 mb-1">Catatan Penting:</p>
+                                        <ul class="text-sm text-yellow-700 space-y-1">
+                                          <li>• Harap datang 30 menit sebelum waktu tes</li>
+                                          <li>• Bawa semua persyaratan asli dan fotokopi</li>
+                                          <li>• Gunakan pakaian yang rapi dan sopan</li>
+                                          <li>• Konfirmasi kehadiran ke: <span class="font-medium">${escapeHtml((window as any).pendaftaran.contactPhone || "-")}</span></li>
+                                        </ul>
+                                    </div>
+                                  </div>
+                                `;
+                           }
+                        }
+
+                    } else {
+
+                        statusResult.innerHTML = 
+                          '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><div class="flex items-center"><h3 class="font-bold text-red-800">Data Tidak Ditemukan</h3></div>' +
+                          '<p class="text-red-700 mt-2">ID pendaftaran "' + escapeHtml(kode) + '" tidak ditemukan. Pastikan ID yang dimasukkan benar.</p>' +
+                          '<div class="mt-3 text-sm text-red-600"><p>Tips:</p><ul class="list-disc list-inside ml-2"><li>Periksa kembali ID pendaftaran</li><li>Pastikan tidak ada spasi di awal atau akhir</li></ul></div></div>';
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    statusResult.innerHTML = '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><h3 class="font-bold text-red-800">Terjadi Kesalahan</h3><p class="text-red-700 mt-2">Gagal memeriksa status. Silakan coba lagi atau hubungi admin.</p></div>';
+                    statusResult.classList.remove("hidden");
+
+                    // Reset button
+                    checkBtn.disabled = false;
+                    checkBtn.innerHTML = "Cek Status";
+                    checkBtn.classList.remove("opacity-50");
+                }
+            }
+
+            // Tambahkan event listener ke button
+            checkBtn.addEventListener("click", checkStatus);
+
+            // Enter key untuk cek status
+            registrationId.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    checkStatus();
+                }
+            });
+
+            // Auto-focus input
+            registrationId.focus();
+
+            // Cek jika ada ID di URL query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const kodeFromUrl = urlParams.get("kode");
+            if (kodeFromUrl) {
+                registrationId.value = kodeFromUrl;
+                // Auto-check setelah 500ms
+                setTimeout(() => {
+                    checkStatus();
+                }, 500);
+            }
+        });
+    </script>
+
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #statusResult,
+            #statusResult * {
+                visibility: visible;
+            }
+            #statusResult {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+            button,
+            input,
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</Layout>

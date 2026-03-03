@@ -1,4 +1,4 @@
-// src/pages/api/ppdb/get-status.ts
+// src/pages/api/pendaftaran/get-status.ts
 import type { APIRoute } from 'astro';
 import { getUserByKode } from '../../../lib/db';
 

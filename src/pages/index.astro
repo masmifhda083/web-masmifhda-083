@@ -11,37 +11,20 @@ import HeroSection from "../components/HeroSection.astro";
 import StaffList from "../components/StaffList.astro";
 import Year from "../components/Year.astro";
 import GallerySlider from "../components/GallerySlider.astro";
+import OsisInti from "../components/OsisInti.astro";
+import { getVisiblePosts } from "../utils/postFilter";
+
 const allPosts = await getCollection("posts");
+const visiblePosts = getVisiblePosts(allPosts);
 
 // Proses posts untuk mendapatkan category dan slug yang benar
-const processedPosts = allPosts.map((post) => {
-  const filePath = post.filePath ?? "";
-  let category = "";
-  let slug = "";
-
-  // Extract category dari filePath
-  if (filePath.startsWith("src/content/posts/")) {
-    const relPath = filePath.replace(/^src\/content\/posts\//, "");
-    const parts = relPath.split("/");
-    if (parts.length >= 2) {
-      category = parts[0];
-      // Slug adalah sisa path tanpa extension
-      slug = parts
-        .slice(1)
-        .join("/")
-        .replace(/\.mdx?$/, "");
-    }
-  }
-
-  // Fallback ke frontmatter jika tidak ditemukan di filePath
-  if (!category && post.data.category) {
-    category = post.data.category;
-  }
-
-  // Fallback untuk slug - gunakan id sebagai fallback
-  if (!slug) {
-    slug = post.id.split("/").pop() ?? "";
-  }
+const processedPosts = visiblePosts.map((post) => {
+  const category = post.data.category || "news";
+  const slug =
+    post.id
+      .split("/")
+      .pop()
+      ?.replace(/\.mdx?$/, "") || post.id;
 
   return {
     slug,
@@ -119,6 +102,38 @@ const latestPosts = processedPosts
       </div>
     </div>
   </section>
+
+  <!-- OSIS SECTION -->
+  <section class="bg-primary py-24 relative overflow-hidden">
+    <!-- Premium Glowing Background Decoration & Dotted Mesh Overlay -->
+    <div
+      class="absolute inset-0 w-full h-full pointer-events-none z-0"
+      style="background-image: radial-gradient(rgba(255, 255, 255, 0.15) 2px, transparent 2px); background-size: 30px 30px;"
+    >
+      <div
+        class="absolute -top-[10%] -right-[10%] w-[500px] h-[500px] rounded-full bg-secondary/30 blur-[100px] mix-blend-lighten animate-pulse"
+        style="animation-duration: 4s;"
+      >
+      </div>
+      <div
+        class="absolute -bottom-[10%] -left-[10%] w-[600px] h-[600px] rounded-full bg-secondary/20 blur-[120px] mix-blend-lighten pointer-events-none"
+      >
+      </div>
+      <div
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-white/5 blur-[100px] pointer-events-none"
+      >
+      </div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <h2
+        class="text-3xl text-surface text-center font-bold mb-16 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after:-bottom-2 after:right-1/2"
+      >
+        Pengurus OSIS
+      </h2>
+      <OsisInti />
+    </div>
+  </section>
   <section class="py-24 bg-primary text-white">
     <div class="container mx-auto px-4">
       <div class="text-center max-w-3xl mx-auto mb-20" data-animate="fade">
@@ -156,7 +171,7 @@ const latestPosts = processedPosts
         <p data-animate="fade" class="text-lg mb-8">
           Klik link berikut untuk informasi dan syarat pendaftaran siswa baru
         </p>
-        <a href="/ppdb">
+        <a href="/pendaftaran">
           <span
             class="bg-surface text-primary rounded-sm py-2 px-4"
             data-animate="fade">FORMULIR PENDAFTARAN</span

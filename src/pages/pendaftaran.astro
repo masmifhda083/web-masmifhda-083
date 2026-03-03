@@ -1,13 +1,13 @@
 ---
-//src/pages/ppdb.astro
 import Layout from "../layouts/Layout.astro";
 import Year from "../components/Year.astro";
 import { getCollection } from "astro:content";
+
 // Ambil data sekolah dari Tina CMS
-const ppdbData = await getCollection("ppdb");
-const settings = ppdbData[0]?.data?.datappdb || {
+const pendaftaranData = await getCollection("pendaftaran");
+const settings = pendaftaranData[0]?.data?.pendaftaranData || {
   schoolName: "",
-  ppdbAlias: "",
+  pendaftaranAlias: "",
   logoUrl: "",
   coverImageUrl: "",
   primaryColor: "",
@@ -18,10 +18,10 @@ const settings = ppdbData[0]?.data?.datappdb || {
 };
 ---
 
-<Layout title="Pendaftaran PPDB">
+<Layout title="Pendaftaran Siswa Baru">
   <section
-    class={`relative overflow-hidden bg-cover bg-center befor:content-[''] before:absolute before:opacity-70 before:z-10 before:w-full before:h-full before:bg-${settings.primaryColor}`}
-    style={`background-image: url('${settings.coverImageUrl || ""}'); `}
+    class="relative overflow-hidden bg-cover bg-center before:content-[''] before:absolute before:opacity-70 before:z-10 before:w-full before:h-full"
+    style={`background-image: url('${settings.coverImageUrl || ""}'); --tw-bg-opacity: 0.7;`}
   >
     <div
       class="absolute inset-0 opacity-90"
@@ -47,8 +47,8 @@ const settings = ppdbData[0]?.data?.datappdb || {
           }
           <div class="text-surface">
             {
-              settings.ppdbAlias && (
-                <p class="text-sm font-medium">{settings.ppdbAlias}</p>
+              settings.pendaftaranAlias && (
+                <p class="text-sm font-medium">{settings.pendaftaranAlias}</p>
               )
             }
             <h1 class="text-2xl md:text-4xl font-bold mb-2">
@@ -87,13 +87,13 @@ const settings = ppdbData[0]?.data?.datappdb || {
     <!-- Navigation Tabs -->
     <div class="flex border-b border-gray-200 mb-8">
       <a
-        href="/ppdb"
+        href="/pendaftaran"
         class="p-3 text-sm md:text-lg font-medium text-blue-600 border-b-2 border-blue-600"
       >
         Form Pendaftaran
       </a>
       <a
-        href="/ppdb/status"
+        href="/pendaftaran/status"
         class="p-3 text-sm md:text-lg font-medium text-gray-500 hover:text-blue-600"
       >
         Cek Status
@@ -103,7 +103,7 @@ const settings = ppdbData[0]?.data?.datappdb || {
     <h1
       class="text-xl md:text-3xl font-bold text-center max-w-4xl mx-auto mb-8 text-gray-800"
     >
-      Formulir Pendaftaran {settings.ppdbAlias}
+      Formulir Pendaftaran Siswa Baru
       <span class="text-blue-600"><Year /></span>
     </h1>
 
@@ -119,17 +119,25 @@ const settings = ppdbData[0]?.data?.datappdb || {
         <div class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              Tahun PPDB <span class="text-red-500">*</span>
+              Tahun Pendaftaran <span class="text-red-500">*</span>
             </label>
             <select
-              name="tahun_ppdb"
+              name="tahun_pendaftaran"
+              id="tahun_pendaftaran"
               required
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition duration-200"
             >
               <option value="">Pilih Tahun</option>
-              <option value="2026/2027">2026/2027</option>
-              <option value="2025/2026">2027/2028</option>
-              <option value="2025/2026">2028/2029</option>
+              {
+                Array.from({ length: 5 }).map((_, i) => {
+                  const year = new Date().getFullYear() + i;
+                  return (
+                    <option value={`${year}/${year + 1}`}>
+                      {year}/{year + 1}
+                    </option>
+                  );
+                })
+              }
             </select>
           </div>
         </div>
@@ -478,7 +486,8 @@ const settings = ppdbData[0]?.data?.datappdb || {
             />
             <label for="pernyataan_seleksi" class="text-gray-700">
               <span class="font-medium"
-                >Saya bersedia mengikuti proses seleksi PPDB sesuai jadwal</span
+                >Saya bersedia mengikuti proses seleksi pendaftaran sesuai
+                jadwal</span
               >
             </label>
           </div>
@@ -493,7 +502,7 @@ const settings = ppdbData[0]?.data?.datappdb || {
             />
             <label for="pernyataan_keputusan" class="text-gray-700">
               <span class="font-medium"
-                >Saya memahami bahwa keputusan panitia PPDB adalah mutlak</span
+                >Saya memahami bahwa keputusan panitia pendaftaran adalah mutlak</span
               >
             </label>
           </div>
@@ -518,15 +527,63 @@ const settings = ppdbData[0]?.data?.datappdb || {
       class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50 p-4"
     >
       <div
-        class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-auto transform transition-all"
+        class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-auto transform transition-all relative"
       >
+        <!-- Close Button (X) -->
+        <button
+          onclick="closeModal()"
+          class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1"
+          aria-label="Close modal"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+
         <div class="p-8">
           <div class="text-center mb-6">
             <div
-              id="modalIcon"
-              class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4"
+              id="modalIconSuccess"
+              class="mx-auto hidden items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4"
             >
-              <!-- Icon akan diisi oleh JavaScript -->
+              <svg
+                class="h-10 w-10 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <div
+              id="modalIconError"
+              class="mx-auto hidden items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4"
+            >
+              <svg
+                class="h-10 w-10 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
             </div>
             <h3 id="modalTitle" class="text-2xl font-bold text-gray-900"></h3>
           </div>
@@ -552,13 +609,13 @@ const settings = ppdbData[0]?.data?.datappdb || {
 
           <div class="flex space-x-3">
             <button
-              onclick="closeModal()"
+              onclick="window.closeModal()"
               class="flex-1 px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 transition duration-200"
             >
               Tutup
             </button>
             <a
-              href="/ppdb/status"
+              href="/pendaftaran/status"
               id="checkStatusBtn"
               class="flex-1 px-4 py-3 bg-gray-100 text-gray-800 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 transition duration-200 text-center hidden"
             >
@@ -569,190 +626,4 @@ const settings = ppdbData[0]?.data?.datappdb || {
       </div>
     </div>
   </div>
-
-  <script>
-    const form = document.getElementById("registrationForm");
-    const modal = document.getElementById("resultModal");
-    const submitBtn = document.getElementById("submitBtn");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      // Disable submit button
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = "Mengirim...";
-      submitBtn.classList.add("opacity-50");
-
-      // Collect form data
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      // Convert checkboxes to boolean
-      data.pernyataan_kebenaran = formData.has("pernyataan_kebenaran");
-      data.pernyataan_seleksi = formData.has("pernyataan_seleksi");
-      data.pernyataan_keputusan = formData.has("pernyataan_keputusan");
-
-      try {
-        const response = await fetch("/api/ppdb/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          showModal(
-            "success",
-            "Pendaftaran Berhasil!",
-            "Data pendaftaran Anda telah berhasil disimpan dan sedang menunggu proses review oleh admin.",
-            result.data.kode_pendaftaran,
-          );
-          form.reset();
-        } else {
-          showModal(
-            "error",
-            "Terjadi Kesalahan",
-            result.message || "Gagal menyimpan data pendaftaran",
-            null,
-          );
-        }
-      } catch (error) {
-        showModal(
-          "error",
-          "Error",
-          "Terjadi kesalahan pada server. Silakan coba lagi.",
-          null,
-        );
-      } finally {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = "Kirim Pendaftaran";
-        submitBtn.classList.remove("opacity-50");
-      }
-    });
-
-    function showModal(type, title, message, kode) {
-      const modalIcon = document.getElementById("modalIcon");
-      const modalTitle = document.getElementById("modalTitle");
-      const modalMessage = document.getElementById("modalMessage");
-      const idSection = document.getElementById("registrationId");
-      const idValue = document.getElementById("idValue");
-      const checkStatusBtn = document.getElementById("checkStatusBtn");
-
-      // Set modal content
-      modalTitle.textContent = title;
-      modalMessage.textContent = message;
-
-      // Set icon based on type
-      if (type === "success") {
-        modalIcon.innerHTML = `
-          <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-        `;
-        modalIcon.className =
-          "mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4";
-      } else {
-        modalIcon.innerHTML = `
-          <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        `;
-        modalIcon.className =
-          "mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4";
-      }
-
-      // Show/hide registration ID
-      if (kode) {
-        idValue.textContent = kode;
-        idSection.classList.remove("hidden");
-        checkStatusBtn.classList.remove("hidden");
-      }
-
-      // Show modal
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeModal() {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-      document.body.style.overflow = "auto";
-    }
-
-    // Close modal when clicking outside
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        closeModal();
-      }
-    });
-
-    // Close modal with Escape key
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-        closeModal();
-      }
-    });
-
-    // Auto-hide modal after 10 seconds for success
-    let modalTimeout;
-    form.addEventListener("submit", () => {
-      if (modalTimeout) clearTimeout(modalTimeout);
-      modalTimeout = setTimeout(() => {
-        if (!modal.classList.contains("hidden")) {
-          closeModal();
-        }
-      }, 10000);
-    });
-  </script>
-
-  <style>
-    /* Custom styles */
-    input,
-    select,
-    textarea {
-      transition: all 0.2s ease-in-out;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    #resultModal {
-      backdrop-filter: blur(4px);
-    }
-
-    /* Animation for modal */
-    @keyframes modalEnter {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    #resultModal > div {
-      animation: modalEnter 0.3s ease-out;
-    }
-
-    /* Checkbox styling */
-    input[type="checkbox"] {
-      cursor: pointer;
-    }
-
-    /* Required field asterisk */
-    .required::after {
-      content: " *";
-      color: #ef4444;
-    }
-  </style>
 </Layout>

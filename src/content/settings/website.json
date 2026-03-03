@@ -67,6 +67,11 @@
         "isActive": false
       },
       {
+        "label": "OSIS",
+        "href": "/osis",
+        "isActive": false
+      },
+      {
         "label": "Kontak",
         "href": "/contact",
         "isActive": false
@@ -121,7 +126,7 @@
     },
     "overlay": {
       "color": "#000000",
-      "opacity": "0.8"
+      "opacity": "0.6"
     },
     "animation": {
       "autoSlide": true,

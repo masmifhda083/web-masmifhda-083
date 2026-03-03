@@ -1,7 +1,7 @@
 {
-  "datappdb": {
+  "pendaftaranData": {
     "schoolName": "MA MIFTAHUL HUDA",
-    "ppdbAlias": "SPMB",
+    "pendaftaranAlias": "SPMB",
     "logoUrl": "/uploads/logo.webp",
     "coverImageUrl": "/uploads/cover.webp",
     "primaryColor": "#2E6731",

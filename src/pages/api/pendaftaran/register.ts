@@ -1,4 +1,4 @@
-// src/pages/api/ppdb/register.ts
+// src/pages/api/pendaftaran/register.ts
 import type { APIRoute } from 'astro';
 import { insertUser, checkUsersTable } from '../../../lib/db';
 
@@ -9,6 +9,11 @@ export const POST: APIRoute = async ({ request }) => {
         const tableCheck = await checkUsersTable();
 
         const data = await request.json();
+
+        // Support both old and new field name
+        if (data.tahun_pendaftaran && !data.tahun_ppdb) {
+            data.tahun_ppdb = data.tahun_pendaftaran;
+        }
 
         // Validasi required fields
         const requiredFields = [

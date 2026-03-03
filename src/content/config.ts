@@ -6,8 +6,7 @@ import { glob } from "astro/loaders"
 const posts = defineCollection({
   loader: glob({
     base: "./src/content/posts",
-    pattern: "**/*.{md,mdx}",
-    ignore: ["**/gitkeep.md"]
+    pattern: "**/*.{md,mdx}"
   }),
   schema: z.object({
     title: z.string(),
@@ -27,13 +26,41 @@ const posts = defineCollection({
     bgImage: z.string().optional(),
 
     // PERBAIKAN: Handle category dan customCategory
-    category: z.string().transform(val => {
-      if (!val) return val;
-      return val.toLowerCase().trim();
-    }).optional(),
+    category: z.enum(["akademik", "kurikulum", "prestasi", "news", "pengumuman"]).default("news"),
 
-    // Tambahkan customCategory untuk category "other"
-    customCategory: z.string().optional(),
+    // Tambahkan status field
+    status: z.enum(["draft", "scheduled", "published", "takedown"]).default("published"),
+  }),
+});
+
+const osis = defineCollection({
+  type: "data",
+  schema: z.object({
+    hero: z.object({
+      title: z.string(),
+      description: z.string(),
+      heroImage: z.string().optional(),
+    }),
+    visiMisi: z.object({
+      visi: z.string(),
+      misi: z.array(z.string()),
+    }),
+    pembina: z.array(z.object({
+      name: z.string(),
+      role: z.string(),
+      avatar: z.string().optional(),
+    })),
+    pengurusInti: z.array(z.object({
+      name: z.string(),
+      role: z.string(),
+      avatar: z.string().optional(),
+    })),
+    sekbid: z.array(z.object({
+      name: z.string(),
+      koordinator: z.string(),
+      sekretaris: z.string().optional(),
+      anggota: z.array(z.string()).optional(),
+    })),
   }),
 });
 
@@ -166,15 +193,15 @@ const pamflate = defineCollection({
   }),
 });
 
-// PPDB Settings Collection
-const ppdbSettings = defineCollection({
+// Pendaftaran Settings Collection
+const pendaftaranSettings = defineCollection({
   type: 'data', // menggunakan JSON/data
   schema: z.object({
-    // Data utama PPDB (grouping)
-    datappdb: z.object({
+    // Data utama Pendaftaran (grouping)
+    pendaftaranData: z.object({
       // Branding
       schoolName: z.string().default('SMP Xaverius 2'),
-      ppdbAlias: z.string().optional(),
+      pendaftaranAlias: z.string().optional(),
       logoUrl: z.string().default('/images/logo-school.png'),
       coverImageUrl: z.string().default('/images/cover-school.jpg'),
       primaryColor: z.string().default('#2563eb'),
@@ -206,7 +233,7 @@ const ppdbSettings = defineCollection({
 
       // Contact Info
       contactPhone: z.string().default('(0271) 123-456'),
-      contactEmail: z.string().default('ppdb@sekolah.example.com'),
+      contactEmail: z.string().default('pendaftaran@sekolah.example.com'),
       contactAddress: z.string().default('Jl. Pendidikan No. 123, Bandar Lampung'),
 
     }).default({}),
@@ -378,8 +405,9 @@ export const collections = {
   staff,
   pamflate,
   extracurricular,
-  ppdb: ppdbSettings,
+  pendaftaran: pendaftaranSettings,
   settings: websiteSettingsCollection,
   authors: authorsCollection,
-  contact: contactCollection
+  contact: contactCollection,
+  osis: osis
 };

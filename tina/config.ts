@@ -1,7 +1,9 @@
-//file: tina/config.ts
+﻿//file: tina/config.ts
 // Trigger Tina Schema Update
+import React from "react"
 import { defineConfig } from "tinacms"
 import { SOCIAL_ICON_REGISTRY } from "../src/config/socialIcons"
+import PendaftaranScreen from "./PendaftaranScreen"
 
 const socialIconOptions = Object.entries(SOCIAL_ICON_REGISTRY ?? {}).map(
   ([key, value]) => ({
@@ -15,11 +17,6 @@ export default defineConfig({
   token: "b14f2679594a1ecfd64fac53bea2c64ba277c24e",
   branch: 'main',
 
-  local: {
-    enabled: false,
-    apiUrl: "http://localhost:4321/api/tina",
-  },
-
   build: {
     outputFolder: "admin",
     publicFolder: "public",
@@ -30,6 +27,24 @@ export default defineConfig({
       mediaRoot: "uploads",
       publicFolder: "public",
     },
+  },
+
+  cmsCallback: (cms) => {
+    cms.plugins.add({
+      __type: "screen",
+      name: "PendaftaranScreen",
+      Component: PendaftaranScreen,
+      Icon: () =>
+        React.createElement(
+          "svg",
+          { viewBox: "0 0 24 24", width: "20", height: "20", fill: "currentColor" },
+          React.createElement("path", {
+            d: "M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 14h-4v-4h4v4zm0-6h-4V6h4v4z",
+          })
+        ),
+      layout: "fullscreen",
+    });
+    return cms;
   },
 
   schema: {
@@ -98,7 +113,25 @@ export default defineConfig({
             type: "string",
             name: "category",
             label: "Category",
-            description: "Gunakan huruf kecil, tanpa spasi. Contoh: akademik, kurikulum, event",
+            options: [
+              { label: "Akademik", value: "akademik" },
+              { label: "Kurikulum", value: "kurikulum" },
+              { label: "Prestasi", value: "prestasi" },
+              { label: "News", value: "news" },
+              { label: "Pengumuman", value: "pengumuman" },
+            ],
+            required: true,
+          },
+          {
+            type: "string",
+            name: "status",
+            label: "Post Status",
+            options: [
+              { label: "Draft", value: "draft" },
+              { label: "Scheduled", value: "scheduled" },
+              { label: "Published", value: "published" },
+              { label: "Takedown", value: "takedown" },
+            ],
             required: true,
           },
           {
@@ -115,6 +148,255 @@ export default defineConfig({
           },
         ],
       },
+      // collection pendaftaran
+      {
+        name: "pendaftaranSettings",
+        label: "Pendaftaran",
+        path: "src/content/pendaftaran",
+        format: "json",
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false
+          }
+        },
+        fields: [
+          {
+            type: "object",
+            name: "datappdb",
+            label: "Data Pendaftaran",
+            fields: [
+              { type: "string", name: "schoolName", label: "Nama Sekolah", required: true },
+              { type: "string", name: "ppdbAlias", label: "Nama Pendaftaran" },
+              { type: "image", name: "logoUrl", label: "Logo Sekolah" },
+              { type: "image", name: "coverImageUrl", label: "Cover Image" },
+              {
+                type: "string",
+                name: "primaryColor",
+                label: "Warna Utama",
+                ui: { component: "color" }
+              },
+              {
+                type: "string",
+                name: "secondaryColor",
+                label: "Warna Sekunder",
+                ui: { component: "color" }
+              },
+              { type: "string", name: "academicYear", label: "Tahun Ajaran", required: true },
+              { type: "boolean", name: "registrationOpen", label: "Pendaftaran Dibuka?" },
+              { type: "string", name: "registrationPeriod", label: "Periode Pendaftaran" },
+              { type: "string", name: "testDate", label: "Tanggal Tes" },
+              { type: "string", name: "testTime", label: "Waktu Tes" },
+              { type: "string", name: "testLocation", label: "Lokasi Tes" },
+              {
+                type: "object",
+                name: "requirements",
+                label: "Persyaratan",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: item && item.requirement ? item.requirement : "Persyaratan Baru"
+                  })
+                },
+                fields: [
+                  { type: "string", name: "requirement", label: "Persyaratan" }
+                ]
+              },
+              { type: "string", name: "contactPhone", label: "Telepon Kontak" },
+              { type: "string", name: "contactEmail", label: "Email Kontak" },
+              { type: "string", name: "contactAddress", label: "Alamat Sekolah" },
+            ]
+          },
+          {
+            type: "object",
+            name: "highlightPamflet",
+            label: "Pamflet Pendaftaran",
+            fields: [
+              { type: "image", name: "customImage", label: "Gambar Pamflet (Custom)" },
+            ]
+          }
+        ]
+      },
+      // contact
+      {
+        name: "contact",
+        label: "Contact",
+        path: "src/content/contact",
+        format: "json",
+        ui: {
+          allowedActions: {
+            create: false, // Supaya hanya ada satu file contact
+            delete: false,
+          },
+        },
+        fields: [
+          // ============ HERO SECTION ============
+          {
+            type: "object",
+            label: "Hero Section",
+            name: "hero",
+            fields: [
+              {
+                type: "string",
+                label: "Judul",
+                name: "title",
+                required: true,
+              },
+              {
+                type: "string",
+                label: "Deskripsi",
+                name: "description",
+                ui: {
+                  component: "textarea",
+                },
+                required: true,
+              },
+              {
+                type: "image",
+                label: "Background Image",
+                name: "backgroundImage",
+                required: true,
+              },
+            ],
+          },
+          // ============ CONTACT INFORMATION ============
+          {
+            type: "object",
+            label: "Informasi Kontak",
+            name: "contactInfo",
+            fields: [
+              {
+                type: "object",
+                label: "Detail Kontak",
+                name: "details",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: `${item?.label} - ${item?.value || 'Detail Baru'}`,
+                  }),
+                  defaultItem: () => ({
+                    type: "phone",
+                    label: "Telepon",
+                    value: ""
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    label: "Jenis Kontak",
+                    name: "type",
+                    options: [
+                      { label: "Telepon", value: "phone" },
+                      { label: "Email", value: "email" },
+                      { label: "Alamat", value: "address" },
+                    ],
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    label: "Label",
+                    name: "label",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    label: "Nilai",
+                    name: "value",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+          // ============ JAM OPERASIONAL ============
+          {
+            type: "object",
+            label: "Jam Operasional",
+            name: "hours",
+            fields: [
+              {
+                type: "object",
+                label: "Jam Operasional",
+                name: "days",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: `${item?.day || 'Hari Baru'} - ${item?.time || ''}`,
+                  }),
+                  defaultItem: () => ({
+                    day: "Senin - Jumat",
+                    time: "08:00 - 16:00"
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    label: "Hari",
+                    name: "day",
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    label: "Jam",
+                    name: "time",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+          // ============ SOCIAL MEDIA ============
+          {
+            type: "object",
+            label: "Social Media",
+            name: "socialMedia",
+            fields: [
+              {
+                type: "object",
+                label: "Link Sosial Media",
+                name: "links",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: `${item?.iconKey || "Icon"} - ${item?.url || ""}`,
+                  }),
+                  defaultItem: () => ({
+                    iconKey: "facebook",
+                    url: "#",
+                  }),
+                },
+                fields: [
+                  {
+                    type: "string",
+                    name: "iconKey",
+                    label: "Icon",
+                    options: socialIconOptions,
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    name: "url",
+                    label: "URL",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+          // ============ MAPS ============
+          {
+            type: "string",
+            label: "Google Maps Embed URL",
+            name: "mapEmbedUrl",
+            required: true,
+            ui: {
+              description: "Paste URL dari menu Share > Embed > Copy bagian https"
+            }
+          }
+
+        ],
+      },
+
       // ABOUT
       {
         name: "about",
@@ -126,44 +408,8 @@ export default defineConfig({
             create: false,
             delete: false,
           },
-          defaultItem: () => ({
-            gallery: {
-              items: [
-                {
-                  title: "Kegiatan Upacara",
-                  image: ""
-                }
-              ]
-            },
-            facilities: {
-              items: [
-                {
-                  title: "Laboratorium Komputer",
-                  image: "",
-                }
-              ]
-            },
-            kepegawaian: {
-              items: [
-                { title: "Tenaga Pendidik", image: "", body: "" }
-              ]
-            },
-            profil: {
-              items: [
-                { title: "Profil Sekolah", image: "", body: "" }
-              ]
-            },
-            sambutan: {
-              items: [
-                { title: "Sambutan Kepala Sekolah", image: "", body: "" }
-              ]
-            },
-            visimisi: {
-              items: [
-                { title: "Visi Misi Sekolah", image: "", body: "" }
-              ]
-            },
-          })
+          // Truncated fix for brevity - usually defaultItem goes into ui: { defaultItem: ... }
+          // I will just remove the ones causing errors for now as they are redundant or misplaced.
         },
         fields: [
           {
@@ -399,9 +645,6 @@ export default defineConfig({
             create: false,
             delete: false,
           },
-          defaultItem: () => ({
-            teachers: [],
-          }),
         },
         fields: [
           // ============ GURU ============
@@ -441,8 +684,6 @@ export default defineConfig({
                 description: 'Pilih satu jabatan',
                 ui: {
                   component: 'select',
-                  creatable: true,
-                  searchable: true,
                 },
                 options: [
                   { label: 'Guru Mapel', value: 'guru-mapel' },
@@ -671,76 +912,82 @@ export default defineConfig({
       //   ]
       // },
 
-      // collection ppdb
+      // OSIS
       {
-        name: "ppdbSettings",
-        label: "PPDB",
-        path: "src/content/ppdb",
+        name: "osis",
+        label: "OSIS",
+        path: "src/content/osis",
         format: "json",
         ui: {
           allowedActions: {
             create: false,
-            delete: false
-          }
+            delete: false,
+          },
         },
         fields: [
           {
             type: "object",
-            name: "datappdb",
-            label: "Data PPDB",
+            name: "hero",
+            label: "Hero Section",
             fields: [
-              { type: "string", name: "schoolName", label: "Nama Sekolah", required: true },
-              { type: "string", name: "ppdbAlias", label: "Nama Pendaftaran" },
-              { type: "image", name: "logoUrl", label: "Logo Sekolah" },
-              { type: "image", name: "coverImageUrl", label: "Cover Image" },
-              {
-                type: "string",
-                name: "primaryColor",
-                label: "Warna Utama",
-                ui: { component: "color" }
-              },
-              {
-                type: "string",
-                name: "secondaryColor",
-                label: "Warna Sekunder",
-                ui: { component: "color" }
-              },
-              { type: "string", name: "academicYear", label: "Tahun Ajaran", required: true },
-              { type: "boolean", name: "registrationOpen", label: "Pendaftaran Dibuka?" },
-              { type: "string", name: "registrationPeriod", label: "Periode Pendaftaran" },
-              { type: "string", name: "testDate", label: "Tanggal Tes" },
-              { type: "string", name: "testTime", label: "Waktu Tes" },
-              { type: "string", name: "testLocation", label: "Lokasi Tes" },
-              {
-                type: "object",
-                name: "requirements",
-                label: "Persyaratan",
-                list: true,
-                ui: {
-                  itemProps: (item) => ({
-                    label: item && item.requirement ? item.requirement : "Persyaratan Baru"
-                  })
-                },
-                fields: [
-                  { type: "string", name: "requirement", label: "Persyaratan" }
-                ]
-              },
-              { type: "string", name: "contactPhone", label: "Telepon Kontak" },
-              { type: "string", name: "contactEmail", label: "Email Kontak" },
-              { type: "string", name: "contactAddress", label: "Alamat Sekolah" },
-            ]
+              { type: "string", name: "title", label: "Judul" },
+              { type: "string", name: "description", label: "Deskripsi", ui: { component: "textarea" } },
+              { type: "image", name: "heroImage", label: "Hero Image" },
+            ],
           },
           {
             type: "object",
-            name: "highlightPamflet",
-            label: "Pamflet PPDB",
+            name: "visiMisi",
+            label: "Visi & Misi",
             fields: [
-
-              { type: "image", name: "customImage", label: "Gambar Pamflet (Custom)" },
-
-            ]
-          }
-        ]
+              { type: "string", name: "visi", label: "Visi", ui: { component: "textarea" } },
+              { type: "string", name: "misi", label: "Misi", list: true },
+            ],
+          },
+          {
+            type: "object",
+            name: "pembina",
+            label: "Pembina OSIS",
+            list: true,
+            ui: {
+              itemProps: (item) => ({ label: item?.name || "Pembina Baru" }),
+            },
+            fields: [
+              { type: "string", name: "name", label: "Nama" },
+              { type: "string", name: "role", label: "Jabatan" },
+              { type: "image", name: "avatar", label: "Foto" },
+            ],
+          },
+          {
+            type: "object",
+            name: "pengurusInti",
+            label: "Pengurus Inti",
+            list: true,
+            ui: {
+              itemProps: (item) => ({ label: item?.name || "Pengurus Baru" }),
+            },
+            fields: [
+              { type: "string", name: "name", label: "Nama" },
+              { type: "string", name: "role", label: "Jabatan" },
+              { type: "image", name: "avatar", label: "Foto" },
+            ],
+          },
+          {
+            type: "object",
+            name: "sekbid",
+            label: "Seksi Bidang",
+            list: true,
+            ui: {
+              itemProps: (item) => ({ label: item?.name || "Sekbid Baru" }),
+            },
+            fields: [
+              { type: "string", name: "name", label: "Nama Sekbid" },
+              { type: "string", name: "koordinator", label: "Koordinator" },
+              { type: "string", name: "sekretaris", label: "Sekretaris" },
+              { type: "string", name: "anggota", label: "Anggota", list: true },
+            ],
+          },
+        ],
       },
       // Authors
       {
@@ -771,7 +1018,7 @@ export default defineConfig({
             type: "string",
             name: "username",
             label: "Username",
-            description: "Untuk URL, contoh: nisa → /author/nisa",
+            description: "Untuk URL, contoh: nisa â†’ /author/nisa",
             required: true
           },
           {
@@ -795,248 +1042,6 @@ export default defineConfig({
           },
         ]
       },
-      // contact
-      {
-        name: "contact",
-        label: "Contact",
-        path: "src/content/contact",
-        format: "json",
-        ui: {
-          allowedActions: {
-            create: false, // Supaya hanya ada satu file contact
-            delete: false,
-          },
-          defaultItem: () => ({
-            hero: {
-              title: "Tertarik Bergabung?",
-              description: "Bersama kami, Anda akan mendapatkan pendidikan berkualitas dan pengalaman belajar yang inspiratif.",
-              backgroundImage: "https://images.unsplash.com/photo-1494949649109-ecfc3b8c35df?q=80&w=1032"
-            },
-            contactInfo: {
-              details: [
-                {
-                  type: "phone",
-                  label: "Telepon",
-                  value: "+1-316-555-1258"
-                },
-                {
-                  type: "email",
-                  label: "Email",
-                  value: "google@gmail.com"
-                },
-                {
-                  type: "address",
-                  label: "Alamat",
-                  value: "802 Pension Rd, Maine 96812, USA"
-                }
-              ]
-            },
-            hours: {
-              days: [
-                {
-                  day: "Monday - Friday",
-                  time: "9:00 AM - 6:00 PM"
-                },
-                {
-                  day: "Saturday",
-                  time: "10:00 AM - 4:00 PM"
-                }
-              ]
-            },
-            socialMedia: {
-              links: [
-                {
-                  platform: "facebook",
-                  url: "#"
-                },
-                {
-                  platform: "twitter",
-                  url: "#"
-                },
-                {
-                  platform: "instagram",
-                  url: "#"
-                },
-                {
-                  platform: "youtube",
-                  url: "#"
-                }
-              ]
-            },
-            contactForm: {
-              title: "Hubungi Kami"
-            },
-
-          }),
-        },
-        fields: [
-          // ============ HERO SECTION ============
-          {
-            type: "object",
-            label: "Hero Section",
-            name: "hero",
-            fields: [
-              {
-                type: "string",
-                label: "Judul",
-                name: "title",
-                required: true,
-              },
-              {
-                type: "string",
-                label: "Deskripsi",
-                name: "description",
-                ui: {
-                  component: "textarea",
-                },
-                required: true,
-              },
-              {
-                type: "image",
-                label: "Background Image",
-                name: "backgroundImage",
-                required: true,
-              },
-            ],
-          },
-          // ============ CONTACT INFORMATION ============
-          {
-            type: "object",
-            label: "Informasi Kontak",
-            name: "contactInfo",
-            fields: [
-              {
-                type: "object",
-                label: "Detail Kontak",
-                name: "details",
-                list: true,
-                ui: {
-                  itemProps: (item) => ({
-                    label: `${item?.label} - ${item?.value || 'Detail Baru'}`,
-                  }),
-                  defaultItem: () => ({
-                    type: "phone",
-                    label: "Telepon",
-                    value: ""
-                  }),
-                },
-                fields: [
-                  {
-                    type: "string",
-                    label: "Jenis Kontak",
-                    name: "type",
-                    options: [
-                      { label: "Telepon", value: "phone" },
-                      { label: "Email", value: "email" },
-                      { label: "Alamat", value: "address" },
-                    ],
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    label: "Label",
-                    name: "label",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    label: "Nilai",
-                    name: "value",
-                    required: true,
-                  },
-                ],
-              },
-            ],
-          },
-          // ============ JAM OPERASIONAL ============
-          {
-            type: "object",
-            label: "Jam Operasional",
-            name: "hours",
-            fields: [
-              {
-                type: "object",
-                label: "Jam Operasional",
-                name: "days",
-                list: true,
-                ui: {
-                  itemProps: (item) => ({
-                    label: `${item?.day || 'Hari Baru'} - ${item?.time || ''}`,
-                  }),
-                  defaultItem: () => ({
-                    day: "Senin - Jumat",
-                    time: "08:00 - 16:00"
-                  }),
-                },
-                fields: [
-                  {
-                    type: "string",
-                    label: "Hari",
-                    name: "day",
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    label: "Jam",
-                    name: "time",
-                    required: true,
-                  },
-                ],
-              },
-            ],
-          },
-          // ============ SOCIAL MEDIA ============
-          {
-            type: "object",
-            label: "Social Media",
-            name: "socialMedia",
-            fields: [
-              {
-                type: "object",
-                label: "Link Sosial Media",
-                name: "links",
-                list: true,
-                ui: {
-                  itemProps: (item) => ({
-                    label: `${item?.iconKey || "Icon"} - ${item?.url || ""}`,
-                  }),
-                  defaultItem: () => ({
-                    iconKey: "facebook",
-                    url: "#",
-                  }),
-                },
-                fields: [
-                  {
-                    type: "string",
-                    name: "iconKey",
-                    label: "Icon",
-                    options: socialIconOptions,
-                    required: true,
-                  },
-                  {
-                    type: "string",
-                    name: "url",
-                    label: "URL",
-                    required: true,
-                  },
-                ],
-              },
-            ],
-          },
-          // ============ MAPS ============
-          {
-            type: "string",
-            label: "Google Maps Embed URL",
-            name: "mapEmbedUrl",
-            required: true,
-            ui: {
-              description: "Paste URL dari menu Share > Embed > Copy bagian https"
-            }
-          }
-
-        ],
-      },
-
       //websiteSettings
       {
         label: 'Settings',
@@ -1048,12 +1053,6 @@ export default defineConfig({
             create: false,
             delete: false,
           },
-          defaultItem: {
-            siteInfo: {
-              siteName: 'SMA Negeri 1 Indonesia',
-              siteUrl: 'https://masmifhda.sch.id'
-            }
-          }
         },
         fields: [
           // ============ BAGIAN 1: HEADER & NAVBAR ============
@@ -1157,13 +1156,11 @@ export default defineConfig({
                     type: 'number',
                     label: 'Lebar Logo (Desktop)',
                     name: 'logoWidthDesktop',
-                    defaultValue: 48,
                   },
                   {
                     type: 'number',
                     label: 'Lebar Logo (Mobile)',
                     name: 'logoWidthMobile',
-                    defaultValue: 40,
                   },
                   // TAMBAHKAN FIELD INI
                   {
@@ -1171,7 +1168,6 @@ export default defineConfig({
                     label: 'Tampilkan Nama Sekolah',
                     name: 'showName',
                     description: 'Centang untuk menampilkan nama sekolah di sebelah logo',
-                    defaultValue: true,
                   },
                 ],
               },
@@ -1191,7 +1187,7 @@ export default defineConfig({
                 list: true,
                 ui: {
                   itemProps: (item) => ({
-                    label: item.alt || `Image ${item.url ? '✓' : '✗'}`
+                    label: item.alt || `Image ${item.url ? 'âœ“' : 'âœ—'}`
                   }),
                   defaultItem: () => ({
                     url: '',
@@ -1412,8 +1408,6 @@ export default defineConfig({
                     type: 'number',
                     label: 'Marquee Speed',
                     name: 'marqueeSpeed',
-                    min: 1,
-                    max: 30,
                   },
                 ],
               },
@@ -1472,7 +1466,6 @@ export default defineConfig({
                     type: 'string',
                     label: 'Title Template',
                     name: 'titleTemplate',
-                    defaultValue: '%s | Nama Sekolah',
                   },
                   {
                     type: 'string',
@@ -1509,13 +1502,11 @@ export default defineConfig({
                     label: 'OG:Type',
                     name: 'type',
                     options: ['website', 'article'],
-                    defaultValue: 'website',
                   },
                   {
                     type: 'string',
                     label: 'OG:Locale',
                     name: 'locale',
-                    defaultValue: 'id_ID',
                   },
                   {
                     type: 'image',

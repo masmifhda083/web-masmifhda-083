@@ -1,5 +1,5 @@
 ---
-// src/pages/dashboard/ppdb.astro
+// src/pages/dashboard/pendaftaran.astro
 import Layout from "../../layouts/Layout.astro";
 import { getAllUsers } from "../../lib/db";
 
@@ -7,9 +7,21 @@ const usersResult = await getAllUsers();
 const allUsers = usersResult.success ? usersResult.data : [];
 
 // Get unique years from data
-const uniqueYears = [
-  ...new Set(allUsers.map((user) => user.tahun_ppdb)),
-].sort();
+const dbYears = [
+  ...new Set(
+    allUsers.map((user: any) => user.tahun_pendaftaran || user.tahun_ppdb),
+  ),
+].filter(Boolean) as string[];
+
+// Generate next 10 years based on current year (format like "2026/2027")
+const currentYear = new Date().getFullYear();
+const futureYears = Array.from({ length: 11 }, (_, i) => {
+  const start = currentYear + i;
+  return `${start}/${start + 1}`;
+});
+
+// Combine and deduplicate
+const uniqueYears = [...new Set([...dbYears, ...futureYears])].sort();
 
 // Get current year from URL or default to "Semua"
 const url = new URL(Astro.request.url);
@@ -19,10 +31,13 @@ const selectedYear = url.searchParams.get("tahun") || "Semua";
 const filteredUsers =
   selectedYear === "Semua"
     ? allUsers
-    : allUsers.filter((user) => user.tahun_ppdb === selectedYear);
+    : allUsers.filter(
+        (user: any) =>
+          (user.tahun_pendaftaran || user.tahun_ppdb) === selectedYear,
+      );
 
 // Calculate statistics
-const calculateStats = (users) => {
+const calculateStats = (users: any[]) => {
   const total = users.length;
   const pending = users.filter(
     (u) => !u.status || u.status === "pending",
@@ -38,28 +53,52 @@ const stats = calculateStats(filteredUsers);
 const allStats = calculateStats(allUsers);
 ---
 
-<Layout title="Admin PPDB">
+<Layout title="Admin Pendaftaran">
   <div class="container min-h-screen mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Admin Panel - Pendaftaran PPDB</h1>
-    <button
-      id="logoutBtn"
-      class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium flex items-center"
-    >
-      <svg
-        class="w-4 h-4 mr-2"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+    <h1 class="text-3xl font-bold mb-6">
+      Admin Panel - Pendaftaran Siswa Baru
+    </h1>
+
+    <div class="flex justify-between items-center mb-6">
+      <button
+        id="logoutBtn"
+        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium flex items-center"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <svg
+          class="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          ></path>
+        </svg>
+        Logout
+      </button>
+
+      <a
+        href="/dashboard"
+        class="text-sm text-primary hover:underline flex items-center gap-1"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
           stroke-width="2"
-          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-        ></path>
-      </svg>
-      Logout
-    </button>
+          stroke-linecap="round"
+          stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg
+        >
+        Kembali ke Dashboard
+      </a>
+    </div>
+
     <!-- Filter Section -->
     <div class="bg-body rounded-xl shadow-lg p-6 mb-6">
       <div
@@ -68,35 +107,21 @@ const allStats = calculateStats(allUsers);
         <!-- Year Filter -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Filter Berdasarkan Tahun PPDB</label
+            >Filter Berdasarkan Tahun Pendaftaran</label
           >
-          <div class="flex flex-wrap gap-2">
-            <a href="?tahun=Semua">
-              <p
-                class={`px-4 py-2 rounded-lg font-medium transition ${
-                  selectedYear === "Semua"
-                    ? "bg-primary text-surface"
-                    : "bg-secondary text-surface hover:bg-primary"
-                }`}
-              >
-                Semua Tahun
-              </p>
-            </a>
-            {
-              uniqueYears.map((year) => (
-                <a href={`?tahun=${year}`}>
-                  <p
-                    class={`px-4 py-2 rounded-lg font-medium transition ${
-                      selectedYear === year
-                        ? "bg-primary text-surface hover:bg-secondary"
-                        : "bg-secondary text-surface hover:bg-primary"
-                    }`}
-                  >
-                    {year}
-                  </p>
-                </a>
-              ))
-            }
+          <div class="relative">
+            <select
+              id="yearFilter"
+              class="appearance-none bg-surface border border-gray-300 text-gray-700 py-2 pl-4 pr-10 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition font-medium w-full sm:w-auto cursor-pointer"
+            >
+              <option value="Semua" selected={selectedYear === "Semua"}>Semua Tahun</option>
+              {uniqueYears.map((year) => (
+                <option value={year} selected={selectedYear === year}>{year}</option>
+              ))}
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
           </div>
         </div>
 
@@ -263,18 +288,22 @@ const allStats = calculateStats(allUsers);
                   <th class="font-medium">Aksi</th>
                 </tr>
               </thead>
-              <tbody>
-                {filteredUsers.map((user) => (
-                  <tr>
+              <tbody class="divide-y divide-gray-200">
+                {filteredUsers.map((user: any) => (
+                  <tr class="hover:bg-gray-50 transition-colors">
                     <td class="pl-3 py-4 text-sm font-mono text-gray-900">
                       {user.kode_pendaftaran}
                     </td>
                     <td class="px-3 py-2 whitespace-nowrap">
                       <div class="text-sm text-gray-900">
-                        {new Date(user.created_at).toLocaleDateString("id-ID")}
+                        {user.created_at
+                          ? new Date(user.created_at).toLocaleDateString(
+                              "id-ID",
+                            )
+                          : "-"}
                       </div>
                     </td>
-                    <td class="text-sm py-2">{user.nama_lengkap}</td>
+                    <td class="text-sm py-2 px-3">{user.nama_lengkap}</td>
                     <td class="px-3 py-2 whitespace-nowrap">
                       <span
                         class={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full status-badge capitalize ${
@@ -290,28 +319,28 @@ const allStats = calculateStats(allUsers);
                         {user.status || "pending"}
                       </span>
                     </td>
-                    <td class="px-3 py-2 whitespace-nowrap text-sm font-medium">
+                    <td class="px-3 py-2 whitespace-nowrap text-sm font-medium flex gap-3">
                       <a
-                        href={`/dashboard/ppdb/detail?id=${user.id}`}
-                        class="text-secondary hover:text-blue-900 mr-3"
+                        href={`/dashboard/pendaftaran/detail?id=${user.id}`}
+                        class="text-secondary hover:underline"
                       >
                         Detail
                       </a>
                       <a
-                        href={`/api/ppdb/update-status?id=${user.id}&status=approved`}
-                        class="text-green-600 hover:text-green-900 mr-2 action-approve"
+                        href={`/api/pendaftaran/update-status?id=${user.id}&status=approved`}
+                        class="text-green-600 hover:underline action-approve"
                       >
                         Terima
                       </a>
                       <a
-                        href={`/api/ppdb/update-status?id=${user.id}&status=rejected`}
-                        class="text-red-600 hover:text-red-900 action-reject"
+                        href={`/api/pendaftaran/update-status?id=${user.id}&status=rejected`}
+                        class="text-red-600 hover:underline action-reject"
                       >
                         Tolak
                       </a>
                       <a
-                        href={`/api/ppdb/delete?id=${user.id}`}
-                        class="text-gray-600 hover:text-gray-900 ml-2 action-delete"
+                        href={`/api/pendaftaran/delete?id=${user.id}`}
+                        class="text-gray-600 hover:underline action-delete"
                       >
                         Hapus
                       </a>
@@ -322,10 +351,31 @@ const allStats = calculateStats(allUsers);
             </table>
           </div>
         ) : (
-          <p class="text-sm text-gray-500 p-4">Tidak ada pendaftar</p>
+          <div class="p-8 text-center">
+            <svg
+              class="mx-auto h-12 w-12 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">
+              Tidak ada pendaftar
+            </h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Belum ada data pendaftaran untuk filter ini.
+            </p>
+          </div>
         )
       }
     </div>
+
     <!-- Footer Summary -->
     <div class="mt-6 text-center text-sm text-gray-500">
       <p>
@@ -353,9 +403,9 @@ const allStats = calculateStats(allUsers);
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       // Logout function
-      document
-        .getElementById("logoutBtn")
-        .addEventListener("click", async function () {
+      const logoutBtn = document.getElementById("logoutBtn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", async function () {
           if (confirm("Apakah Anda yakin ingin logout?")) {
             try {
               await fetch("/api/admin/logout", { method: "POST" });
@@ -365,6 +415,8 @@ const allStats = calculateStats(allUsers);
             }
           }
         });
+      }
+
       // Konfirmasi sebelum update status
       document
         .querySelectorAll(".action-approve, .action-reject, .action-delete")
@@ -387,21 +439,30 @@ const allStats = calculateStats(allUsers);
             }
           });
         });
-    });
-    document.addEventListener("DOMContentLoaded", () => {
+
+      // Export CSV
       const exportBtn = document.getElementById("exportBtn");
+      if (exportBtn) {
+        exportBtn.addEventListener("click", () => {
+          const tahun = new URLSearchParams(window.location.search).get(
+            "tahun",
+          );
+          let url = "/api/pendaftaran/export?";
+          if (tahun && tahun !== "Semua") {
+            url += `tahun=${encodeURIComponent(tahun)}`;
+          }
+          window.location.href = url;
+        });
+      }
 
-      exportBtn.addEventListener("click", () => {
-        const tahun = new URLSearchParams(window.location.search).get("tahun");
-
-        let url = "/api/ppdb/export?";
-
-        if (tahun && tahun !== "Semua") {
-          url += `tahun=${encodeURIComponent(tahun)}`;
-        }
-
-        window.location.href = url;
-      });
+      // Year Filter Dropdown logic
+      const yearFilter = document.getElementById("yearFilter");
+      if (yearFilter) {
+        yearFilter.addEventListener("change", function(e) {
+          const selectedValue = (e.target as HTMLSelectElement).value;
+          window.location.href = '?tahun=' + encodeURIComponent(selectedValue);
+        });
+      }
     });
   </script>
 </Layout>

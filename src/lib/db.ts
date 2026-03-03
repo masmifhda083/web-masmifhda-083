@@ -1,4 +1,4 @@
-// src/lib/db.ts
+// src/lib/pendaftaran.ts (Legacy: db.ts)
 import { createClient } from '@libsql/client';
 
 const db = createClient({
@@ -43,7 +43,7 @@ export async function checkUsersTable() {
 }
 
 function generateKodePendaftaran() {
-  return `PPDB-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  return `SPMB-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }
 export async function insertUser(userData: UserData) {
   const now = new Date().toISOString();

@@ -6,12 +6,12 @@
 
 export const ADMIN_CREDENTIALS = {
   username: import.meta.env.ADMIN_USERNAME || 'admin',
-  // Hash untuk password: ppdbAdmin2026
-  passwordHash: import.meta.env.ADMIN_PASSWORD_HASH || 'd2800b126f83def9f9544d3bf2a99ca06b6706bd974f7234bd67d994e9109a41'
+  // Hash untuk password: spmbAdmin2026 (atau ppdbAdmin2026 tetap berlaku)
+  passwordHash: import.meta.env.ADMIN_PASSWORD_HASH || '3b47b9826e8ab98bf58889ad2520e76a11168a2a74c9fb291c4ec4220811acf0'
 };
 
 // Secret key untuk session (gunakan environment variable)
-export const SESSION_SECRET = import.meta.env.SESSION_SECRET || 'ppdb-secret-key-change-this';
+export const SESSION_SECRET = import.meta.env.SESSION_SECRET || 'pendaftaran-secret-key-change-this';
 
 // Session expiration (30 menit)
 export const SESSION_EXPIRY = 30 * 60 * 1000; // 30 menit dalam milidetik

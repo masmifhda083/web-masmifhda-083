@@ -1,4 +1,4 @@
-// src/pages/api/ppdb/update-status.ts
+// src/pages/api/pendaftaran/update-status.ts
 import type { APIRoute } from 'astro';
 import { updateUserStatus } from '../../../lib/db';
 
@@ -37,7 +37,7 @@ export const GET: APIRoute = async ({ request }) => {
         if (result.success) {
             return new Response(null, {
                 status: 302,
-                headers: { Location: '/dashboard/ppdb' }
+                headers: { Location: '/dashboard/pendaftaran' }
             });
         }
 

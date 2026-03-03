@@ -3,26 +3,21 @@ import Layout from "../../layouts/Layout.astro";
 import CardPosts from "../../components/CardPosts.astro";
 import Pagination from "../../components/Pagination.astro";
 import { getCollection } from "astro:content";
+import { getVisiblePosts } from "../../utils/postFilter";
 
 // Ambil semua post
 const allPosts = await getCollection("posts");
+const visiblePosts = getVisiblePosts(allPosts);
 
 // Kelompokkan berdasarkan kategori dengan validasi
 const postsByCategory = {};
 const categoryCounts = {};
 
-for (const post of allPosts) {
+for (const post of visiblePosts) {
   try {
     // Tentukan kategori dengan validasi
-    let category = "uncategorized";
-    if (post.data.category) {
-      const cat = post.data.category.toLowerCase().trim();
-      if (cat === "other" && post.data.customCategory) {
-        category = post.data.customCategory.toLowerCase().trim();
-      } else {
-        category = cat;
-      }
-    }
+    let category = post.data.category || "news";
+    category = category.toLowerCase().trim();
 
     // Validasi kategori
     if (!category || category === "undefined") {
