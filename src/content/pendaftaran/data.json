@@ -50,6 +50,9 @@
     "requirements": [
       {
         "requirement": "Foto copy Kartu Keluarga"
+      },
+      {
+        "requirement": "Foto copy Akta Kelahiran"
       }
     ]
   },
