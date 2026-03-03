@@ -1,4 +1,4 @@
----
+﻿---
 title: >-
   Hari Pahlawan 10 November: Meneladani Semangat Berjuang dan Berkorban untuk
   Negeri
@@ -8,7 +8,7 @@ description: >-
   Setiap tanggal 10 November, bangsa Indonesia memperingati Hari Pahlawan
   sebagai bentuk penghormatan kepada para pejuang yang telah mengorbankan jiwa
   dan raga demi kemerdekaan bangsa
-category: news
+category: 'news'
 heroImage: /uploads/poster.webp
 ---
 
@@ -16,7 +16,7 @@ Setiap tanggal 10 November, bangsa Indonesia memperingati Hari Pahlawan sebagai 
 
 ### Sejarah Singkat Hari Pahlawan
 
-Tanggal 10 November diperingati sebagai Hari Pahlawan untuk mengenang Pertempuran Surabaya tahun 1945, salah satu pertempuran terbesar dalam sejarah kemerdekaan Indonesia. Rakyat Surabaya, bersama para santri, kiai, ulama, dan pejuang, bersatu melawan pasukan kolonial yang ingin kembali menjajah Indonesia. Dengan tekad kuat dan semangat jihad fi sabilillah, mereka berjuang tanpa rasa takut, meski persenjataan yang dimiliki jauh lebih sederhana. Pekikan “Allahu Akbar!” menjadi penyemangat untuk menolak penjajahan. Pertempuran ini menewaskan ribuan pejuang, namun justru membangkitkan semangat perlawanan di seluruh Nusantara dan memperkuat posisi Indonesia di mata dunia sebagai bangsa yang siap mempertahankan kemerdekaannya.
+Tanggal 10 November diperingati sebagai Hari Pahlawan untuk mengenang Pertempuran Surabaya tahun 1945, salah satu pertempuran terbesar dalam sejarah kemerdekaan Indonesia. Rakyat Surabaya, bersama para santri, kiai, ulama, dan pejuang, bersatu melawan pasukan kolonial yang ingin kembali menjajah Indonesia. Dengan tekad kuat dan semangat jihad fi sabilillah, mereka berjuang tanpa rasa takut, meski persenjataan yang dimiliki jauh lebih sederhana. Pekikan â€œAllahu Akbar!â€ menjadi penyemangat untuk menolak penjajahan. Pertempuran ini menewaskan ribuan pejuang, namun justru membangkitkan semangat perlawanan di seluruh Nusantara dan memperkuat posisi Indonesia di mata dunia sebagai bangsa yang siap mempertahankan kemerdekaannya.
 
 ### Makna Hari Pahlawan bagi Pelajar
 
@@ -46,6 +46,6 @@ Meneladani Pahlawan dengan Aksi Nyata Semangat kepahlawanan dapat diwujudkan dal
 
 Mari lanjutkan perjuangan para pahlawan dengan prestasi, akhlak mulia, dan kontribusi nyata untuk agama, bangsa, dan negara.
 
-> Bangsa yang besar adalah bangsa yang menghargai jasa para pahlawannya.”— Ir. Soekarno
+> Bangsa yang besar adalah bangsa yang menghargai jasa para pahlawannya.â€â€” Ir. Soekarno
 
 Semoga Allah SWT memberi kekuatan kepada seluruh civitas akademika MA Miftahul Huda untuk terus berkarya, berjuang dalam kebaikan, dan menjadi pahlawan masa kini bagi lingkungan dan bangsa.

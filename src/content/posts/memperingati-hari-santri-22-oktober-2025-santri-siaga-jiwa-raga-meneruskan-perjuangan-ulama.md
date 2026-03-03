@@ -1,4 +1,4 @@
----
+﻿---
 title: >-
   Memperingati Hari Santri 22 Oktober 2025: Santri Siaga Jiwa Raga, Meneruskan
   Perjuangan Ulama
@@ -8,7 +8,7 @@ description: >-
   Setiap tanggal 22 Oktober, bangsa Indonesia memperingati Hari Santri Nasional,
   sebuah momentum penting yang mengakui peran santri dan ulama dalam perjuangan
   kemerdekaan serta pembangunan moral bangsa.
-category: news
+category: 'news'
 heroImage: /uploads/mifda-2.webp
 ---
 
@@ -16,13 +16,13 @@ Setiap tanggal 22 Oktober, bangsa Indonesia memperingati Hari Santri Nasional, s
 
 ### Sejarah Hari Santri
 
-Penetapan Hari Santri merujuk pada Resolusi Jihad 22 Oktober 1945 yang dikeluarkan oleh Hadratus Syaikh KH. Hasyim Asy’ari. Seruan ini mewajibkan seluruh umat Islam, khususnya para santri, untuk berjihad melawan penjajah demi mempertahankan kemerdekaan Indonesia. Resolusi tersebut menjadi pemantik terjadinya Pertempuran 10 November di Surabaya, salah satu peristiwa heroik terbesar dalam sejarah bangsa.
+Penetapan Hari Santri merujuk pada Resolusi Jihad 22 Oktober 1945 yang dikeluarkan oleh Hadratus Syaikh KH. Hasyim Asyâ€™ari. Seruan ini mewajibkan seluruh umat Islam, khususnya para santri, untuk berjihad melawan penjajah demi mempertahankan kemerdekaan Indonesia. Resolusi tersebut menjadi pemantik terjadinya Pertempuran 10 November di Surabaya, salah satu peristiwa heroik terbesar dalam sejarah bangsa.
 
 ### Tema Hari Santri 2025
 
 Tema resmi biasanya dikeluarkan oleh Kemenag. Jika belum dirilis, bisa ditulis opsional
 
-> ⭐️ Santri Siaga Jiwa Raga untuk Negeri dan Agama
+> â­ï¸ Santri Siaga Jiwa Raga untuk Negeri dan Agama
 
 Tema ini mengandung pesan bahwa santri tidak hanya kuat secara spiritual, tetapi juga siap berperan aktif di tengah perkembangan zaman, menjaga akidah, bangsa, dan ilmu pengetahuan.
 
@@ -53,10 +53,10 @@ Hari Santri harus menjadi pengingat bagi seluruh siswa, bahwa:
 
 Penutup Dengan semangat Hari Santri 2025, mari kita mantapkan niat untuk menjadi generasi santri yang:
 
-* ✨ Berilmu dan berwawasan luas
-* ✨ Berakhlak mulia
-* ✨ Cinta tanah air
-* ✨ Siap menjadi pelopor kebaikan di masyarakat
+* âœ¨ Berilmu dan berwawasan luas
+* âœ¨ Berakhlak mulia
+* âœ¨ Cinta tanah air
+* âœ¨ Siap menjadi pelopor kebaikan di masyarakat
 
 > Santri hari ini, pemimpin bangsa esok hari.
 

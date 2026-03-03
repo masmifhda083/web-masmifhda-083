@@ -1,4 +1,4 @@
----
+﻿---
 title: >-
   Memperingati Hari Kemerdekaan Republik Indonesia 17 Agustus 2025: Merdeka,
   Berkarakter, dan Berprestasi
@@ -7,7 +7,7 @@ pubdate: 2025-08-17T00:00:00.000Z
 description: >-
   Pada tanggal 17 Agustus 2025, bangsa Indonesia kembali memperingati Hari Ulang
   Tahun ke-80 Kemerdekaan Republik Indonesia. 
-category: news
+category: 'news'
 heroImage: /uploads/mifda-1.webp
 ---
 
@@ -21,7 +21,7 @@ Pada tanggal 17 Agustus 1945, Ir. Soekarno dan Drs. Mohammad Hatta atas nama ban
 
 Tema resmi biasanya dikeluarkan pemerintah. Bila belum rilis, bisa memakai format universal
 
-> ⭐ 80 Tahun Indonesia Merdeka: Bersatu, Berakhlak, dan Berdaya
+> â­ 80 Tahun Indonesia Merdeka: Bersatu, Berakhlak, dan Berdaya
 
 Tema ini mengandung pesan bahwa kemerdekaan harus dijaga dengan persatuan, kekuatan karakter, serta kemampuan bersaing di era modern.
 
@@ -38,7 +38,7 @@ Kemerdekaan bukan hanya kebebasan fisik, tetapi juga kesempatan luas untuk:
 
 Madrasah bukan hanya tempat belajar formal, tetapi pusat pembentukan karakter spiritual dan kebangsaan. Melalui pendidikan:
 
-1. Al-Qur’an dan As-Sunnah dijadikan pedoman hidup
+1. Al-Qurâ€™an dan As-Sunnah dijadikan pedoman hidup
 2. Ilmu pengetahuan dipelajari sebagai bekal masa depan
 3. Akhlak dan disiplin dibina sebagai identitas santri Dengan demikian, MA Miftahul Huda berkomitmen melahirkan generasi beriman, berilmu, dan berkontribusi untuk Indonesia.
 
@@ -53,10 +53,10 @@ Peringatan kemerdekaan biasanya diisi dengan berbagai kegiatan, antara lain:
 
 Mari jadikan Hari Kemerdekaan ke-80 ini sebagai momentum:
 
-* ✨ Mensyukuri nikmat kemerdekaan
-* ✨ Meneladani perjuangan pahlawan
-* ✨ Mengisi kemerdekaan dengan prestasi
-* ✨ Menjaga persatuan dan nilai-nilai keislaman
+* âœ¨ Mensyukuri nikmat kemerdekaan
+* âœ¨ Meneladani perjuangan pahlawan
+* âœ¨ Mengisi kemerdekaan dengan prestasi
+* âœ¨ Menjaga persatuan dan nilai-nilai keislaman
 
 Merdeka adalah amanah. Tugas kita adalah menjaga dan mengisinya dengan kebaikan.
 

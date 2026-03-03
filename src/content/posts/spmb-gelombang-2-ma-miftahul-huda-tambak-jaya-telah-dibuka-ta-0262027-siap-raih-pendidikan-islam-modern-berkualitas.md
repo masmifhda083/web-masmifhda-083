@@ -1,9 +1,9 @@
----
+﻿---
 title: 'SPMB Gelombang 2 MA Miftahul Huda Tambak Jaya Telah Dibuka TA 026-2027: Siap Raih Pendidikan Islam Modern Berkualitas!'
 author: src/content/authors/admin.md
 pubdate: 2026-03-01T00:00:00.000Z
 description: 'Kabar gembira bagi calon murid dan orang tua yang mencari institusi pendidikan menengah atas berbasis Islam berkualitas di Lampung Barat! Madrasah Aliyah (MA) Miftahul Huda Kampus Sanyir, yang merupakan bagian tak terpisahkan dari keluarga besar MA Miftahul Huda Tambak Jaya, secara resmi membuka Sistem Penerimaan Murid Baru (SPMB) Gelombang 2 untuk Tahun Ajaran 2026-2027'
-category: pengumuman
+category: 'pengumuman'
 heroImage: /uploads/mifda-15.webp
 ---
 

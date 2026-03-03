@@ -1,9 +1,9 @@
----
+﻿---
 title: Jadwal Sumatif Kelas XII Semester Genap 2026 MA Miftahul Huda Tambak Jaya
 author: src/content/authors/admin.md
 pubdate: 2026-02-25T00:00:00.000Z
 description: MA Miftahul Huda Tambak Jaya Way Tenong Lampung Barat menetapkan pelaksanaan sumatif semester genap tahun pelajaran 2025.2026 bagi seluruh siswa kelas XII pada tanggal 02 Maret 2026 sampai 10 Maret 2026
-category: pengumuman
+category: 'pengumuman'
 heroImage: /uploads/Jadwal Sumatif Kelas XII Semester Genap 2026 MA Miftahul Huda Tambak Jaya.webp
 ---
 
@@ -15,58 +15,58 @@ Sumatif semester genap kelas XII memiliki fungsi strategis dalam sistem evaluasi
 
 Senin, 02 Maret 2026
 
-* 08.00–09.00 Al Qur’an Hadis
-* 09.00–10.00 Akidah Akhlak
-* 10.00–10.10 Istirahat
-* 10.10–11.00 Bahasa Indonesia
+* 08.00â€“09.00 Al Qurâ€™an Hadis
+* 09.00â€“10.00 Akidah Akhlak
+* 10.00â€“10.10 Istirahat
+* 10.10â€“11.00 Bahasa Indonesia
 
 Selasa, 03 Maret 2026
 
-* 08.00–09.00 SKI
-* 09.00–10.00 Fikih
-* 10.00–10.10 Istirahat
-* 10.10–11.00 Bahasa Arab
+* 08.00â€“09.00 SKI
+* 09.00â€“10.00 Fikih
+* 10.00â€“10.10 Istirahat
+* 10.10â€“11.00 Bahasa Arab
 
 Rabu, 04 Maret 2026
 
-* 08.00–09.00 Matematika
-* 09.00–10.00 Seni Budaya
-* 10.00–10.10 Istirahat
-* 10.10–11.00 Biologi
+* 08.00â€“09.00 Matematika
+* 09.00â€“10.00 Seni Budaya
+* 10.00â€“10.10 Istirahat
+* 10.10â€“11.00 Biologi
 
 Kamis, 05 Maret 2026
 
-* 08.00–09.00 Matematika Lanjutan
-* 09.00–10.00 Sejarah Indonesia
-* 10.00–10.10 Istirahat
-* 10.10–11.00 Fisika
+* 08.00â€“09.00 Matematika Lanjutan
+* 09.00â€“10.00 Sejarah Indonesia
+* 10.00â€“10.10 Istirahat
+* 10.10â€“11.00 Fisika
 
 Jumat, 06 Maret 2026
 
-* 08.00–09.00 Kimia
-* 09.00–10.00 PKWU
-* 10.00–10.10 Istirahat
-* 10.10–11.00 Ekonomi
+* 08.00â€“09.00 Kimia
+* 09.00â€“10.00 PKWU
+* 10.00â€“10.10 Istirahat
+* 10.10â€“11.00 Ekonomi
 
 Sabtu, 07 Maret 2026
 
-* 08.00–09.00 Bahasa Inggris Lanjutan
-* 09.00–10.00 Penjaskes
-* 10.00–10.10 Istirahat
-* 10.10–11.00 Geografi
+* 08.00â€“09.00 Bahasa Inggris Lanjutan
+* 09.00â€“10.00 Penjaskes
+* 10.00â€“10.10 Istirahat
+* 10.10â€“11.00 Geografi
 
 Senin, 09 Maret 2026
 
-* 08.00–09.00 Sosiologi
-* 09.00–10.00 Sejarah Umum
-* 10.00–10.10 Istirahat
-* 10.10–11.00 TIK
+* 08.00â€“09.00 Sosiologi
+* 09.00â€“10.00 Sejarah Umum
+* 10.00â€“10.10 Istirahat
+* 10.10â€“11.00 TIK
 
 Selasa, 10 Maret 2026
 
-* 08.00–09.00 Koding
-* 09.00–10.00 Tahfiz
-* 10.00–10.10 Istirahat
+* 08.00â€“09.00 Koding
+* 09.00â€“10.00 Tahfiz
+* 10.00â€“10.10 Istirahat
 
 ## Ketentuan Pelaksanaan
 

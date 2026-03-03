@@ -1,9 +1,9 @@
----
+﻿---
 title: Volly Putra MA Miftahul Huda meraih kemenangan pertama di FK2MA 2026
 author: src/content/authors/admin.md
 pubdate: 2026-02-09T00:00:00.000Z
 description: Volly Putra MA Miftahul Huda meraih kemenangan pertama FK2MA 2026 melawan MA Al Hikmah Suoh.
-category: news
+category: 'news'
 heroImage: /uploads/IMG_20260209_144811_930.jpg
 ---
 

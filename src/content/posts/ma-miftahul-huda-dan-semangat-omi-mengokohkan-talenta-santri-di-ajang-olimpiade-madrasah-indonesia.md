@@ -1,4 +1,4 @@
----
+﻿---
 title: >-
   MA Miftahul Huda dan Semangat OMI: Mengokohkan Talenta Santri di Ajang
   Olimpiade Madrasah Indonesia
@@ -11,7 +11,7 @@ description: >-
   sangat mendukung dan mendorong para siswanya untuk terlibat aktif dalam
   kompetisi ini sebagai bagian dari upaya meningkatkan prestasi dan karakter
   santri.
-category: prestasi
+category: 'prestasi'
 heroImage: /uploads/mifda-13.webp
 ---
 
@@ -32,7 +32,7 @@ OMI 2025 diadakan secara berjenjang, yaitu:
 1. Seleksi tingkat madrasah/sekolah
 2. Babak kabupaten/kota
 3. Seleksi tingkat provinsi
-4. Grand Final Nasional K Dari 15.474 peserta di tingkat provinsi, 484 siswa berhasil lolos ke tahap nasional. Ajang nasional OMI 2025 berlangsung secara luring dari 10–14 November 2025 di Tangerang, provinsi Banten.
+4. Grand Final Nasional K Dari 15.474 peserta di tingkat provinsi, 484 siswa berhasil lolos ke tahap nasional. Ajang nasional OMI 2025 berlangsung secara luring dari 10â€“14 November 2025 di Tangerang, provinsi Banten.
 
 ### Bidang Lomba
 

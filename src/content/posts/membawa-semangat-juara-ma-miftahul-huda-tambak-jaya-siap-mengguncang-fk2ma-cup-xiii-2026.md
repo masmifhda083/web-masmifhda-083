@@ -1,4 +1,4 @@
----
+﻿---
 title: >-
   Membawa Semangat Juara, MA Miftahul Huda Tambak Jaya Siap Mengguncang FK2MA
   CUP XIII 2026
@@ -8,7 +8,7 @@ description: >-
   Antusiasme tinggi tampak dari siswa MA Miftahul Huda Tambak Jaya dalam
   menyambut ajang FK2MA CUP KE XIII Se Lampung Barat Tahun 2026 yang akan
   digelar di MAS AL HASYIMIYAH.
-category: news
+category: 'news'
 heroImage: /uploads/IMG_20260123_090817_681.jpg
 ---
 
@@ -18,7 +18,7 @@ Antusiasme tinggi tampak dari siswa MA Miftahul Huda Tambak Jaya dalam menyambut
 
 Persiapan dilakukan secara terencana dan berkelanjutan. Pada bidang olahraga, siswa menjalani latihan fisik dan teknik di lapangan sekolah maupun fasilitas sekitar. Tim futsal dan voli fokus pada kerja sama tim dan penguatan strategi. Cabang tenis meja, bulu tangkis, catur, dan lari maraton menekankan konsistensi latihan serta penguatan mental bertanding.
 
-Di bidang keagamaan, peserta Tahfidz Juz 1 dan 30 menjalani setoran hafalan rutin dengan pendampingan guru pembina. Latihan tilawatil Qur’an dan syarhil Qur’an dilakukan melalui pembinaan tajwid, penghayatan makna, serta kekompakan tim beregu.
+Di bidang keagamaan, peserta Tahfidz Juz 1 dan 30 menjalani setoran hafalan rutin dengan pendampingan guru pembina. Latihan tilawatil Qurâ€™an dan syarhil Qurâ€™an dilakukan melalui pembinaan tajwid, penghayatan makna, serta kekompakan tim beregu.
 
 Pada bidang seni, latihan kaligrafi kontemporer diarahkan pada ketepatan kaidah dan kreativitas visual. Tim hadroh berlatih vokal dan pukulan secara intensif untuk menjaga harmoni, tempo, dan kekompakan.
 

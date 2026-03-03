@@ -1,4 +1,4 @@
----
+﻿---
 title: Keberangkatan MA Miftahul Huda Tambak Jaya ke FK2MA 2026 Lampung Barat
 author: src/content/authors/admin.md
 pubdate: 2026-02-09T00:00:00.000Z
@@ -6,7 +6,7 @@ description: |+
   MA Miftahul Huda Tambak Jaya resmi berangkat mengikuti FK2MA 2026 di MA Al Hasimiyah Air Hitam Lampung Barat.
 
 
-category: news
+category: 'news'
 heroImage: /uploads/motion_photo_694620829834116932.jpg
 ---
 

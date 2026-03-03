@@ -1,9 +1,9 @@
----
+﻿---
 title: 'Libur Puasa Ramadhan di MA Miftahul Huda 2026, Ini Jadwal Resmi dan Agenda Akademik Lengkap'
 author: src/content/authors/admin.md
 pubdate: 2026-02-16T00:00:00.000Z
 description: Jadwal libur puasa Ramadhan 2026 MA Miftahul Huda lengkap dengan KBM dan PAT Kelas XII. Cek tanggal resmi dan panduannya di sini.
-category: pengumuman
+category: 'pengumuman'
 heroImage: /uploads/Jadwal%20libur%20puasa%20Ramadhan%202026%20MA%20Miftahul%20Huda%20dan%20agenda%20PAT%20Kelas%20XII.webp
 ---
 

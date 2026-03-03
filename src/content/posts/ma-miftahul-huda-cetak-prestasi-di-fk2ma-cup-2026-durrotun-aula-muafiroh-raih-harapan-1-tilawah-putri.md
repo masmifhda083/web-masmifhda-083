@@ -1,9 +1,9 @@
----
+﻿---
 title: 'MA Miftahul Huda Cetak Prestasi di FK2MA Cup 2026, Durrotun Aula Muafiroh Raih Harapan 1 Tilawah Putri'
 author: src/content/authors/admin.md
 pubdate: 2026-02-11T00:00:00.000Z
 description: MA Miftahul Huda kembali menorehkan prestasi pada ajang FK2MA Cup ke 13 KKM MA se Lambar tahun 2026. Siswa atas nama Durrotun Aula Muafiroh berhasil meraih Harapan 1 cabang Tilawah Putri pada kompetisi yang digelar di MA Al Hasyimiyah Air Hitam.
-category: prestasi
+category: 'prestasi'
 heroImage: /uploads/5.webp
 ---
 

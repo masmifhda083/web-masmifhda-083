@@ -1,9 +1,9 @@
----
+﻿---
 title: Hadroh MA Miftahul Huda Juara 2 FK2MA 2026
 author: src/content/authors/admin.md
 pubdate: 2026-02-10T00:00:00.000Z
 description: Tim hadroh MA Miftahul Huda meraih juara 2 FK2MA 2026 tingkat regional
-category: Prestasi
+category: 'prestasi'
 heroImage: /uploads/IMG-20260210-WA0003.jpg
 ---
 

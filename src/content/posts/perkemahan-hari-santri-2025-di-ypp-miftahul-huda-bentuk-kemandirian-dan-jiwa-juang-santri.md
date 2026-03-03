@@ -1,4 +1,4 @@
----
+﻿---
 title: >-
   Perkemahan Hari Santri 2025 di YPP Miftahul Huda: Bentuk Kemandirian dan Jiwa
   Juang Santri
@@ -8,7 +8,7 @@ description: >-
   Dalam rangka memperingati Hari Santri Nasional 22 Oktober 2025, Yayasan Pondok
   Pesantren (YPP) Miftahul Huda menyelenggarakan Perkemahan Hari Santri yang
   dilaksanakan pada malam puncak Hari Santri.
-category: news
+category: 'news'
 heroImage: /uploads/bakar.jpeg
 ---
 
@@ -47,6 +47,6 @@ Salah satu pembina menyampaikan:
 
 ### Makna Hari Santri
 
-Hari Santri adalah momentum untuk mengenang perjuangan para ulama dan santri dalam mempertahankan kemerdekaan Indonesia. Melalui kegiatan perkemahan ini, santri diajak untuk: • Mengenal sejarah perjuangan santri • Meneladani semangat jihad para ulama • Menguatkan komitmen sebagai generasi penerus bangsa
+Hari Santri adalah momentum untuk mengenang perjuangan para ulama dan santri dalam mempertahankan kemerdekaan Indonesia. Melalui kegiatan perkemahan ini, santri diajak untuk: â€¢ Mengenal sejarah perjuangan santri â€¢ Meneladani semangat jihad para ulama â€¢ Menguatkan komitmen sebagai generasi penerus bangsa
 
 Semoga Perkemahan Hari Santri di YPP Miftahul Huda menjadi sarana pembentukan karakter santri yang mandiri, berani, religius, dan siap mengabdi untuk umat dan bangsa. Selamat Hari Santri Nasional 2025 Santri Siaga! Santri Berdaya! Santri Untuk Indonesia!

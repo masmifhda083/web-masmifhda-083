@@ -1,4 +1,4 @@
----
+﻿---
 title: Pelaksanaan PKKM di MA Miftahul Huda Tahun 2025
 author: src/content/authors/admin.md
 pubdate: 2025-11-18T00:00:00.000Z
@@ -6,7 +6,7 @@ description: >-
   Pada Selasa, 18 November 2025, MA Miftahul Huda melaksanakan kegiatan
   Penilaian Kinerja Kepala Madrasah (PKKM) sebagai bagian dari upaya peningkatan
   mutu pengelolaan madrasah.
-category: news
+category: 'news'
 heroImage: /uploads/mifda-14.webp
 ---
 
@@ -23,7 +23,7 @@ Keduanya hadir sebagai penilai yang meninjau langsung seluruh aspek administrati
 
 Kegiatan PKKM juga dihadiri oleh:
 
-1. Kepala MA Miftahul Huda, Bapak Ahmad Rifa’i, M.Pd
+1. Kepala MA Miftahul Huda, Bapak Ahmad Rifaâ€™i, M.Pd
 2. Wakil Kepala Madrasah Bidang Kurikulum, Bapak Drs. Hamim Hasyim
 3. Wakil Kepala Madrasah Bidang Kesiswaan, Ibu Endang Kurniasih, S.E
 4. Seluruh guru dan staf MA Miftahul Huda yang turut berperan dalam penyusunan dokumen serta kelancaran pelaksanaan kegiatan.

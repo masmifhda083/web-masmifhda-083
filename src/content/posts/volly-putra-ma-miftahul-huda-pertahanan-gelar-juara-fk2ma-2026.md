@@ -1,15 +1,15 @@
----
+﻿---
 title: Volly Putra MA Miftahul Huda Pertahanan Gelar Juara FK2MA 2026
 author: src/content/authors/admin.md
 pubdate: 2026-02-10T00:00:00.000Z
-description: Tim volly putra MA Miftahul Huda kembali meraih juara 1 FK2MA 2026 usai mengalahkan MA Al Ma’arif Suoh.
-category: Prestasi
+description: Tim volly putra MA Miftahul Huda kembali meraih juara 1 FK2MA 2026 usai mengalahkan MA Al Maâ€™arif Suoh.
+category: 'prestasi'
 heroImage: /uploads/IMG_20260210_181024_474.jpg
 ---
 
 Tim volly putra MA Miftahul Huda berhasil meraih juara 1 FK2MA 2026.
 
-Kemenangan volly putra MA Miftahul Huda diraih atas MA Al Ma’arif Suoh.
+Kemenangan volly putra MA Miftahul Huda diraih atas MA Al Maâ€™arif Suoh.
 
 Hasil ini menegaskan posisi volly putra MA Miftahul Huda di FK2MA 2026.
 
@@ -29,7 +29,7 @@ Jadwal sore hari memberi suasana kompetitif bagi volly putra MA Miftahul Huda.
 
 ## Lawan di Partai Final
 
-MA Al Ma’arif Suoh menjadi lawan volly putra MA Miftahul Huda di final.
+MA Al Maâ€™arif Suoh menjadi lawan volly putra MA Miftahul Huda di final.
 
 Pertandingan FK2MA 2026 mempertemukan dua tim dengan performa stabil.
 

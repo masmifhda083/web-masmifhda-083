@@ -1,4 +1,4 @@
----
+﻿---
 title: >-
   Memaknai Hari Sumpah Pemuda: Momentum Menguatkan Semangat Persatuan dan
   Pendidikan Islam
@@ -7,7 +7,7 @@ pubdate: 2025-10-28T00:00:00.000Z
 description: >-
   Setiap tanggal 28 Oktober, bangsa Indonesia memperingati salah satu momen
   paling bersejarah dalam perjuangan kemerdekaan, yaitu Hari Sumpah Pemuda
-category: news
+category: 'news'
 heroImage: /uploads/poster-2.webp
 ---
 
@@ -15,7 +15,7 @@ Setiap tanggal 28 Oktober, bangsa Indonesia memperingati salah satu momen paling
 
 ### Sejarah Singkat Sumpah Pemuda
 
-Sumpah Pemuda lahir dari Kongres Pemuda II yang diselenggarakan pada 27–28 Oktober 1928 di Jakarta. Para pemuda dari berbagai organisasi, seperti Jong Java, Jong Sumatra, Jong Islamieten Bond, dan lainnya, bersatu untuk menyatakan tekad:
+Sumpah Pemuda lahir dari Kongres Pemuda II yang diselenggarakan pada 27â€“28 Oktober 1928 di Jakarta. Para pemuda dari berbagai organisasi, seperti Jong Java, Jong Sumatra, Jong Islamieten Bond, dan lainnya, bersatu untuk menyatakan tekad:
 
 > Satu Tanah Air, Tanah Air Indonesia Satu Bangsa, Bangsa Indonesia
 

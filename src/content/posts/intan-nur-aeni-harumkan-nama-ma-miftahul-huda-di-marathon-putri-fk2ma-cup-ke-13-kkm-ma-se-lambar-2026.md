@@ -1,9 +1,9 @@
----
+﻿---
 title: Intan Nur Aeni Harumkan Nama MA Miftahul Huda di Marathon Putri FK2MA Cup ke 13 KKM MA se Lambar 2026
 author: src/content/authors/admin.md
 pubdate: 2026-02-11T00:00:00.000Z
 description: MA Miftahul Huda raih Harapan 1 Marathon Putri di FK2MA Cup ke 13 KKM MA se Lambar 2026 di MA Al Hasyimiyah Air Hitam. Simak detail lengkapnya.
-category: prestasi
+category: 'prestasi'
 heroImage: /uploads/6.webp
 ---
 

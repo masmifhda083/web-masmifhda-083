@@ -1,4 +1,4 @@
----
+﻿---
 title: >-
   MA Miftahul Huda Resmi Buka Pendaftaran Siswa Baru Tahun Ajaran 2026/2027,
   Gelombang 1 Dimulai Awal Januari
@@ -11,7 +11,7 @@ description: >-
   Januari 2026. Pihak sekolah menetapkan periode Gelombang 1 akan berlangsung
   cukup singkat, yakni hingga 28 Februari 2026, guna menjaring siswa-siswi
   berprestasi lebih awal.
-category: pengumuman
+category: 'pengumuman'
 heroImage: /uploads/WhatsApp%20Image%202026-01-09%20at%2013.51.33.jpeg
 ---
 
