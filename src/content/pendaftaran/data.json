@@ -36,6 +36,18 @@
     "contactEmail": "masmifhda083@gmail.com",
     "contactAddress": "Jl. Tirtomoyo, Tembak Jaya, Way Tenong, Lampung Barat "
   },
+  "datappdb": {
+    "schoolName": "MA MIFTAHUL HUDA",
+    "ppdbAlias": "Penerimaan Murid Baru",
+    "logoUrl": "/uploads/logo.webp",
+    "coverImageUrl": "/uploads/cover.webp",
+    "primaryColor": "#417505",
+    "secondaryColor": "#7ED321",
+    "academicYear": "2026-2027",
+    "registrationOpen": true,
+    "registrationPeriod": "Gelombang II 1 Maret - 30 April 2026",
+    "testDate": "Coming Soon"
+  },
   "highlightPamflet": {
     "customImage": "/uploads/spmb-ma-miftahul-huda-gelombang-2.webp"
   }
