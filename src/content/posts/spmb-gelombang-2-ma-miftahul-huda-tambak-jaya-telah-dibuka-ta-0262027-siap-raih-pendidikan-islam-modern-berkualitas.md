@@ -1,9 +1,10 @@
-﻿---
+---
 title: 'SPMB Gelombang 2 MA Miftahul Huda Tambak Jaya Telah Dibuka TA 026-2027: Siap Raih Pendidikan Islam Modern Berkualitas!'
 author: src/content/authors/admin.md
 pubdate: 2026-03-01T00:00:00.000Z
 description: 'Kabar gembira bagi calon murid dan orang tua yang mencari institusi pendidikan menengah atas berbasis Islam berkualitas di Lampung Barat! Madrasah Aliyah (MA) Miftahul Huda Kampus Sanyir, yang merupakan bagian tak terpisahkan dari keluarga besar MA Miftahul Huda Tambak Jaya, secara resmi membuka Sistem Penerimaan Murid Baru (SPMB) Gelombang 2 untuk Tahun Ajaran 2026-2027'
-category: 'pengumuman'
+category: pengumuman
+status: published
 heroImage: /uploads/mifda-15.webp
 ---
 
@@ -50,7 +51,7 @@ Penting bagi calon murid dan wali murid untuk memperhatikan detail jadwal dan lo
 1. Jenis Kegiatan: Pendaftaran Murid Baru Gelombang 2
 2. Periode Pendaftaran Gelombang 2: Dimulai pada tanggal 01 Maret 2026 dan akan ditutup pada 30 April 2026.
 3. Lokasi Pendaftaran: Pendaftaran dapat dilakukan langsung di sekretariat Madrasah Aliyah Miftahul Huda Kampus Sanyir, yang beralamat di: JL. Tirtomoyo No. 083 Margorahayu (Sanyir), Kecamatan Way Tenong, Lampung Barat.
-4. Pendaftaran Online: Pendaftar bisa juga mendaftar melalui website official MA Miftathul Huda berikut [KLIK DISINI UNTUK MENGISI FORM](https://www.masmifhda.sch.id/ppdb)
+4. Pendaftaran Online: Pendaftar bisa juga mendaftar melalui website official MA Miftathul Huda berikut [KLIK DISINI UNTUK MENGISI FORM](https://www.masmifhda.sch.id/pendaftaran)
 5. Waktu Pelayanan: Informasi lebih lanjut mengenai jam pelayanan pendaftaran dapat dikonfirmasi langsung ke sekretariat atau melalui kontak yang tersedia.
 
 Sebagai informasi tambahan, periode pendaftaran SPMB MA Miftahul Huda Tahun Ajaran 2026-2027 terbagi menjadi tiga gelombang:
@@ -82,10 +83,11 @@ Siapkan dan serahkan dokumen-dokumen berikut bersama dengan formulir pendaftaran
 
 #### 3. Mengikuti Tes Seleksi
 
-Setelah menyerahkan berkas pendaftaran, calon murid akan dijadwalkan untuk mengikuti serangkaian tes seleksi yang meliputi: \* Tes Potensi Akademik: Mengukur kemampuan dasar di bidang mata pelajaran umum.
+Setelah menyerahkan berkas pendaftaran, calon murid akan dijadwalkan untuk mengikuti serangkaian tes seleksi yang meliputi: 
 
-1. Tes Keagamaan: Meliputi kemampuan membaca Al-Qur'an, pemahaman dasar agama, dan wawancara terkait motivasi belajar di madrasah.
-2. Wawancara Calon Murid dan Orang Tua: Untuk menggali informasi lebih lanjut mengenai komitmen dan dukungan keluarga terhadap pendidikan di MA Miftahul Huda.
+1. Tes Potensi Akademik: Mengukur kemampuan dasar di bidang mata pelajaran umum.
+2. Tes Keagamaan: Meliputi kemampuan membaca Al-Qur'an, pemahaman dasar agama, dan wawancara terkait motivasi belajar di madrasah.
+3. Wawancara Calon Murid dan Orang Tua: Untuk menggali informasi lebih lanjut mengenai komitmen dan dukungan keluarga terhadap pendidikan di MA Miftahul Huda.
 
 #### 4. Pengumuman Hasil Seleksi
 
