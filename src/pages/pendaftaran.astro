@@ -5,9 +5,9 @@ import { getCollection } from "astro:content";
 
 // Ambil data sekolah dari Tina CMS
 const pendaftaranData = await getCollection("pendaftaran");
-const settings = pendaftaranData[0]?.data?.pendaftaranData || {
+const settings = pendaftaranData[0]?.data?.datappdb || {
   schoolName: "",
-  pendaftaranAlias: "",
+  ppdbAlias: "",
   logoUrl: "",
   coverImageUrl: "",
   primaryColor: "",
@@ -47,8 +47,8 @@ const settings = pendaftaranData[0]?.data?.pendaftaranData || {
           }
           <div class="text-surface">
             {
-              settings.pendaftaranAlias && (
-                <p class="text-sm font-medium">{settings.pendaftaranAlias}</p>
+              settings.ppdbAlias && (
+                <p class="text-sm font-medium">{settings.ppdbAlias}</p>
               )
             }
             <h1 class="text-2xl md:text-4xl font-bold mb-2">
@@ -103,8 +103,12 @@ const settings = pendaftaranData[0]?.data?.pendaftaranData || {
     <h1
       class="text-xl md:text-3xl font-bold text-center max-w-4xl mx-auto mb-8 text-gray-800"
     >
-      Formulir Pendaftaran Siswa Baru
-      <span class="text-blue-600"><Year /></span>
+      Formulir Pendaftaran {
+        settings.ppdbAlias && <span>{settings.ppdbAlias}</span>
+      }
+      <span style={`color: ${settings.primaryColor || "#2563eb"};`}
+        ><Year /></span
+      >
     </h1>
 
     <!-- Form sama dengan sebelumnya, tapi adjust endpoint API -->
@@ -514,7 +518,8 @@ const settings = pendaftaranData[0]?.data?.pendaftaranData || {
         <button
           type="submit"
           id="submitBtn"
-          class="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2 transition duration-300 text-lg shadow-lg hover:shadow-xl"
+          class="px-8 py-4 text-white font-semibold rounded-lg focus:outline-none focus:ring-4 focus:ring-gray-300 focus:ring-offset-2 transition duration-300 text-lg shadow-lg hover:shadow-xl hover:opacity-90"
+          style={`background-color: ${settings.primaryColor || "#2563eb"};`}
         >
           Kirim Pendaftaran
         </button>

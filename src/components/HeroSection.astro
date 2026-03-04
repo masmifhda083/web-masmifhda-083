@@ -39,8 +39,8 @@ const sliderId = `hero-slider-${Math.random().toString(36).substring(2, 11)}`;
 
 // Ambil data pendaftaran untuk teks button
 const pendaftaranCollection = await getCollection('pendaftaran');
-const pendaftaranData = pendaftaranCollection[0]?.data?.pendaftaranData;
-const pendaftaranText = pendaftaranData?.pendaftaranAlias || "Pendaftaran";
+const pendaftaranData = pendaftaranCollection[0]?.data?.datappdb;
+const pendaftaranText = pendaftaranData?.ppdbAlias || "Pendaftaran";
 
 // Variabel untuk animation duration calculation
 const marqueeDuration = `calc(10s / ${animation.marqueeSpeed || 15} * 15)`;

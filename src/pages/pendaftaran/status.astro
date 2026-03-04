@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 
 // Ambil data pendaftaran settings dari Tina CMS
 const pendaftaranData = await getCollection("pendaftaran");
-const settings = pendaftaranData[0]?.data?.pendaftaranData || {
+const settings = pendaftaranData[0]?.data?.datappdb || {
     // Default values jika data tidak ditemukan
     schoolName: "SMA Negeri 1",
     academicYear: "2026/2027",
@@ -71,17 +71,18 @@ const jsPendaftaranData = {
                         type="text"
                         id="registrationId"
                         placeholder="Contoh: DAFTAR-1767766226920-R4ET"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
                     />
                     <p class="text-sm text-gray-500 mt-2">
                         ID pendaftaran didapat setelah mengisi formulir
-                        pendaftaran
+                        pendaftaran dan jika kehilangan silahkan hubungi admin
                     </p>
                 </div>
 
                 <button
                     id="checkBtn"
-                    class="w-full px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+                    class="w-full px-4 py-3 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 transition duration-200 hover:opacity-90"
+                    style={`background-color: ${settings.primaryColor || "#2563eb"};`}
                 >
                     Cek Status
                 </button>
@@ -176,7 +177,7 @@ const jsPendaftaranData = {
 
                 // Disable button dan tampilkan loading
                 checkBtn.disabled = true;
-                checkBtn.innerHTML = 'Memeriksa...';
+                checkBtn.innerHTML = "Memeriksa...";
 
                 try {
                     const response = await fetch(
@@ -250,10 +251,11 @@ const jsPendaftaranData = {
                         }
 
                         // Create result container safely
-                        statusResult.innerHTML = '';
+                        statusResult.innerHTML = "";
                         const resultContainer = document.createElement("div");
-                        resultContainer.className = "bg-white rounded-xl border border-gray-200 p-6 shadow-sm";
-                       
+                        resultContainer.className =
+                            "bg-white rounded-xl border border-gray-200 p-6 shadow-sm";
+
                         // Header
                         const headerHtml = `
                           <div class="flex items-center justify-between mb-6 pb-4 border-b">
@@ -303,40 +305,62 @@ const jsPendaftaranData = {
                             <p class="text-gray-600 whitespace-pre-line">${escapeHtml(data.alamat_sekolah)}</p>
                           </div>
                         `;
-                        
+
                         let infoStatusHtml = "";
                         if (data.status === "pending" || !data.status) {
-                           infoStatusHtml = '<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4"><div class="flex items-start"><div><h4 class="font-bold text-yellow-800 mb-1">Sedang Menunggu Review</h4><p class="text-yellow-700">Pendaftaran Anda sudah diterima dan sedang menunggu proses review oleh admin. Silakan cek kembali dalam 2-3 hari kerja.</p></div></div></div>';
+                            infoStatusHtml =
+                                '<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4"><div class="flex items-start"><div><h4 class="font-bold text-yellow-800 mb-1">Sedang Menunggu Review</h4><p class="text-yellow-700">Pendaftaran Anda sudah diterima dan sedang menunggu proses review oleh admin. Silakan cek kembali dalam 2-3 hari kerja.</p></div></div></div>';
                         } else if (data.status === "rejected") {
-                           infoStatusHtml = '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><div class="flex items-start"><div><h4 class="font-bold text-red-800 mb-1">Informasi Penting</h4><p class="text-red-700">Silakan menghubungi admin sekolah untuk informasi lebih detail mengenai keputusan ini.</p></div></div></div>';
+                            infoStatusHtml =
+                                '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><div class="flex items-start"><div><h4 class="font-bold text-red-800 mb-1">Informasi Penting</h4><p class="text-red-700">Silakan menghubungi admin sekolah untuk informasi lebih detail mengenai keputusan ini.</p></div></div></div>';
                         }
 
-                        resultContainer.innerHTML = 
-                          headerHtml + 
-                          '<div class="space-y-6">' +
-                          pendaftaranIdHtml +
-                          dataPribadiHtml +
-                          alamatHtml +
-                          asalSekolahHtml +
-                          '<div class="mt-6 pt-6 border-t">' +
-                          infoStatusHtml +
-                          '<div id="approvedContainerWrapper"></div>' +
-                          '</div>' +
-                          '</div>' +
-                          '<div class="mt-8 pt-6 border-t border-gray-200 text-center"><button onclick="window.print()" class="px-4 py-2 bg-gray-100 text-gray-800 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-200 inline-flex items-center mr-3">Cetak Status</button></div>';
+                        resultContainer.innerHTML =
+                            headerHtml +
+                            '<div class="space-y-6">' +
+                            pendaftaranIdHtml +
+                            dataPribadiHtml +
+                            alamatHtml +
+                            asalSekolahHtml +
+                            '<div class="mt-6 pt-6 border-t">' +
+                            infoStatusHtml +
+                            '<div id="approvedContainerWrapper"></div>' +
+                            "</div>" +
+                            "</div>" +
+                            '<div class="mt-8 pt-6 border-t border-gray-200 text-center"><button onclick="window.print()" class="px-4 py-2 bg-gray-100 text-gray-800 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-200 inline-flex items-center mr-3">Cetak Status</button></div>';
 
                         statusResult.appendChild(resultContainer);
-                        
+
                         // Dynamically append the large approved HTML context if approved
                         if (data.status === "approved") {
-                           const appWrap = document.getElementById("approvedContainerWrapper");
-                           if (appWrap) {
+                            const appWrap = document.getElementById(
+                                "approvedContainerWrapper",
+                            );
+                            if (appWrap) {
                                 let requirementsList = "";
-                                if ((window as any).pendaftaran.requirements && (window as any).pendaftaran.requirements.length > 0) {
-                                     const reqItems = (window as any).pendaftaran.requirements.map(
-                                        (req: any, index: number) => '<li class="flex items-start"><span class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold mr-3 mt-0.5">' + (index + 1) + '</span><span class="text-gray-700">' + escapeHtml(req.requirement || "") + '</span></li>'
-                                    ).join("");
-                                    requirementsList = '<div><h6 class="font-bold text-gray-800 mb-3">📋 Persyaratan</h6><ul class="space-y-2">' + reqItems + '</ul></div>';
+                                if (
+                                    (window as any).pendaftaran.requirements &&
+                                    (window as any).pendaftaran.requirements
+                                        .length > 0
+                                ) {
+                                    const reqItems = (
+                                        window as any
+                                    ).pendaftaran.requirements
+                                        .map(
+                                            (req: any, index: number) =>
+                                                '<li class="flex items-start"><span class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold mr-3 mt-0.5">' +
+                                                (index + 1) +
+                                                '</span><span class="text-gray-700">' +
+                                                escapeHtml(
+                                                    req.requirement || "",
+                                                ) +
+                                                "</span></li>",
+                                        )
+                                        .join("");
+                                    requirementsList =
+                                        '<div><h6 class="font-bold text-gray-800 mb-3">📋 Persyaratan</h6><ul class="space-y-2">' +
+                                        reqItems +
+                                        "</ul></div>";
                                 }
 
                                 appWrap.innerHTML = `
@@ -364,19 +388,20 @@ const jsPendaftaranData = {
                                     </div>
                                   </div>
                                 `;
-                           }
+                            }
                         }
-
                     } else {
-
-                        statusResult.innerHTML = 
-                          '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><div class="flex items-center"><h3 class="font-bold text-red-800">Data Tidak Ditemukan</h3></div>' +
-                          '<p class="text-red-700 mt-2">ID pendaftaran "' + escapeHtml(kode) + '" tidak ditemukan. Pastikan ID yang dimasukkan benar.</p>' +
-                          '<div class="mt-3 text-sm text-red-600"><p>Tips:</p><ul class="list-disc list-inside ml-2"><li>Periksa kembali ID pendaftaran</li><li>Pastikan tidak ada spasi di awal atau akhir</li></ul></div></div>';
+                        statusResult.innerHTML =
+                            '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><div class="flex items-center"><h3 class="font-bold text-red-800">Data Tidak Ditemukan</h3></div>' +
+                            '<p class="text-red-700 mt-2">ID pendaftaran "' +
+                            escapeHtml(kode) +
+                            '" tidak ditemukan. Pastikan ID yang dimasukkan benar.</p>' +
+                            '<div class="mt-3 text-sm text-red-600"><p>Tips:</p><ul class="list-disc list-inside ml-2"><li>Periksa kembali ID pendaftaran</li><li>Pastikan tidak ada spasi di awal atau akhir</li></ul></div></div>';
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    statusResult.innerHTML = '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><h3 class="font-bold text-red-800">Terjadi Kesalahan</h3><p class="text-red-700 mt-2">Gagal memeriksa status. Silakan coba lagi atau hubungi admin.</p></div>';
+                    statusResult.innerHTML =
+                        '<div class="bg-red-50 border border-red-200 rounded-lg p-4"><h3 class="font-bold text-red-800">Terjadi Kesalahan</h3><p class="text-red-700 mt-2">Gagal memeriksa status. Silakan coba lagi atau hubungi admin.</p></div>';
                     statusResult.classList.remove("hidden");
 
                     // Reset button

@@ -41,8 +41,8 @@ if (menuItems.length === 0) {
 
 // Ambil data pendaftaran untuk label CTA
 const pendaftaranCollection = await getCollection("pendaftaran");
-const pendaftaranData = pendaftaranCollection[0]?.data?.pendaftaranData;
-const pendaftaranLabel = pendaftaranData?.pendaftaranAlias || "Pendaftaran";
+const pendaftaranData = pendaftaranCollection[0]?.data?.datappdb;
+const pendaftaranLabel = pendaftaranData?.ppdbAlias || "Pendaftaran";
 
 // Get current path for active state
 const currentPath = Astro.url.pathname;

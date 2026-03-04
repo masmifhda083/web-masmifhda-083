@@ -198,10 +198,10 @@ const pendaftaranSettings = defineCollection({
   type: 'data', // menggunakan JSON/data
   schema: z.object({
     // Data utama Pendaftaran (grouping)
-    pendaftaranData: z.object({
+    datappdb: z.object({
       // Branding
       schoolName: z.string().default('SMP Xaverius 2'),
-      pendaftaranAlias: z.string().optional(),
+      ppdbAlias: z.string().optional(),
       logoUrl: z.string().default('/images/logo-school.png'),
       coverImageUrl: z.string().default('/images/cover-school.jpg'),
       primaryColor: z.string().default('#2563eb'),

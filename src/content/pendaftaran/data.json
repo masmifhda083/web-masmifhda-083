@@ -38,10 +38,10 @@
   },
   "datappdb": {
     "schoolName": "MA MIFTAHUL HUDA",
-    "ppdbAlias": "Penerimaan Murid Baru",
+    "ppdbAlias": "SPMB",
     "logoUrl": "/uploads/logo.webp",
     "coverImageUrl": "/uploads/cover.webp",
-    "primaryColor": "#417505",
+    "primaryColor": "#418B36",
     "secondaryColor": "#7ED321",
     "academicYear": "2026-2027",
     "registrationOpen": true,
