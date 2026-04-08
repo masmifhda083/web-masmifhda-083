@@ -5,7 +5,7 @@ pubdate: 2026-03-28T00:00:00.000Z
 description: Kegiatan Halal Bi Halal di MA Miftahul Huda bukan sekadar seremoni rutin. Acara ini merupakan manifestasi dari nilai-nilai yang telah ditempa selama satu bulan penuh di bulan Ramadhan.
 category: news
 status: published
-heroImage: /uploads/Merajut+Silaturahmi+di+Hari+Kemenangan%3A+Kemeriahan+Halal+Bi+Halal+MA+Miftahul+Huda+Pasca+Lebaran+2026.webp
+heroImage: /uploads/Merajut+Silaturahmi+di+Hari+Kemenangan+Kemeriahan+Halal+Bi+Halal+MA+Miftahul+Huda+Pasca+Lebaran+2026.webp
 ---
 
 Suasana khidmat dan penuh kehangatan menyelimuti lingkungan MA Miftahul Huda pada Sabtu pagi ini. Mengambil momentum hari ketujuh setelah Idul Fitri 1447 Hijriah, seluruh keluarga besar madrasah berkumpul dalam acara Halal Bi Halal tahunan. Kegiatan yang menjadi puncak dari rangkaian ibadah selama bulan suci Ramadhandan perayaan Lebaran 2026 ini bertujuan untuk mempererat tali silaturahmi serta membersihkan hati melalui tradisi saling memaafkan.
@@ -32,9 +32,9 @@ Selain agenda formal, panitia juga menyisipkan sesi ramah tamah yang menyajikan 
 
 Penyelenggaraan Halal Bi Halal di MA Miftahul Huda membawa dampak positif yang luas, baik secara psikologis maupun institusional. Berikut adalah beberapa manfaat utama yang dirasakan oleh para peserta:
 
-1. Recharge Mental dan Spiritual: Setelah menjalani ritme ibadah yang intens di bulan Ramadhan, Halal Bi Halal memberikan dorongan energi positif (mood booster) bagi guru dan siswa untuk menghadapi sisa semester genap dengan lebih semangat. 
-2. Harmonisasi Hubungan Intern: Kegiatan ini mencairkan kekakuan yang mungkin terjadi selama proses belajar mengajar sebelumnya. Dengan saling memaafkan, komunikasi antara guru, siswa, dan orang tua diharapkan menjadi lebih lancar dan terbuka. 
-3. Penguatan Karakter Siswa: Melalui keteladanan para guru dalam saling memaafkan, siswa belajar secara langsung tentang kerendahan hati, empati, dan pentingnya menjaga kerukunan dalam komunitas. 
+1. Recharge Mental dan Spiritual: Setelah menjalani ritme ibadah yang intens di bulan Ramadhan, Halal Bi Halal memberikan dorongan energi positif (mood booster) bagi guru dan siswa untuk menghadapi sisa semester genap dengan lebih semangat.
+2. Harmonisasi Hubungan Intern: Kegiatan ini mencairkan kekakuan yang mungkin terjadi selama proses belajar mengajar sebelumnya. Dengan saling memaafkan, komunikasi antara guru, siswa, dan orang tua diharapkan menjadi lebih lancar dan terbuka.
+3. Penguatan Karakter Siswa: Melalui keteladanan para guru dalam saling memaafkan, siswa belajar secara langsung tentang kerendahan hati, empati, dan pentingnya menjaga kerukunan dalam komunitas.
 4. Networking Alumni: Kehadiran alumni dalam acara ini juga membuka peluang jejaring bagi para siswa kelas XII yang akan segera lulus, memberikan mereka gambaran mengenai dunia perkuliahan dan karir.
 
 ### Suara dari Hati Keluarga Besar MA Miftahul Huda
