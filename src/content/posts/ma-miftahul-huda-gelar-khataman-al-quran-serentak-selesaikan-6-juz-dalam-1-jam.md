@@ -5,7 +5,7 @@ pubdate: 2026-03-07T00:00:00.000Z
 description: MA MIFTAHUL HUDA sukses gelar Khataman Al Qur'an serentak dalam rangkaian Safari Ramadhan 2026. Capaian luar biasa 6 juz selesai dalam 1 jam pada 17 Ramadhan. Simak selengkapnya!
 category: news
 status: published
-heroImage: /uploads/Semarak%20Safari%20Ramadhan%3A%20MA%20MIFTAHUL%20HUDA%20Gelar%20Khataman%20Al%20Qur%E2%80%99an%20Serentak%2C%20Selesaikan%206%20Juz%20dalam%201%20Jam.webp
+heroImage: /uploads/ma-miftahul-huda-gelar-khataman-al-quran-serentak-selesaikan-6-juz-dalam-1-jam.webp
 ---
 
 Memasuki pertengahan bulan suci yang penuh berkah, MA MIFTAHUL HUDA kembali menunjukkan komitmennya dalam mencetak generasi qur’ani. Dalam rangkaian program Safari Ramadhan tahun ini, lembaga pendidikan tersebut sukses menggelar agenda khataman Al Qur'an serentak yang melibatkan seluruh civitas akademika pada Sabtu, 07 Maret 2026.
@@ -32,8 +32,8 @@ Hasilnya, atmosfer di lingkungan madrasah menjadi sangat syahdu. Suara lantunan 
 
 Kegiatan khataman Al Qur'an ini merupakan highlight atau puncak dari rangkaian agenda Safari Ramadhan yang telah dicanangkan sejak awal bulan puasa. Program Safari Ramadhan di MA MIFTAHUL HUDA sendiri mencakup berbagai kegiatan, antara lain:
 
-1. Kajian: Pendalaman materi keagamaan klasik bagi siswa kelas akhir. 
-2. Buka Puasa Bersama: Mempererat ukhuwah antara guru, siswa, dan orang tua murid. 
+1. Kajian: Pendalaman materi keagamaan klasik bagi siswa kelas akhir.
+2. Buka Puasa Bersama: Mempererat ukhuwah antara guru, siswa, dan orang tua murid.
 3. Tadarus Mandiri: Target harian bacaan Al-Qur'an yang dipantau melalui buku mutaba'ah.
 
 Penyelenggaraan khataman serentak ini menjadi bukti nyata bahwa MA MIFTAHUL HUDA tidak hanya fokus pada pencapaian akademik umum, tetapi juga sangat menitikberatkan pada aspek religiusitas dan pembentukan karakter (character building).
@@ -42,8 +42,8 @@ Penyelenggaraan khataman serentak ini menjadi bukti nyata bahwa MA MIFTAHUL HUDA
 
 Melalui kegiatan keagamaan yang intensif seperti ini, terdapat beberapa dampak positif yang diharapkan dapat dirasakan langsung oleh para siswa:
 
-* Meningkatkan Kelancaran Membaca: Dengan intensitas membaca yang tinggi selama Ramadhan, kemampuan tahsin siswa meningkat secara signifikan. 
-* Menumbuhkan Kedisiplinan: Mengikuti jadwal khataman serentak melatih siswa untuk menghargai waktu dan bertanggung jawab atas tugas yang diberikan.  
+* Meningkatkan Kelancaran Membaca: Dengan intensitas membaca yang tinggi selama Ramadhan, kemampuan tahsin siswa meningkat secara signifikan.
+* Menumbuhkan Kedisiplinan: Mengikuti jadwal khataman serentak melatih siswa untuk menghargai waktu dan bertanggung jawab atas tugas yang diberikan.
 * Ketentraman Batin: Lingkungan yang dipenuhi dengan lantunan Al-Qur'an terbukti secara psikologis mampu memberikan rasa tenang dan mengurangi tingkat stres siswa.
 
 Masyarakat di sekitar lokasi MA MIFTAHUL HUDA pun turut mengapresiasi kegiatan ini. Kehadiran madrasah yang aktif melakukan syiar Islam melalui khataman Al Qur'an memberikan warna positif bagi lingkungan sekitar, terutama dalam menciptakan suasana Ramadhan yang religius dan kondusif.
