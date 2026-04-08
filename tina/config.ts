@@ -1,4 +1,4 @@
-﻿//file: tina/config.ts
+//file: tina/config.ts
 // Trigger Tina Schema Update
 import React from "react"
 import { defineConfig } from "tinacms"
@@ -133,6 +133,16 @@ export default defineConfig({
               { label: "Takedown", value: "takedown" },
             ],
             required: true,
+          },
+          {
+            type: "datetime",
+            name: "scheduledTime",
+            label: "Waktu Terjadwal",
+            description: "Tanggal dan jam artikel akan ter-publish (hanya berlaku jika Post Status adalah Scheduled).",
+            ui: {
+              timeFormat: "HH:mm",
+              dateFormat: "DD MMMM YYYY",
+            },
           },
           {
             type: "image",

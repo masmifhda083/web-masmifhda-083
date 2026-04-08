@@ -30,6 +30,7 @@ const posts = defineCollection({
 
     // Tambahkan status field
     status: z.enum(["draft", "scheduled", "published", "takedown"]).default("published"),
+    scheduledTime: z.coerce.date().optional(),
   }),
 });
 

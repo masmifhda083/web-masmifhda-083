@@ -115,7 +115,13 @@ if (category) {
 }
 ---
 
-<Layout title={title} description={description}>
+<Layout 
+  title={title} 
+  description={description}
+  image={heroSrc}
+  type="article"
+  publishedTime={pubdateDate ? pubdateDate.toISOString() : undefined}
+>
   <section class="py-12">
     <div
       class="container px-6 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6"

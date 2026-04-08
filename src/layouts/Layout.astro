@@ -19,10 +19,28 @@ import "@fontsource/mr-dafoe";
 interface Props {
   title?: string;
   description?: string;
-  // ... other props
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  tags?: string[];
+  noindex?: boolean;
+  canonical?: string;
+  breadcrumbs?: any[];
 }
 
-const { title, description } = Astro.props;
+const { 
+  title, 
+  description,
+  image,
+  type,
+  publishedTime,
+  modifiedTime,
+  tags,
+  noindex,
+  canonical,
+  breadcrumbs
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -42,7 +60,19 @@ const { title, description } = Astro.props;
   `}
 >
   <head>
-    <SEO title={title} description={description} url={Astro.url.pathname} />
+    <SEO 
+      title={title} 
+      description={description} 
+      image={image}
+      type={type}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      tags={tags}
+      noindex={noindex}
+      canonical={canonical}
+      breadcrumbs={breadcrumbs}
+      url={Astro.url.pathname} 
+    />
     <style is:global>
       .prose {
         max-width: none;

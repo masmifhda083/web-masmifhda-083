@@ -6,12 +6,22 @@ export function getVisiblePosts(posts: any[]) {
     return posts.filter((post) => {
         const status = post.data.status ?? 'published';
         const pubDate = post.data.pubdate ? new Date(post.data.pubdate) : null;
+        const scheduledTime = post.data.scheduledTime ? new Date(post.data.scheduledTime) : null;
 
-        // Logic: status must be 'published' AND (no pubDate OR pubDate <= now)
+        // Jika status scheduled, tampilkan HANYA JIKA scheduledTime sudah terlewati
+        if (status === 'scheduled') {
+            if (scheduledTime && scheduledTime <= now) {
+                return true;
+            }
+            return false;
+        }
+
+        // Jika status selain 'published' dan 'scheduled' (seperti draft, takedown), sembunyikan
         if (status !== 'published') {
             return false;
         }
 
+        // Jika status published, pastikan pubDate tidak di masa depan
         if (pubDate && pubDate > now) {
             return false;
         }
