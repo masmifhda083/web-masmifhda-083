@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:with-tina": "tinacms build && astro build",
+    "build:with-tina": "tinacms build --skip-cloud-checks && astro build",
     "generate:secrets": "node generate-password.js"
   },
   "dependencies": {
