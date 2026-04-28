@@ -58,7 +58,7 @@
       },
       {
         "label": "Pengumuman",
-        "href": "cek-kelulusan",
+        "href": "/cek-kelulusan",
         "isActive": false
       },
       {
