@@ -444,7 +444,7 @@ export default defineConfig({
             type: "string",
             name: "csvData",
             label: "Data Siswa (Paste dari Excel)",
-            description: "Format per baris: NISN [Tab/Koma] Nama Lengkap [Tab/Koma] Status (Lulus/Tidak Lulus/Cadangan). Blok data dari Excel lalu paste di sini.",
+            description: "Format per baris: NISN [Tab/Koma] Nama Lengkap [Tab/Koma] Status (Lulus/Tidak Lulus/Cadangan) [Tab/Koma] Link Transkrip Nilai (opsional). Blok data dari Excel lalu paste di sini.",
             ui: {
               component: "textarea",
             },

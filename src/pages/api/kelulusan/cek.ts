@@ -4,13 +4,13 @@ import { getEntry } from 'astro:content';
 /**
  * Parse CSV/TSV data yang di-paste dari Excel.
  * Mendukung pemisah Tab (dari Excel copy-paste) dan Koma (dari file .csv).
- * Format per baris: NISN [Tab/Koma] Nama [Tab/Koma] Status
+ * Format per baris: NISN [Tab/Koma] Nama [Tab/Koma] Status [Tab/Koma] Link Transkrip (opsional)
  */
 function parseStudentData(csvData: string) {
   if (!csvData || !csvData.trim()) return [];
 
   const lines = csvData.split('\n').filter(line => line.trim() !== '');
-  const students: { nisn: string; name: string; status: string }[] = [];
+  const students: { nisn: string; name: string; status: string; link?: string }[] = [];
 
   for (const line of lines) {
     // Deteksi pemisah: prioritaskan Tab (dari Excel), lalu Koma
@@ -19,8 +19,8 @@ function parseStudentData(csvData: string) {
 
     // Minimal harus ada 3 kolom: NISN, Nama, Status
     if (columns.length >= 3) {
-      const [nisn, name, status] = columns;
-      students.push({ nisn, name, status });
+      const [nisn, name, status, link] = columns;
+      students.push({ nisn, name, status, link: link || undefined });
     }
   }
 
