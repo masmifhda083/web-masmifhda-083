@@ -1,0 +1,162 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getEntry } from "astro:content";
+
+const kelulusanEntry = await getEntry("kelulusan", "data");
+const { title = "Pengumuman Kelulusan", description = "Silakan masukkan NISN untuk mengecek status kelulusan." } = kelulusanEntry?.data || {};
+---
+
+<Layout title={title} description={description}>
+  <section class="min-h-screen py-24 bg-gray-50 dark:bg-dark-base text-gray-900 dark:text-gray-100 transition-colors">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold font-poppins text-primary-600 dark:text-primary-400 mb-4">{title}</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400">{description}</p>
+      </div>
+
+      <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-xl p-6 md:p-10 border border-gray-100 dark:border-dark-border"
+           x-data="{
+             nisn: '',
+             loading: false,
+             error: null,
+             result: null,
+             async cekKelulusan() {
+               if(!this.nisn) {
+                 this.error = 'Harap masukkan NISN Anda terlebih dahulu.';
+                 return;
+               }
+               this.loading = true;
+               this.error = null;
+               this.result = null;
+               try {
+                 const response = await fetch('/api/kelulusan/cek?nisn=' + this.nisn);
+                 const data = await response.json();
+                 if (!response.ok) {
+                   this.error = data.error || 'Terjadi kesalahan sistem.';
+                 } else {
+                   this.result = data.data;
+                 }
+               } catch (e) {
+                 this.error = 'Koneksi bermasalah, silakan coba lagi.';
+               } finally {
+                 this.loading = false;
+               }
+             }
+           }">
+
+        <form @submit.prevent="cekKelulusan" class="mb-8">
+          <div class="flex flex-col md:flex-row gap-4">
+            <input 
+              type="text" 
+              x-model="nisn"
+              placeholder="Masukkan NISN Anda..." 
+              class="flex-grow px-5 py-4 rounded-xl border-2 border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-dark-base focus:ring-0 focus:border-primary-500 dark:focus:border-primary-500 transition-all outline-none text-lg"
+              :disabled="loading"
+            />
+            <button 
+              type="submit" 
+              class="px-8 py-4 bg-gradient-to-r from-primary to-secondary hover:brightness-110 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-3 disabled:opacity-70 shadow-lg text-lg group"
+              :disabled="loading"
+            >
+              <span x-show="!loading">Cek Hasil</span>
+              <span x-show="loading" style="display: none;" class="flex items-center gap-2">
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Mencari...
+              </span>
+              <svg x-show="!loading" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
+        </form>
+
+        <!-- Error Message -->
+        <div x-show="error" x-transition.opacity style="display: none;" class="p-5 mb-6 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span x-text="error" class="font-medium"></span>
+        </div>
+
+        <!-- Result Card -->
+        <div x-show="result" x-transition.opacity style="display: none;" class="mt-8">
+          <div class="p-6 md:p-8 rounded-2xl border-2 border-gray-100 dark:border-dark-border bg-gray-50/50 dark:bg-dark-base relative overflow-hidden">
+            
+            <!-- Decorative background blob based on status -->
+            <div class="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-20"
+                 :class="{
+                   'bg-green-500': result?.status === 'Lulus',
+                   'bg-red-500': result?.status === 'Tidak Lulus',
+                   'bg-yellow-500': result?.status === 'Cadangan'
+                 }">
+            </div>
+
+            <div class="relative z-10 text-center mb-8">
+              <p class="text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase mb-2">HASIL PENCARIAN</p>
+              <h3 class="text-3xl font-bold mb-1 text-gray-900 dark:text-white" x-text="result?.name"></h3>
+              <p class="text-gray-500 dark:text-gray-400">NISN: <span x-text="result?.nisn" class="font-mono bg-white dark:bg-dark-surface px-2 py-1 rounded border border-gray-200 dark:border-dark-border"></span></p>
+            </div>
+            
+            <div class="relative z-10 flex flex-col items-center justify-center mb-8">
+              <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Status Kelulusan Anda:</p>
+              <span class="px-8 py-3 rounded-xl text-2xl font-bold text-white shadow-xl shadow-current/30 flex items-center gap-3"
+                    :class="{
+                      'bg-green-600': result?.status === 'Lulus',
+                      'bg-red-600': result?.status === 'Tidak Lulus',
+                      'bg-yellow-500 text-gray-900': result?.status === 'Cadangan'
+                    }">
+                
+                <!-- Icon Lulus -->
+                <svg x-show="result?.status === 'Lulus'" style="display: none;" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                
+                <!-- Icon Tidak Lulus -->
+                <svg x-show="result?.status === 'Tidak Lulus'" style="display: none;" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                
+                <!-- Icon Cadangan -->
+                <svg x-show="result?.status === 'Cadangan'" style="display: none;" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+
+                <span x-text="result?.status"></span>
+              </span>
+            </div>
+
+            <div x-show="result" style="display: none;" class="relative z-10 p-5 bg-white dark:bg-dark-surface rounded-xl border border-gray-200 dark:border-dark-border shadow-sm">
+              <div class="flex items-start gap-3 text-left">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 text-primary-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Catatan Tambahan:</h4>
+                  <p class="text-gray-700 dark:text-gray-300">
+                    <span x-show="result?.status === 'Lulus'">Selamat! Anda dinyatakan LULUS. Semoga sukses untuk pendidikan selanjutnya!</span>
+                    <span x-show="result?.status === 'Tidak Lulus'">Mohon maaf, Anda dinyatakan TIDAK LULUS. Tetap semangat dan jangan putus asa!</span>
+                    <span x-show="result?.status === 'Cadangan'">Anda masuk dalam daftar CADANGAN. Silakan tunggu informasi selanjutnya dari sekolah.</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Larangan Siswa -->
+            <div x-show="result" style="display: none;" class="relative z-10 mt-4 p-5 bg-white dark:bg-dark-surface rounded-xl border-l-4 border-l-red-500 border border-gray-200 dark:border-dark-border shadow-sm">
+              <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-3 flex items-center gap-2">
+                <span class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01" /></svg>
+                </span>
+                Larangan Saat Kelulusan
+              </h4>
+              <ol class="text-sm text-gray-600 dark:text-gray-400 space-y-2 pl-1">
+                <li class="flex gap-2"><span class="text-red-500 font-bold">1.</span> Melakukan konvoi kendaraan di jalan raya.</li>
+                <li class="flex gap-2"><span class="text-red-500 font-bold">2.</span> Corat-coret seragam sekolah.</li>
+                <li class="flex gap-2"><span class="text-red-500 font-bold">3.</span> Euforia berlebihan yang mengganggu ketertiban.</li>
+                <li class="flex gap-2"><span class="text-red-500 font-bold">4.</span> Merusak fasilitas sekolah maupun umum.</li>
+              </ol>
+              <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-3 border-t border-gray-100 dark:border-dark-border pt-2">Pelanggaran dapat dikenai sanksi sesuai ketentuan sekolah.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Layout>

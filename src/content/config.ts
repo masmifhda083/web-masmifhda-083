@@ -399,6 +399,16 @@ const contactCollection = defineCollection({
   }),
 });
 
+const kelulusanCollection = defineCollection({
+  type: "data",
+  schema: z.object({
+    isActive: z.boolean().default(false),
+    title: z.string().default("Pengumuman Kelulusan Kelas 12"),
+    description: z.string().optional(),
+    csvData: z.string().default("")
+  })
+});
+
 //  export collections
 export const collections = {
   posts,
@@ -410,5 +420,6 @@ export const collections = {
   settings: websiteSettingsCollection,
   authors: authorsCollection,
   contact: contactCollection,
-  osis: osis
+  osis: osis,
+  kelulusan: kelulusanCollection
 };

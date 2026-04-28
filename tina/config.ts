@@ -407,6 +407,51 @@ export default defineConfig({
         ],
       },
 
+      // Kelulusan
+      {
+        name: "kelulusan",
+        label: "Kelulusan",
+        path: "src/content/kelulusan",
+        format: "json",
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+        },
+        fields: [
+          {
+            type: "boolean",
+            name: "isActive",
+            label: "Buka Pengumuman?",
+            description: "Jika diaktifkan, siswa dapat mencari NISN mereka di halaman frontend.",
+          },
+          {
+            type: "string",
+            name: "title",
+            label: "Judul Halaman",
+            required: true,
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Deskripsi Halaman",
+            ui: {
+              component: "textarea",
+            },
+          },
+          {
+            type: "string",
+            name: "csvData",
+            label: "Data Siswa (Paste dari Excel)",
+            description: "Format per baris: NISN [Tab/Koma] Nama Lengkap [Tab/Koma] Status (Lulus/Tidak Lulus/Cadangan). Blok data dari Excel lalu paste di sini.",
+            ui: {
+              component: "textarea",
+            },
+          },
+        ],
+      },
+
       // ABOUT
       {
         name: "about",
