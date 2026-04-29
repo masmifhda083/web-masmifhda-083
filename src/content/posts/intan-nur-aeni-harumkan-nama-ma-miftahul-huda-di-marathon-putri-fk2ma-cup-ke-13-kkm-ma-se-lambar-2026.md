@@ -1,10 +1,15 @@
-﻿---
-title: Intan Nur Aeni Harumkan Nama MA Miftahul Huda di Marathon Putri FK2MA Cup ke 13 KKM MA se Lambar 2026
+---
+title: >-
+  Intan Nur Aeni Harumkan Nama MA Miftahul Huda di Marathon Putri FK2MA Cup ke
+  13 KKM MA se Lambar 2026
 author: src/content/authors/admin.md
 pubdate: 2026-02-11T00:00:00.000Z
-description: MA Miftahul Huda raih Harapan 1 Marathon Putri di FK2MA Cup ke 13 KKM MA se Lambar 2026 di MA Al Hasyimiyah Air Hitam. Simak detail lengkapnya.
-category: 'prestasi'
-heroImage: /uploads/6.webp
+description: >-
+  MA Miftahul Huda raih Harapan 1 Marathon Putri di FK2MA Cup ke 13 KKM MA se
+  Lambar 2026 di MA Al Hasyimiyah Air Hitam. Simak detail lengkapnya.
+category: prestasi
+status: published
+heroImage: /uploads/prestasi-ma-miftahul-huda (2).webp
 ---
 
 MA Miftahul Huda kembali mencatatkan prestasi dalam ajang FK2MA Cup ke 13 KKM MA se Lambar tahun 2026 yang digelar di MA Al Hasyimiyah Air Hitam. Pada event ini, siswi atas nama Intan Nur Aeni berhasil meraih prestasi Harapan 1 Marathon Putri. Kegiatan tersebut diikuti oleh madrasah aliyah se Lampung Barat dengan berbagai cabang lomba akademik dan non akademik. Keikutsertaan MA Miftahul Huda menunjukkan komitmen dalam pembinaan potensi siswa secara terarah.
@@ -36,7 +41,7 @@ Berikut adalah data teknis terkait prestasi MA Miftahul Huda pada FK2MA Cup ke 1
 
 MA Al Hasyimiyah Air Hitam menjadi lokasi pelaksanaan FK2MA Cup ke 13 KKM MA se Lambar. Kegiatan ini diikuti oleh madrasah aliyah dari berbagai kecamatan di Lampung Barat. Cakupan kompetisi bersifat regional dengan standar teknis yang ditetapkan panitia KKM. Penyelenggaraan terpusat memudahkan koordinasi dan pengawasan selama lomba berlangsung.
 
-## Penutup 
+## Penutup
 
 Prestasi Intan Nur Aeni sebagai Harapan 1 Marathon Putri dalam FK2MA Cup ke 13 KKM MA se Lambar tahun 2026 memperlihatkan hasil pembinaan terarah di MA Miftahul Huda. Capaian ini menjadi referensi bagi siswa lain untuk mengembangkan potensi di bidang olahraga. Orang tua dan calon peserta didik baru dapat melihat komitmen madrasah dalam mendukung kompetisi tingkat regional. Kunjungi MA Miftahul Huda untuk memperoleh informasi pendaftaran dan program pembinaan siswa.
 

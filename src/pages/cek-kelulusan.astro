@@ -3,19 +3,31 @@ import Layout from "../layouts/Layout.astro";
 import { getEntry } from "astro:content";
 
 const kelulusanEntry = await getEntry("kelulusan", "data");
-const { title = "Pengumuman Kelulusan", description = "Silakan masukkan NISN untuk mengecek status kelulusan." } = kelulusanEntry?.data || {};
+const {
+  title = "Pengumuman Kelulusan",
+  description = "Silakan masukkan NISN untuk mengecek status kelulusan.",
+} = kelulusanEntry?.data || {};
 ---
 
 <Layout title={title} description={description}>
-  <section class="min-h-screen py-24 bg-gray-50 dark:bg-dark-base text-gray-900 dark:text-gray-100 transition-colors">
+  <section
+    class="min-h-screen py-24 bg-gray-50 dark:bg-dark-base text-gray-900 dark:text-gray-100 transition-colors"
+  >
     <div class="container mx-auto px-4 max-w-3xl">
       <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold font-poppins text-primary-600 dark:text-primary-400 mb-4">{title}</h1>
-        <p class="text-lg text-gray-600 dark:text-gray-400">{description}</p>
+        <h1
+          class="text-3xl md:text-5xl font-bold font-poppins text-primary-600 dark:text-primary-400 mb-4"
+        >
+          {title}
+        </h1>
+        <p class="text-md text-gray-600 max-w-prose dark:text-gray-400">
+          {description}
+        </p>
       </div>
 
-      <div class="bg-white dark:bg-dark-surface rounded-2xl shadow-xl p-6 md:p-10 border border-gray-100 dark:border-dark-border"
-           x-data="{
+      <div
+        class="bg-white dark:bg-dark-surface rounded-2xl shadow-xl p-6 md:p-10 border border-gray-100 dark:border-dark-border"
+        x-data="{
              nisn: '',
              loading: false,
              error: null,
@@ -35,6 +47,20 @@ const { title = "Pengumuman Kelulusan", description = "Silakan masukkan NISN unt
                    this.error = data.error || 'Terjadi kesalahan sistem.';
                  } else {
                    this.result = data.data;
+                   
+                   // Animasi Confetti jika Lulus
+                   if (this.result.status === 'Lulus') {
+                     setTimeout(() => {
+                       if (typeof confetti === 'function') {
+                         confetti({
+                           particleCount: 150,
+                           spread: 80,
+                           origin: { y: 0.6 },
+                           colors: ['#22c55e', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6']
+                         });
+                       }
+                     }, 100);
+                   }
                  }
                } catch (e) {
                  this.error = 'Koneksi bermasalah, silakan coba lagi.';
@@ -42,132 +68,665 @@ const { title = "Pengumuman Kelulusan", description = "Silakan masukkan NISN unt
                  this.loading = false;
                }
              }
-           }">
-
+           }"
+      >
         <form @submit.prevent="cekKelulusan" class="mb-8">
           <div class="flex flex-col md:flex-row gap-4">
-            <input 
-              type="text" 
+            <input
+              type="text"
               x-model="nisn"
-              placeholder="Masukkan NISN Anda..." 
+              placeholder="Masukkan NISN Anda..."
               class="flex-grow px-5 py-4 rounded-xl border-2 border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-dark-base focus:ring-0 focus:border-primary-500 dark:focus:border-primary-500 transition-all outline-none text-lg"
               :disabled="loading"
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               class="px-8 py-4 bg-gradient-to-r from-primary to-secondary hover:brightness-110 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-3 disabled:opacity-70 shadow-lg text-lg group"
               :disabled="loading"
             >
               <span x-show="!loading">Cek Hasil</span>
-              <span x-show="loading" style="display: none;" class="flex items-center gap-2">
-                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <span
+                x-show="loading"
+                style="display: none;"
+                class="flex items-center gap-2"
+              >
+                <svg
+                  class="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
                 Mencari...
               </span>
-              <svg x-show="!loading" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg
+                x-show="!loading"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
             </button>
           </div>
         </form>
 
         <!-- Error Message -->
-        <div x-show="error" x-transition.opacity style="display: none;" class="p-5 mb-6 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <div
+          x-show="error"
+          x-transition.opacity
+          style="display: none;"
+          class="p-5 mb-6 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 flex items-center gap-3"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg
+          >
           <span x-text="error" class="font-medium"></span>
         </div>
 
         <!-- Result Card -->
-        <div x-show="result" x-transition.opacity style="display: none;" class="mt-8">
-          <div class="p-6 md:p-8 rounded-2xl border-2 border-gray-100 dark:border-dark-border bg-gray-50/50 dark:bg-dark-base relative overflow-hidden">
-            
+        <div
+          x-show="result"
+          x-transition.opacity
+          style="display: none;"
+          class="mt-8"
+        >
+          <div
+            id="result-card-printable"
+            class="p-6 md:p-8 rounded-2xl border-2 border-gray-100 dark:border-dark-border bg-gray-50/50 dark:bg-dark-base relative overflow-hidden"
+          >
             <!-- Decorative background blob based on status -->
-            <div class="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-20"
-                 :class="{
+            <div
+              class="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-20"
+              :class="{
                    'bg-green-500': result?.status === 'Lulus',
                    'bg-red-500': result?.status === 'Tidak Lulus',
                    'bg-yellow-500': result?.status === 'Cadangan'
-                 }">
+                 }"
+            >
             </div>
 
             <div class="relative z-10 text-center mb-8">
-              <p class="text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase mb-2">HASIL PENCARIAN</p>
-              <h3 class="text-3xl font-bold mb-1 text-gray-900 dark:text-white" x-text="result?.name"></h3>
-              <p class="text-gray-500 dark:text-gray-400">NISN: <span x-text="result?.nisn" class="font-mono bg-white dark:bg-dark-surface px-2 py-1 rounded border border-gray-200 dark:border-dark-border"></span></p>
-            </div>
-            
-            <div class="relative z-10 flex flex-col items-center justify-center mb-8">
-              <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Status Kelulusan Anda:</p>
-              <span class="px-8 py-3 rounded-xl text-2xl font-bold text-white shadow-xl shadow-current/30 flex items-center gap-3"
-                    :class="{
-                      'bg-green-600': result?.status === 'Lulus',
-                      'bg-red-600': result?.status === 'Tidak Lulus',
-                      'bg-yellow-500 text-gray-900': result?.status === 'Cadangan'
-                    }">
-                
-                <!-- Icon Lulus -->
-                <svg x-show="result?.status === 'Lulus'" style="display: none;" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                
-                <!-- Icon Tidak Lulus -->
-                <svg x-show="result?.status === 'Tidak Lulus'" style="display: none;" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                
-                <!-- Icon Cadangan -->
-                <svg x-show="result?.status === 'Cadangan'" style="display: none;" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-
-                <span x-text="result?.status"></span>
-              </span>
+              <p
+                class="text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase mb-2"
+              >
+                HASIL PENCARIAN
+              </p>
+              <h3
+                class="text-3xl font-bold mb-1 text-gray-900 dark:text-white"
+                x-text="result?.name"
+              >
+              </h3>
+              <p class="text-gray-500 dark:text-gray-400">
+                NISN: <span
+                  x-text="result?.nisn"
+                  class="font-mono bg-white dark:bg-dark-surface px-2 py-1 rounded border border-gray-200 dark:border-dark-border"
+                ></span>
+              </p>
             </div>
 
-            <div x-show="result" style="display: none;" class="relative z-10 p-5 bg-white dark:bg-dark-surface rounded-xl border border-gray-200 dark:border-dark-border shadow-sm">
+            <div
+              class="relative z-10 flex flex-col items-center justify-center mb-8"
+            >
+              <p
+                class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3"
+              >
+                Status Kelulusan Anda:
+              </p>
+              <div class="relative group">
+                <!-- Efek Glow di belakang badge -->
+                <div x-show="result?.status === 'Lulus'" class="absolute"></div>
+
+                <span
+                  class="relative px-8 py-2 rounded-md text-2xl font-bold flex items-center gap-3"
+                  :class="{
+                        'text-emerald-600': result?.status === 'Lulus',
+                        'text-red-500': result?.status === 'Tidak Lulus',
+                        'text-amber-500': result?.status === 'Cadangan'
+                      }"
+                >
+                  <!-- Icon Lulus -->
+                  <svg
+                    x-show="result?.status === 'Lulus'"
+                    style="display: none;"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-8 w-8"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    ><path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path></svg
+                  >
+
+                  <!-- Icon Tidak Lulus -->
+                  <svg
+                    x-show="result?.status === 'Tidak Lulus'"
+                    style="display: none;"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-8 w-8"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    ><path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path></svg
+                  >
+
+                  <!-- Icon Cadangan -->
+                  <svg
+                    x-show="result?.status === 'Cadangan'"
+                    style="display: none;"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-8 w-8"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    ><path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path></svg
+                  >
+
+                  <span x-text="result?.status"></span>
+                </span>
+              </div>
+            </div>
+
+            <div
+              x-show="result"
+              style="display: none;"
+              class="relative z-10 p-5 bg-white dark:bg-dark-surface rounded-xl border border-gray-200 dark:border-dark-border shadow-sm"
+            >
               <div class="flex items-start gap-3 text-left">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 text-primary-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 shrink-0 text-primary-500 mt-0.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
                 </svg>
                 <div>
-                  <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Catatan Tambahan:</h4>
-                  <p class="text-gray-700 dark:text-gray-300">
-                    <span x-show="result?.status === 'Lulus'">Selamat! Anda dinyatakan LULUS. Semoga sukses untuk pendidikan selanjutnya!</span>
-                    <span x-show="result?.status === 'Tidak Lulus'">Mohon maaf, Anda dinyatakan TIDAK LULUS. Tetap semangat dan jangan putus asa!</span>
-                    <span x-show="result?.status === 'Cadangan'">Anda masuk dalam daftar CADANGAN. Silakan tunggu informasi selanjutnya dari sekolah.</span>
+                  <p class="text-gray-700 dark:text-gray-300 font-medium">
+                    <span x-show="result?.status === 'Lulus'"
+                      >Selamat! Anda dinyatakan LULUS. Semoga sukses untuk
+                      pendidikan selanjutnya!</span
+                    >
+                    <span x-show="result?.status === 'Tidak Lulus'"
+                      >Mohon maaf, Anda dinyatakan TIDAK LULUS. Tetap semangat
+                      dan jangan putus asa!</span
+                    >
+                    <span x-show="result?.status === 'Cadangan'"
+                      >Anda masuk dalam daftar CADANGAN. Silakan tunggu
+                      informasi selanjutnya dari sekolah.</span
+                    >
                   </p>
                 </div>
               </div>
             </div>
 
-            <!-- Link Transkrip Nilai -->
-            <div x-show="result?.link" style="display: none;" class="relative z-10 mt-4 text-center">
-              <a :href="result?.link" target="_blank" rel="noopener noreferrer" 
-                 class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:brightness-110 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg w-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                Lihat Transkrip Nilai
-              </a>
-            </div>
-
             <!-- Larangan Siswa -->
-            <div x-show="result" style="display: none;" class="relative z-10 mt-4 p-5 bg-white dark:bg-dark-surface rounded-xl border-l-4 border-l-red-500 border border-gray-200 dark:border-dark-border shadow-sm">
-              <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-3 flex items-center gap-2">
-                <span class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01" /></svg>
+            <div
+              x-show="result"
+              style="display: none;"
+              class="relative z-10 mt-4 p-5 bg-white dark:bg-dark-surface rounded-xl border-l-4 border-l-red-500 border border-gray-200 dark:border-dark-border shadow-sm"
+            >
+              <h4
+                class="font-bold text-gray-900 dark:text-white text-sm mb-3 flex items-center gap-2"
+              >
+                <span
+                  class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-3.5 w-3.5 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    ><path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 9v2m0 4h.01"></path></svg
+                  >
                 </span>
                 Larangan Saat Kelulusan
               </h4>
-              <ol class="text-sm text-gray-600 dark:text-gray-400 space-y-2 pl-1">
-                <li class="flex gap-2"><span class="text-red-500 font-bold">1.</span> Melakukan konvoi kendaraan di jalan raya.</li>
-                <li class="flex gap-2"><span class="text-red-500 font-bold">2.</span> Corat-coret seragam sekolah.</li>
-                <li class="flex gap-2"><span class="text-red-500 font-bold">3.</span> Euforia berlebihan yang mengganggu ketertiban.</li>
-                <li class="flex gap-2"><span class="text-red-500 font-bold">4.</span> Merusak fasilitas sekolah maupun umum.</li>
+              <ol
+                class="text-sm text-gray-600 dark:text-gray-400 space-y-2 pl-1"
+              >
+                <li class="flex gap-2">
+                  <span class="text-red-500 font-bold">1.</span> Melakukan konvoi
+                  kendaraan di jalan raya.
+                </li>
+                <li class="flex gap-2">
+                  <span class="text-red-500 font-bold">2.</span> Corat-coret seragam
+                  sekolah.
+                </li>
+                <li class="flex gap-2">
+                  <span class="text-red-500 font-bold">3.</span> Euforia berlebihan
+                  yang mengganggu ketertiban.
+                </li>
+                <li class="flex gap-2">
+                  <span class="text-red-500 font-bold">4.</span> Merusak fasilitas
+                  sekolah maupun umum.
+                </li>
               </ol>
-              <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-3 border-t border-gray-100 dark:border-dark-border pt-2">Pelanggaran dapat dikenai sanksi sesuai ketentuan sekolah.</p>
+              <p
+                class="text-[11px] text-gray-400 dark:text-gray-500 mt-3 border-t border-gray-100 dark:border-dark-border pt-2"
+              >
+                Pelanggaran dapat dikenai sanksi sesuai ketentuan sekolah.
+              </p>
             </div>
 
+            <!-- Tombol Transkrip Nilai & Download -->
+            <div
+              x-show="result?.grades?.length > 0"
+              style="display: none;"
+              class="relative z-10 mt-6 flex flex-wrap justify-center gap-4 print:hidden"
+            >
+              <button
+                @click="$dispatch('open-transcript')"
+                type="button"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:brightness-110 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  ></path>
+                </svg>
+                Lihat Transkrip
+              </button>
+
+              <button
+                @click="printResultCard()"
+                type="button"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-dark-surface border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-semibold rounded-xl transition-all shadow-sm hover:shadow-md"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  ></path>
+                </svg>
+                Download PDF
+              </button>
+            </div>
           </div>
         </div>
 
+        <!-- Modal Transkrip Nilai -->
+        <div
+          x-data="{ showTranscript: false }"
+          @open-transcript.window="showTranscript = true"
+          x-show="showTranscript"
+          style="display: none;"
+          class="fixed inset-0 z-[100] overflow-y-auto"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
+          <!-- Background backdrop -->
+          <div
+            x-show="showTranscript"
+            x-transition.opacity
+            class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity"
+          >
+          </div>
+
+          <div
+            class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0"
+          >
+            <div
+              x-show="showTranscript"
+              @click.away="showTranscript = false"
+              x-transition:enter="ease-out duration-300"
+              x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+              x-transition:leave="ease-in duration-200"
+              x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+              x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              class="relative transform overflow-hidden rounded-lg bg-white dark:bg-dark-surface text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-gray-200 dark:border-dark-border"
+            >
+              <!-- Header Modal (Screen Only) -->
+              <div
+                class="print:hidden bg-gray-50 dark:bg-dark-bg px-4 py-3 border-b border-gray-200 dark:border-dark-border flex justify-between items-center"
+              >
+                <h3
+                  class="text-lg font-semibold leading-6 text-gray-900 dark:text-white"
+                  id="modal-title"
+                >
+                  Detail Nilai
+                </h3>
+                <button
+                  @click="showTranscript = false"
+                  type="button"
+                  class="text-gray-400 hover:text-gray-500"
+                >
+                  <span class="sr-only">Close</span>
+                  <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    ><path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18L18 6M6 6l12 12"></path></svg
+                  >
+                </button>
+              </div>
+
+              <!-- Konten Transkrip (Printable Area) -->
+              <div
+                id="transcript-printable"
+                class="bg-white dark:bg-dark-surface px-6 pb-6 pt-8 sm:p-8"
+              >
+                <!-- Kop Surat -->
+                <div
+                  class="text-center border-b-2 border-gray-800 dark:border-gray-200 pb-4 mb-6"
+                >
+                  <h2
+                    class="text-2xl font-bold uppercase text-gray-900 dark:text-white"
+                  >
+                    TRANSKRIP NILAI
+                  </h2>
+                </div>
+
+                <!-- Biodata -->
+                <div
+                  class="grid grid-cols-1 sm:grid-cols-[200px_auto] gap-x-4 gap-y-2 text-sm text-gray-700 dark:text-gray-300 mb-8"
+                >
+                  <div class="font-semibold">Nama Lengkap</div>
+                  <div class="hidden sm:block">
+                    : <span x-text="result?.name"></span>
+                  </div>
+                  <div class="sm:hidden" x-text="result?.name"></div>
+
+                  <div class="font-semibold">Nomor Induk Siswa Nasional</div>
+                  <div class="hidden sm:block">
+                    : <span x-text="result?.nisn"></span>
+                  </div>
+                  <div class="sm:hidden" x-text="result?.nisn"></div>
+
+                  <template x-for="(value, key) in result?.biodata" :key="key">
+                    <div class="contents">
+                      <div class="font-semibold capitalize" x-text="key"></div>
+                      <div class="hidden sm:block">
+                        : <span x-text="value"></span>
+                      </div>
+                      <div class="sm:hidden" x-text="value"></div>
+                    </div>
+                  </template>
+                </div>
+
+                <!-- Tabel Nilai -->
+                <div
+                  class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+                >
+                  <table
+                    class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+                  >
+                    <thead class="bg-gray-50 dark:bg-gray-800">
+                      <tr>
+                        <th
+                          scope="col"
+                          class="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider w-16 border-r border-gray-200 dark:border-gray-700"
+                          >No.</th
+                        >
+                        <th
+                          scope="col"
+                          class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider border-r border-gray-200 dark:border-gray-700"
+                          >Mata Pelajaran</th
+                        >
+                        <th
+                          scope="col"
+                          class="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider w-32"
+                          >Nilai</th
+                        >
+                      </tr>
+                    </thead>
+                    <tbody
+                      class="bg-white dark:bg-dark-surface divide-y divide-gray-200 dark:divide-gray-700"
+                    >
+                      <template
+                        x-for="(grade, index) in result?.grades"
+                        :key="index"
+                      >
+                        <tr
+                          class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                        >
+                          <td
+                            class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-center border-r border-gray-200 dark:border-gray-700"
+                            x-text="index + 1"></td>
+                          <td
+                            class="px-4 py-3 text-sm text-gray-900 dark:text-white border-r border-gray-200 dark:border-gray-700"
+                            x-text="grade.subject"></td>
+                          <td
+                            class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white text-center"
+                            x-text="grade.score"></td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Footer Modal (Screen Only) -->
+              <div
+                class="print:hidden bg-gray-50 dark:bg-dark-bg px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-2 border-t border-gray-200 dark:border-dark-border"
+              >
+                <button
+                  onclick="printTranscript()"
+                  type="button"
+                  class="mt-3 inline-flex w-full justify-center items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:mt-0 sm:w-auto transition-colors"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    ></path>
+                  </svg>
+                  Download / Cetak PDF
+                </button>
+                <button
+                  @click="showTranscript = false"
+                  type="button"
+                  class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto transition-colors"
+                  >Tutup</button
+                >
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </Layout>
+
+<!-- Confetti Script -->
+<script
+  src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
+></script>
+
+<script is:inline>
+  function printTranscript() {
+    // Buat elemen khusus untuk print di luar hierarki layout
+    const printContainer = document.createElement("div");
+    printContainer.id = "print-container";
+
+    // Terapkan Tailwind class untuk background putih dan margin
+    printContainer.className = "bg-white text-black w-full";
+
+    // Copy HTML dari transcript
+    const transcriptHtml = document.getElementById(
+      "transcript-printable",
+    ).innerHTML;
+    printContainer.innerHTML = transcriptHtml;
+
+    // Tambahkan style CSS khusus untuk media print
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @media print {
+        body > :not(#print-container) {
+          display: none !important;
+        }
+        #print-container {
+          display: block !important;
+          padding: 20px;
+        }
+        #print-container table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        #print-container th, 
+        #print-container td {
+          border: 1px solid #000 !important;
+          padding: 8px;
+        }
+      }
+    `;
+
+    // Append ke DOM
+    document.body.appendChild(printContainer);
+    document.head.appendChild(style);
+
+    // Trigger print
+    window.print();
+
+    // Bersihkan setelah print selesai
+    document.body.removeChild(printContainer);
+    document.head.removeChild(style);
+  }
+
+  function printResultCard() {
+    // Buat elemen khusus untuk print di luar hierarki layout
+    const printContainer = document.createElement("div");
+    printContainer.id = "print-container";
+
+    // Terapkan Tailwind class untuk background putih dan margin
+    printContainer.className = "bg-white text-black w-full p-8";
+
+    // Copy HTML dari result card beserta container-nya
+    const cardHtml = document.getElementById("result-card-printable").outerHTML;
+    printContainer.innerHTML = cardHtml;
+
+    // Tambahkan style CSS khusus untuk media print
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @media print {
+        @page {
+          margin: 0;
+          size: auto;
+        }
+        body {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          background-color: #f9fafb !important;
+        }
+        body > :not(#print-container) {
+          display: none !important;
+        }
+        #print-container {
+          display: flex !important;
+          justify-content: center;
+          align-items: flex-start;
+          padding: 40px 20px;
+          min-height: 100vh;
+          background-color: #f9fafb !important;
+        }
+        #result-card-printable {
+          border: 2px solid #e5e7eb !important;
+          border-radius: 1.5rem !important;
+          max-width: 650px !important;
+          margin: 0 auto !important;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+          background-color: white !important;
+        }
+        /* Sembunyikan tombol saat mencetak */
+        .print\\:hidden {
+          display: none !important;
+        }
+      }
+    `;
+
+    // Append ke DOM
+    document.body.appendChild(printContainer);
+    document.head.appendChild(style);
+
+    // Trigger print
+    window.print();
+
+    // Bersihkan setelah print selesai
+    document.body.removeChild(printContainer);
+    document.head.removeChild(style);
+  }
+</script>

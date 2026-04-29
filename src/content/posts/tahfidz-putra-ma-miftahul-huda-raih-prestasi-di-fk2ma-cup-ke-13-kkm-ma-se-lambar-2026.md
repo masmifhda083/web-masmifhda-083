@@ -1,10 +1,17 @@
-﻿---
-title: Tahfidz Putra MA Miftahul Huda Raih Prestasi di FK2MA Cup ke 13 KKM MA se Lambar 2026
+---
+title: >-
+  Tahfidz Putra MA Miftahul Huda Raih Prestasi di FK2MA Cup ke 13 KKM MA se
+  Lambar 2026
 author: src/content/authors/admin.md
 pubdate: 2026-02-11T00:00:00.000Z
-description: MA Miftahul Huda raih prestasi Harapan 1 Tahfidz Putra di FK2MA Cup ke 13 KKM MA se Lambar tahun 2026 di MA Al Hasyimiyah Air Hitam. Simak detail lengkapnya.
-category: 'prestasi'
-heroImage: /uploads/PAMFLATE.webp
+description: >-
+  MA Miftahul Huda raih prestasi Harapan 1 Tahfidz Putra di FK2MA Cup ke 13 KKM
+  MA se Lambar tahun 2026 di MA Al Hasyimiyah Air Hitam. Simak detail
+  lengkapnya.
+category: prestasi
+status: published
+scheduledTime: 2026-02-10T11:04:13.778Z
+heroImage: /uploads/prestasi-ma-miftahul-huda (4).webp
 ---
 
 MA Miftahul Huda kembali menorehkan capaian membanggakan melalui partisipasi siswanya dalam ajang FK2MA Cup ke 13 KKM MA se Lambar tahun 2026. Kegiatan ini berlangsung di MA Al Hasyimiyah Air Hitam dan diikuti oleh berbagai madrasah aliyah di wilayah Lampung Barat. Salah satu siswa yang mencuri perhatian adalah Rizki Ainun Najib dengan prestasi sebagai Harapan 1 Tahfidz Putra. Keberhasilan ini memperkuat posisi MA Miftahul Huda sebagai lembaga yang konsisten mendorong kompetensi akademik dan non akademik.
@@ -44,20 +51,20 @@ Madrasah juga perlu membangun sistem seleksi internal yang objektif. Pembinaan h
 
 Dokumentasi capaian siswa perlu dipublikasikan melalui kanal resmi madrasah. Strategi ini penting untuk membangun citra positif lembaga di mata masyarakat. Informasi yang transparan memudahkan calon peserta didik baru memahami kualitas pembinaan di MA Miftahul Huda. Konsistensi publikasi juga mendukung visibilitas digital madrasah.
 
-## Penutup 
+## Penutup
 
 Prestasi Rizki Ainun Najib dalam FK2MA Cup ke 13 KKM MA se Lambar tahun 2026 menjadi bukti komitmen MA Miftahul Huda dalam membina potensi siswa secara sistematis. Capaian Harapan 1 Tahfidz Putra mencerminkan kualitas pendampingan yang terarah dan berkelanjutan. Bagi siswa dan orang tua yang mencari madrasah dengan fokus pada pengembangan akademik dan keagamaan, MA Miftahul Huda menghadirkan program pembinaan yang terstruktur. Kunjungi madrasah dan dapatkan informasi pendaftaran peserta didik baru untuk menjadi bagian dari generasi berprestasi berikutnya.
 
 ## FAQ
 
-**Apa itu FK2MA Cup ke 13 KKM MA se Lambar. **
+\*\*Apa itu FK2MA Cup ke 13 KKM MA se Lambar. \*\*
 
 FK2MA Cup ke 13 adalah ajang kompetisi antar Madrasah Aliyah yang tergabung dalam Kelompok Kerja Madrasah di wilayah Lampung Barat pada tahun 2026 dengan berbagai cabang lomba akademik dan keagamaan.
 
-**Siapa siswa MA Miftahul Huda yang meraih prestasi pada event tersebut. **
+\*\*Siapa siswa MA Miftahul Huda yang meraih prestasi pada event tersebut. \*\*
 
 Siswa tersebut adalah Rizki Ainun Najib yang meraih prestasi Harapan 1 Tahfidz Putra dalam ajang yang digelar di MA Al Hasyimiyah Air Hitam.
 
-**Mengapa prestasi ini penting bagi MA Miftahul Huda. **
+\*\*Mengapa prestasi ini penting bagi MA Miftahul Huda. \*\*
 
 Prestasi ini menunjukkan efektivitas program pembinaan tahfidz dan memperkuat kepercayaan masyarakat terhadap kualitas pendidikan di MA Miftahul Huda.

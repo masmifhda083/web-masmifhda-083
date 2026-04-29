@@ -7,6 +7,8 @@ body {
   color: var(--color-text-base);
 }
 
+
+
 @theme {
   --font-dafoe: "Mr Dafoe", cursive;
 
@@ -20,6 +22,7 @@ body {
   --color-link: var(--color-link);
   --color-link-hover: var(--color-link-hover);
   --color-border: var(--color-border);
+
 }
 
 /* Global element */
@@ -34,6 +37,7 @@ a:hover {
 hr {
   border-color: var(--color-border);
 }
+
 
 /* ===== PROSE VARIANT ===== */
 

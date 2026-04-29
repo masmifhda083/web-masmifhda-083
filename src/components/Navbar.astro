@@ -16,8 +16,8 @@ const schoolInfo = headerData?.schoolInfo || {
   showName: true,
 };
 
-// Data untuk menu items
-const menuItems = headerData?.items || [];
+// Data untuk menu items (Clone agar tidak terkena error mutasi array Read-Only Astro)
+const menuItems = [...(headerData?.items || [])];
 
 // Data untuk style settings
 const styleSettings = headerData?.style || {
@@ -33,7 +33,7 @@ if (menuItems.length === 0) {
   menuItems.push(
     { label: "Profil", href: "/profile", isActive: true },
     { label: "Berita", href: "/posts/news", isActive: true },
-    { label: "Pengumuman", href: "/posts/pengumuman", isActive: true },
+    { label: "Pengumuman", href: "/pengumuman", isActive: true },
     { label: "Prestasi", href: "/posts/prestasi", isActive: true },
     { label: "Kontak", href: "/contact", isActive: true },
   );
@@ -52,7 +52,7 @@ const isActiveLink = (href: string): boolean => {
   if (href === "/") {
     return currentPath === "/";
   }
-  return currentPath.startsWith(href);
+  return currentPath === href || currentPath.startsWith(href + "/");
 };
 ---
 
@@ -108,7 +108,7 @@ const isActiveLink = (href: string): boolean => {
                   class={`nav-link relative px-4 py-2 rounded-lg font-medium text-[13px] transition-all duration-200 ${
                     isActive
                       ? "nav-link-active text-primary"
-                      : "text-text/70 hover:text-heading hover:bg-primary/5"
+                      : "nav-link-inactive hover:bg-primary/5"
                   }`}
                   data-active={isActive}
                 >
@@ -151,7 +151,7 @@ const isActiveLink = (href: string): boolean => {
         <!-- Hamburger Button -->
         <button
           class="lg:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-primary/5 hover:bg-primary/10 border border-primary/10 transition-all duration-200 z-10"
-          x-on:click="window.mobileMenu && window.mobileMenu.toggle()"
+          x-on:click="$dispatch('toggle-mobile-menu')"
           aria-label="Toggle navigation"
         >
           <div class="w-5 h-3.5 relative flex flex-col justify-between">
@@ -174,7 +174,7 @@ const isActiveLink = (href: string): boolean => {
 <!-- Mobile Menu (di luar nav untuk menghindari inheritance) -->
 <div
   x-data="{ open: false }"
-  x-init="window.mobileMenu = { toggle: () => open = !open, close: () => open = false }"
+  @toggle-mobile-menu.window="open = !open"
   x-effect="document.body.style.overflow = open ? 'hidden' : ''"
 >
   <!-- Mobile Menu Overlay -->
@@ -194,8 +194,7 @@ const isActiveLink = (href: string): boolean => {
 
   <!-- Mobile Menu Panel -->
   <div
-    class="fixed inset-y-0 right-0 w-[300px] max-w-[85vw] lg:hidden z-[9999]"
-    style="background-color: #f6f6f6;"
+    class="mobile-panel fixed inset-y-0 right-0 w-[300px] max-w-[85vw] lg:hidden z-[9999]"
     x-show="open"
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="translate-x-full"
@@ -205,7 +204,7 @@ const isActiveLink = (href: string): boolean => {
     x-transition:leave-end="translate-x-full"
     x-cloak
   >
-    <div class="h-full flex flex-col" style="background-color: #f6f6f6;">
+    <div class="h-full flex flex-col">
       <!-- Mobile Header -->
       <div
         class="flex items-center justify-between p-4 border-b border-border/30"
@@ -312,7 +311,7 @@ const isActiveLink = (href: string): boolean => {
               d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
             ></path>
           </svg>
-          <p class="text-white">Daftar Pendaftaran</p>
+          <p class="text-white">{pendaftaranLabel}</p>
         </a>
         <p class="text-[11px] text-muted/60 text-center mt-3">
           © {new Date().getFullYear()}
@@ -341,14 +340,16 @@ const isActiveLink = (href: string): boolean => {
     background: transparent;
   }
 
+
   .navbar-scrolled {
-    background: rgba(var(--color-surface-rgb, 255, 255, 255), 0.85);
+    background: rgba(246, 246, 246, 0.9);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
     box-shadow:
       0 1px 0 rgba(0, 0, 0, 0.05),
       0 4px 20px rgba(0, 0, 0, 0.03);
   }
+
 
   /* Logo Glow */
   .logo-container {
@@ -376,6 +377,14 @@ const isActiveLink = (href: string): boolean => {
   /* Nav Links */
   .nav-link {
     position: relative;
+  }
+
+  .nav-link-inactive {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .nav-link-inactive:hover {
+    color: var(--color-text-heading);
   }
 
   .nav-link-active {
@@ -406,15 +415,15 @@ const isActiveLink = (href: string): boolean => {
 
   /* Mobile Panel */
   .mobile-panel {
-    background-color: #ffffff;
-    background-color: var(--color-surface, #ffffff);
+    background-color: #f6f6f6;
+    background-color: var(--color-surface, #f6f6f6);
     box-shadow: -8px 0 30px rgba(0, 0, 0, 0.2);
     isolation: isolate;
   }
 
-  :root.dark .mobile-panel {
-    background-color: #1a1a1a;
-    background-color: var(--color-surface, #1a1a1a);
+  html.dark .mobile-panel {
+    background-color: #1f2937;
+    background-color: var(--color-surface, #1f2937);
   }
 
   /* Mobile Item Animation */
@@ -440,14 +449,6 @@ const isActiveLink = (href: string): boolean => {
     display: none !important;
   }
 
-  /* Dark Mode */
-  :root.dark .navbar-scrolled {
-    background: rgba(var(--color-surface-rgb, 24, 24, 27), 0.9);
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.05),
-      0 4px 20px rgba(0, 0, 0, 0.2);
-  }
-
   /* Scrollbar */
   .mobile-panel nav::-webkit-scrollbar {
     width: 3px;
@@ -471,4 +472,5 @@ const isActiveLink = (href: string): boolean => {
       }
     }
   });
+
 </script>

@@ -1,10 +1,12 @@
-﻿---
+---
 title: Kaligrafi MA Miftahul Huda Raih Juara 3
 author: src/content/authors/admin.md
 pubdate: 2026-02-10T00:00:00.000Z
 description: M. Nur Fahmi meraih juara ketiga cabang kaligrafi pada ajang FK2MA 2026.
-category: 'prestasi'
-heroImage: /uploads/IMG-20260210-WA0027.jpg
+category: prestasi
+status: published
+scheduledTime: 2026-02-10T11:02:30.247Z
+heroImage: /uploads/prestasi-ma-miftahul-huda (1).webp
 ---
 
 M. Nur Fahmi mencatat prestasi kaligrafi FK2MA 2026 untuk MA Miftahul Huda.
