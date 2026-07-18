@@ -9,7 +9,7 @@ status: published
 heroImage: /uploads/Foto suasana keakraban guru dan siswa MA Miftahul Huda saat sesi berbagi dalam acara Chemistry Day 2026.webp
 ---
 
-**TAMBAK JAYA – **Dalam upaya mencetak generasi yang tidak hanya unggul secara akademis tetapi juga memiliki kedalaman spiritual dan karakter, MA Miftahul Huda Mathla'ul Anwar sukses menyelenggarakan kegiatan bertajuk *"Chemistry Day" *pada Sabtu, 18 Juli 2026. Acara yang dipusatkan di lingkungan madrasah ini menjadi momentum penting bagi seluruh civitas akademika untuk memperkuat ikatan emosional antara guru wali kelas dengan para peserta didik.
+TAMBAK JAYA – Dalam upaya mencetak generasi yang tidak hanya unggul secara akademis tetapi juga memiliki kedalaman spiritual dan karakter, MA Miftahul Huda Mathla'ul Anwar sukses menyelenggarakan kegiatan bertajuk \*"Chemistry Day" \*pada Sabtu, 18 Juli 2026. Acara yang dipusatkan di lingkungan madrasah ini menjadi momentum penting bagi seluruh civitas akademika untuk memperkuat ikatan emosional antara guru wali kelas dengan para peserta didik.
 
 Pendidikan karakter kini menjadi fondasi utama dalam kurikulum nasional, namun di MA Miftahul Huda, hal tersebut diterjemahkan melalui pendekatan yang lebih personal dan hangat. Chemistry Day hadir bukan sebagai praktikum sains di laboratorium, melainkan sebagai wadah untuk menciptakan "reaksi kimia" positif dalam hubungan interpersonal di sekolah.
 
@@ -23,9 +23,9 @@ Kegiatan Chemistry Day ini dirancang khusus untuk meruntuhkan sekat-sekat kaku a
 
 Dalam sambutannya, perwakilan panitia menekankan pentingnya peran guru wali sebagai orang tua kedua di sekolah. Hal ini sejalan dengan filosofi pendidikan yang dipegang teguh oleh madrasah.
 
-Sebagaimana kutipan resmi dari pihak MA Miftahul Huda: 
+Sebagaimana kutipan resmi dari pihak MA Miftahul Huda:
 
-> "Hubungan yang kuat antara guru wali dan murid adalah kunci lahirnya semangat belajar, karakter mulia, dan masa depan yang penuh keberkahan." 
+> "Hubungan yang kuat antara guru wali dan murid adalah kunci lahirnya semangat belajar, karakter mulia, dan masa depan yang penuh keberkahan."
 
 Kutipan ini menjadi jiwa dari seluruh rangkaian acara yang berlangsung dari pagi hingga sore hari tersebut.
 
