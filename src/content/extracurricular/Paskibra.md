@@ -11,9 +11,9 @@ instructor:
   name: 'Hasyim, S.Pd.'
   position: Pelatih Paskibra
 gallery:
-  - image: /uploads/Paskibra.jpeg
-    caption: Latihan formasi pengibaran
-    date: 2025-01-11T17:00:00.000Z
+  - image: /uploads/Paskibra-ma-miftahul-huda-tambak-jaya (1).webp
+    caption: Kontingen Paskibra di Tingkat Kecamatan Way Tenong
+    date: 2026-08-16T17:00:00.000Z
 achievements:
   - title: Juara 2 LKBB Pelajar
     level: Provinsi
