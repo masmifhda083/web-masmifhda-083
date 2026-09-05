@@ -2,6 +2,14 @@
   "gallery": {
     "items": [
       {
+        "title": "Upacara 17 Agustus 2026",
+        "image": "/uploads/Paskibra-ma-miftahul-huda-tambak-jaya.webp"
+      },
+      {
+        "title": "Kontingen Paskibra tingkat Kecamatan",
+        "image": "/uploads/Paskibra-ma-miftahul-huda-tambak-jaya%20(1).webp"
+      },
+      {
         "title": "Upacara Bendera",
         "image": "/uploads/upacara-bendera-ma-miftahul-huda-sanyir.jpg"
       },
@@ -46,12 +54,12 @@
         "image": "/uploads/prestasi-ma-miftahul-huda%20(4).webp"
       },
       {
-        "title": "Upacara 17 Agustus 2026",
-        "image": "/uploads/Paskibra-ma-miftahul-huda-tambak-jaya.webp"
+        "title": "Seleksi OMI 2026",
+        "image": "/uploads/siapkan-delegasi-menuju-tingkat-kabupaten-ma-miftahul-huda-tambak-jaya-gelar-seleksi-omi-2026.webp"
       },
       {
-        "title": "Kontingen Paskibra tingkat Kecamatan",
-        "image": "/uploads/Paskibra-ma-miftahul-huda-tambak-jaya%20(1).webp"
+        "title": "",
+        "image": ""
       }
     ]
   },
