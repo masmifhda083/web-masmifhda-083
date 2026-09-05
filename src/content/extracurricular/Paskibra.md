@@ -57,9 +57,9 @@ Kompetisi: Mengikuti lomba baris berbaris tingkat kota dan provinsi
 
 ### Keanggotaan
 
-Anggota Muda (kelas 7 sampai 8 SMP dan 10 SMA)
+Anggota Muda (kelas 7 sampai 8 MTs dan 10 MA)
 
-Anggota Inti (kelas 9 SMP dan 11 sampai 12 SMA)
+Anggota Inti (kelas 9 MTs dan 11 sampai 12 MA)
 
 Komandan Regu melalui seleksi internal
 
