@@ -1,40 +1,287 @@
 ---
-import Layout from "../../layouts/Layout.astro"
-import { getEntry } from "astro:content"
+// src/pages/about/visimisi.astro
+import Layout from "../../layouts/Layout.astro";
+import { getEntry } from "astro:content";
 import Sidebar from "../../components/Sidebar.astro";
-import MarkdownRenderer from '../../components/MarkdownRenderer.astro';
-import Breadcrumb from '../../components/Breadcrumb.astro';
+import AboutSubNav from "../../components/AboutSubNav.astro";
 
-const about = await getEntry("about", "index")
-if (!about) throw new Error("About data not found")
+const about = await getEntry("about", "index");
+if (!about) throw new Error("About data not found");
 
-const { visimisi } = about.data
-const item = visimisi.items[0]
-const backgroundImage = item?.image
+const title = "Visi, Misi & Nilai Karakter - MA Miftahul Huda";
+const description =
+  "Visi dan Misi MA Miftahul Huda Mathla'ul Anwar Tambak Jaya: Terwujudnya warga madrasah yang Intelektual, Agamis, Kreatif & Berakhlaqul Karimah.";
 
-const title = "Visi Misi Sekolah"
+const { visimisi } = about.data;
+const item = visimisi?.items?.[0];
+
+const misiList = [
+  {
+    num: "01",
+    title: "Manajemen Madrasah yang Kuat & Efektif",
+    desc: "Melaksanakan tata kelola administrasi dan operasional madrasah yang transparan, akuntabel, dan berorientasi pada peningkatan mutu berkelanjutan.",
+    icon: "management",
+  },
+  {
+    num: "02",
+    title: "Iklim Belajar Saintifik & Bermakna",
+    desc: "Menciptakan lingkungan pembelajaran yang interaktif, menyenangkan, dan memicu daya kritis siswa melalui pendekatan saintifik berbasis Kurikulum Merdeka.",
+    icon: "lightbulb",
+  },
+  {
+    num: "03",
+    title: "Optimalisasi Sarana & Prasarana",
+    desc: "Melengkapi dan memfungsikan laboratorium komputer, perpustakaan, sarana ibadah, dan fasilitas penunjang guna mempercepat peningkatan kompetensi santri.",
+    icon: "building",
+  },
+  {
+    num: "04",
+    title: "Kemitraan Harmonis & Kolaboratif",
+    desc: "Membangun sinergi harmonis antara dewan guru, orang tua/wali santri, tokoh masyarakat, dan instansi pemerintah dalam membina putra-putri madrasah.",
+    icon: "handshake",
+  },
+  {
+    num: "05",
+    title: "Lingkungan Bersih, Hijau & Asri",
+    desc: "Membudayakan perilaku hidup bersih, sehat, dan ramah lingkungan di lingkungan kampus madrasah demi kenyamanan proses belajar mengajar.",
+    icon: "leaf",
+  },
+  {
+    num: "06",
+    title: "Semangat Inovatif & Responsif",
+    desc: "Menanamkan etos kerja yang responsif, adaptif terhadap perkembangan teknologi modern, serta senantiasa kreatif melahirkan terobosan positif.",
+    icon: "rocket",
+  },
+];
+
+// Parse dynamic visi & misi from markdown if available
+let visiText = "Terwujudnya warga madrasah yang Intelektual, Agamis, Kreatif & Berakhlaqul Karimah";
+let dynamicMisi: { num: string; title: string; desc: string }[] = [];
+
+if (item?.body) {
+  const visiMatch = item.body.match(/###\s*Visi[^\n]*\n+([\s\S]*?)(?=###\s*Misi|$)/i);
+  if (visiMatch && visiMatch[1]) {
+    const cleanVisi = visiMatch[1].replace(/[#*_]/g, '').trim();
+    if (cleanVisi) visiText = cleanVisi;
+  }
+
+  const misiMatch = item.body.match(/###\s*Misi[^\n]*\n+([\s\S]*)/i);
+  if (misiMatch && misiMatch[1]) {
+    const lines = misiMatch[1]
+      .split('\n')
+      .map((line: string) => line.replace(/^\d+\.\s*/, '').replace(/[;.]\s*$/, '').trim())
+      .filter((line: string) => line.length > 0 && !line.startsWith('#'));
+    
+    if (lines.length > 0) {
+      dynamicMisi = lines.map((line: string, i: number) => {
+        const num = (i + 1).toString().padStart(2, '0');
+        return {
+          num,
+          title: line,
+          desc: misiList[i]?.desc || "Komitmen pendidikan unggul dan berkelanjutan di lingkungan madrasah."
+        };
+      });
+    }
+  }
+}
+
+const displayMisi = dynamicMisi.length > 0 ? dynamicMisi : misiList;
+
+const pillars = [
+  {
+    title: "Intelektual",
+    desc: "Kecakapan sains, literasi mendalam, berpikir analitis, dan tanggap terhadap perkembangan zaman.",
+    tag: "Akademik",
+  },
+  {
+    title: "Agamis",
+    desc: "Pemahaman dan pengamalan nilai-nilai Islam Ahlussunnah wal Jama'ah secara istiqomah.",
+    tag: "Spiritual",
+  },
+  {
+    title: "Kreatif",
+    desc: "Kemampuan berinovasi, berdaya cipta, mandiri, dan terampil mencari solusi atas berbagai tantangan.",
+    tag: "Keterampilan",
+  },
+  {
+    title: "Berakhlaqul Karimah",
+    desc: "Budi pekerti luhur, beradab, berbakti kepada orang tua dan guru, serta bermanfaat bagi umat.",
+    tag: "Karakter",
+  },
+];
 ---
-<Layout title={title}>
-  <!-- HERO -->
-  <section class="relative py-12 px-4">
-    <div class="container relative w-full h-screen mx-auto rounded-2xl bg-cover bg-center before:content-[''] before:absolute before:bg-black before:opacity-70 before:inset-0 before:rounded-2xl before:w-full before:h-full" 
-          style={`background-image: url(${backgroundImage})`}>
-      <div class="relative w-full h-full flex flex-col items-center justify-center">
-          <h1 class="text-xl md:text-3xl text-surface text-center p-2 font-semibold">
-            {title}
-          </h1>
-          <Breadcrumb title={title} parent={{ label: "About", href: "/about" }}/>
+
+<Layout title={title} description={description}>
+  <!-- 1. Header Section -->
+  <section class="relative bg-gradient-to-b from-primary/10 via-surface to-background pt-10 pb-12 border-b border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs md:text-sm text-muted mb-6" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
+        <span class="text-muted/60">/</span>
+        <a href="/about" class="hover:text-primary transition-colors">Tentang Kami</a>
+        <span class="text-muted/60">/</span>
+        <span class="text-heading font-semibold">Visi & Misi</span>
+      </nav>
+
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-3">
+          Arah & Cita-Cita Pendidikan
+        </div>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold font-sans text-heading tracking-tight mb-3">
+          Visi, Misi & Nilai Karakter
+        </h1>
+        <p class="text-sm sm:text-base text-muted leading-relaxed">
+          Fondasi filosofis dan cetak biru strategis MA Miftahul Huda Mathla'ul Anwar Tambak Jaya dalam mencetak generasi muslim cendekia berakhlak mulia.
+        </p>
       </div>
     </div>
   </section>
-  <section>
-    <div class="container px-4 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6">
-        <div class="w-full lg:w-3/4 overflow-x-auto mb-12">
-            <article class="prose prose-md md:prose-lg max-w-none">
-                <MarkdownRenderer content={item.body} />
-            </article>
+
+  <!-- 2. Sub-Navigation Tabs -->
+  <AboutSubNav active="visimisi" />
+
+  <!-- 3. Main Content Section -->
+  <section class="py-12 md:py-16 bg-background">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: Vision & Mission (8 Cols) -->
+        <div class="lg:col-span-8 space-y-10">
+          
+          <!-- Box 1: Visi Utama -->
+          <div class="bg-gradient-to-br from-primary via-primary to-emerald-950 text-white rounded-2xl p-6 sm:p-10 shadow-lg relative overflow-hidden border border-white/10">
+            <div class="absolute -right-16 -top-16 w-60 h-60 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4 border border-white/15">
+                <span>★</span>
+                <span>Visi Utama Madrasah</span>
+              </div>
+
+              <blockquote class="text-xl sm:text-2xl md:text-3xl font-bold font-sans text-white leading-snug tracking-tight mb-6">
+                “{visiText}”
+              </blockquote>
+
+              <p class="text-sm text-white/80 leading-relaxed max-w-2xl">
+                Sebuah ikrar luhur untuk memadukan keunggulan ilmu pengetahuan umum, keteguhan akidah Islamiah, kecakapan berkarya nyata, serta keluhuran budi pekerti dalam setiap hembusan nafas santri.
+              </p>
+            </div>
+          </div>
+
+          <!-- Box 2: 4 Pilar Karakter Visi -->
+          <div>
+            <div class="flex items-center gap-2 pb-3 mb-6 border-b border-border">
+              <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+              <h2 class="text-xl font-bold text-heading">
+                4 Pilar Nilai Karakter
+              </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {
+                pillars.map((item) => (
+                  <div class="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all duration-200">
+                    <div class="flex items-center justify-between mb-2">
+                      <h3 class="text-base font-bold text-heading">
+                        {item.title}
+                      </h3>
+                      <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-primary/10 text-primary uppercase">
+                        {item.tag}
+                      </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-muted leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <!-- Box 3: Butir Misi Strategis -->
+          <div>
+            <div class="flex items-center gap-2 pb-3 mb-6 border-b border-border">
+              <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+              <h2 class="text-xl font-bold text-heading">
+                {displayMisi.length} Butir Misi Strategis
+              </h2>
+            </div>
+
+            <div class="space-y-4">
+              {
+                displayMisi.map((misi) => (
+                  <div class="group bg-surface p-5 sm:p-6 rounded-2xl border border-border hover:border-primary/40 hover:shadow-md transition-all duration-300 flex items-start gap-4 sm:gap-5">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 text-primary font-bold font-sans text-sm sm:text-base flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                      {misi.num}
+                    </div>
+                    <div class="flex-1">
+                      <h3 class="text-base sm:text-lg font-bold text-heading group-hover:text-primary transition-colors mb-1.5">
+                        {misi.title}
+                      </h3>
+                      <p class="text-xs sm:text-sm text-muted leading-relaxed">
+                        {misi.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <!-- Box 4: Profil Capaian Lulusan -->
+          <div class="bg-surface rounded-2xl p-6 sm:p-8 border border-border">
+            <h2 class="text-lg font-bold text-heading mb-3">
+              Target Profil Lulusan MA Miftahul Huda
+            </h2>
+            <p class="text-xs sm:text-sm text-muted mb-6 leading-relaxed">
+              Setiap santri yang menyelesaikan studi di madrasah ini dibekali dengan tiga kompetensi utama:
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="p-4 rounded-xl bg-background border border-border/70">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs mb-3">
+                  01
+                </div>
+                <h3 class="text-sm font-bold text-heading mb-1">Spiritual & Ibadah</h3>
+                <p class="text-xs text-muted leading-relaxed">
+                  Tertib sholat 5 waktu berjamaah, berakhlak mulia, dan berpegang pada ajaran Islam ahlussunnah.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-background border border-border/70">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs mb-3">
+                  02
+                </div>
+                <h3 class="text-sm font-bold text-heading mb-1">Akademik & Nalar</h3>
+                <p class="text-xs text-muted leading-relaxed">
+                  Mampu bersaing dalam SNBP/SNBT, SPAN-PTKIN, dan seleksi perguruan tinggi favorit.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-background border border-border/70">
+                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs mb-3">
+                  03
+                </div>
+                <h3 class="text-sm font-bold text-heading mb-1">Keterampilan Nyata</h3>
+                <p class="text-xs text-muted leading-relaxed">
+                  Memiliki kecakapan kepemimpinan, melek teknologi informasi, dan berjiwa enterpreunerial.
+                </p>
+              </div>
+            </div>
+          </div>
+
         </div>
+
+        <!-- Right Column: Sidebar (4 Cols) -->
         <Sidebar />
+
+      </div>
     </div>
   </section>
 </Layout>

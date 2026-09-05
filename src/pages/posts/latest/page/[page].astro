@@ -1,0 +1,102 @@
+---
+// src/pages/posts/latest/page/[page].astro
+export const prerender = true;
+import Layout from "../../../../layouts/Layout.astro";
+import CardPosts from "../../../../components/CardPosts.astro";
+import Pagination from "../../../../components/Pagination.astro";
+import { getCollection } from "astro:content";
+import { paginate } from "../../../../utils/pagination";
+import { getVisiblePosts } from "../../../../utils/postFilter";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("posts");
+  const visiblePosts = getVisiblePosts(allPosts);
+  const pageSize = 8;
+  const totalPages = Math.ceil(visiblePosts.length / pageSize);
+
+  const paths = [];
+  for (let page = 2; page <= totalPages; page++) {
+    paths.push({
+      params: { page: String(page) },
+      props: { totalPages },
+    });
+  }
+
+  return paths;
+}
+
+const { page } = Astro.params;
+const pageSize = 8;
+const currentPage = parseInt(page as string);
+
+const allPosts = await getCollection("posts");
+const visiblePosts = getVisiblePosts(allPosts);
+
+// Urutkan berdasarkan tanggal upload/rilis terbaru (Descending)
+const sortedPosts = visiblePosts.sort((a, b) => {
+  const dateA = new Date(a.data.pubdate ?? 0).getTime();
+  const dateB = new Date(b.data.pubdate ?? 0).getTime();
+  return dateB - dateA;
+});
+
+const pagination = paginate({
+  totalItems: sortedPosts.length,
+  currentPage,
+  pageSize,
+});
+
+const pagedPosts = sortedPosts.slice(pagination.start, pagination.end);
+const baseUrl = "/posts/latest";
+
+const pageTitle = `Berita & Artikel Terbaru - Halaman ${currentPage}`;
+const pageDescription = `Daftar semua berita dan artikel terbaru berdasarkan tanggal upload - Halaman ${currentPage}.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <section class="bg-gray-50 min-h-screen py-12">
+    <div class="container mx-auto px-4 max-w-7xl">
+      <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
+        <div>
+          <h1 class="text-3xl font-bold text-primary">
+            Berita & Artikel Terbaru
+          </h1>
+          <p class="text-sm text-muted mt-1">
+            Menampilkan {pagination.start + 1} - {Math.min(pagination.end, sortedPosts.length)} dari {sortedPosts.length} artikel terbaru (Halaman {currentPage})
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {
+          pagedPosts.map((post) => {
+            const category = (post.data.category || "news").toLowerCase();
+            const slug = post.id.split("/").pop()?.replace(/\.mdx?$/, "") || post.id;
+            const url = `/posts/${category}/${slug}`;
+
+            return (
+              <CardPosts
+                title={post.data.title}
+                description={post.data.description}
+                image={post.data.heroImage}
+                date={post.data.pubdate ?? null}
+                category={category}
+                url={url}
+                author={
+                  post.data.author ? { name: post.data.author } : undefined
+                }
+              />
+            );
+          })
+        }
+      </div>
+
+      <div class="mt-12 flex justify-center">
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          baseUrl={baseUrl}
+        />
+      </div>
+    </div>
+  </section>
+</Layout>

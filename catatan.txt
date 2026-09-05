@@ -1,7 +1,0 @@
-update fitur kedepannya:
-1. slider
-2. animation
-3. dashboard
-4. pagination
-5. galery
-6. share article

@@ -1,6 +1,7 @@
 ---
 // src/components/Navbar.astro
 import { getCollection } from "astro:content";
+import Year from "./Year.astro";
 
 const settingsCollection = await getCollection("settings");
 const settingsData = settingsCollection[0]?.data;
@@ -8,7 +9,7 @@ const settingsData = settingsCollection[0]?.data;
 const headerData = settingsData?.header || {};
 // Data untuk logo & nama
 const schoolInfo = headerData?.schoolInfo || {
-  name: "MAS MIFHDA",
+  name: "MA MIFTAHUL HUDA",
   logo: "/uploads/logo.webp",
   logoAlt: "Logo Sekolah",
   logoWidthDesktop: 44,
@@ -16,25 +17,18 @@ const schoolInfo = headerData?.schoolInfo || {
   showName: true,
 };
 
-// Data untuk menu items (Clone agar tidak terkena error mutasi array Read-Only Astro)
+// Data untuk menu items
 const menuItems = [...(headerData?.items || [])];
 
-// Data untuk style settings
-const styleSettings = headerData?.style || {
-  bgColor: "#ffffff",
-  textColor: "#1f2937",
-  hoverColor: "#059669",
-  borderColor: "#e5e7eb",
-  bgTransparent: "solid",
-};
-
-// 3. FALLBACK JIKA DATA KOSONG
+// Fallback jika menu items kosong
 if (menuItems.length === 0) {
   menuItems.push(
-    { label: "Profil", href: "/profile", isActive: true },
+    { label: "Home", href: "/", isActive: true },
+    { label: "Profil", href: "/about", isActive: true },
     { label: "Berita", href: "/posts/news", isActive: true },
     { label: "Pengumuman", href: "/pengumuman", isActive: true },
     { label: "Prestasi", href: "/posts/prestasi", isActive: true },
+    { label: "OSIS", href: "/osis", isActive: true },
     { label: "Kontak", href: "/contact", isActive: true },
   );
 }
@@ -42,7 +36,7 @@ if (menuItems.length === 0) {
 // Ambil data pendaftaran untuk label CTA
 const pendaftaranCollection = await getCollection("pendaftaran");
 const pendaftaranData = pendaftaranCollection[0]?.data?.datappdb;
-const pendaftaranLabel = pendaftaranData?.ppdbAlias || "Pendaftaran";
+const pendaftaranLabel = pendaftaranData?.ppdbAlias || "SPMB";
 
 // Get current path for active state
 const currentPath = Astro.url.pathname;
@@ -50,7 +44,7 @@ const currentPath = Astro.url.pathname;
 // Function to check if menu item is active
 const isActiveLink = (href: string): boolean => {
   if (href === "/") {
-    return currentPath === "/";
+    return currentPath === "/" || currentPath === "";
   }
   return currentPath === href || currentPath.startsWith(href + "/");
 };
@@ -60,62 +54,54 @@ const isActiveLink = (href: string): boolean => {
   role="navigation"
   x-data="{ scrolled: false }"
   x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 10 })"
-  class="navbar-main fixed shadow top-0 left-0 right-0 z-50"
-  :class="scrolled ? 'navbar-scrolled' : 'navbar-top'"
+  class="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md border-b border-border transition-all duration-300"
+  :class="scrolled ? 'shadow-md py-0' : 'shadow-xs py-0'"
 >
-  <div class="nav-container mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
     <div class="flex items-center justify-between h-16 lg:h-[72px]">
-      <!-- Logo & Brand -->
+      <!-- Logo & Brand (Kiri) -->
       <a
         href="/"
-        class="group flex gap-2.5 items-center nav-logo relative z-10"
+        class="group flex gap-3 items-center relative z-10 transition-opacity hover:opacity-90"
       >
-        <!-- Logo Container -->
-        <div class="relative logo-container">
-          <!-- Subtle glow on hover -->
-          <div class="logo-glow"></div>
-          <img
-            src={schoolInfo.logo}
-            alt={schoolInfo.logoAlt}
-            class="h-auto relative z-10 transition-transform duration-300 group-hover:scale-105"
-            style={`width: ${schoolInfo.logoWidthDesktop}px;`}
-            width={schoolInfo.logoWidthDesktop}
-            height={schoolInfo.logoWidthDesktop}
-          />
-        </div>
+        <img
+          src={schoolInfo.logo}
+          alt={schoolInfo.logoAlt}
+          class="w-10 h-10 lg:w-11 lg:h-11 object-contain shrink-0 transition-transform duration-300 group-hover:scale-105"
+        />
 
-        <!-- Nama Sekolah -->
         {
           schoolInfo.showName && (
             <div class="flex flex-col leading-tight">
-              <span class="text-base font-bold text-heading uppercase tracking-wide">
+              <span class="text-sm lg:text-base font-bold text-heading uppercase tracking-wide font-sans">
                 {schoolInfo.name}
+              </span>
+              <span class="text-[11px] text-muted font-medium">
+                Lampung Barat
               </span>
             </div>
           )
         }
       </a>
 
-      <!-- Menu Desktop -->
-      <ul class="hidden lg:flex items-center gap-0.5">
+      <!-- Menu Navigation (Tengah) -->
+      <ul class="hidden lg:flex items-center gap-1">
         {
-          menuItems.map((item, index) => {
+          menuItems.map((item) => {
             const isActive = isActiveLink(item.href);
             return (
-              <li class="nav-item" style={`--item-index: ${index}`}>
+              <li>
                 <a
                   href={item.href}
-                  class={`nav-link relative px-4 py-2 rounded-lg font-medium text-[13px] transition-all duration-200 ${
+                  class={`relative px-3.5 py-2 font-semibold text-[13px] tracking-wide transition-colors duration-200 block ${
                     isActive
-                      ? "nav-link-active text-primary"
-                      : "nav-link-inactive hover:bg-primary/5"
+                      ? "!text-primary font-bold"
+                      : "!text-heading/75 hover:!text-primary"
                   }`}
-                  data-active={isActive}
                 >
-                  <span class="relative z-10">{item.label}</span>
-                  {/* Active indicator */}
+                  <span>{item.label}</span>
                   {isActive && (
-                    <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full" />
+                    <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-primary rounded-full" />
                   )}
                 </a>
               </li>
@@ -124,12 +110,12 @@ const isActiveLink = (href: string): boolean => {
         }
       </ul>
 
-      <!-- Right Side Actions -->
+      <!-- Right Side Actions (Kanan) -->
       <div class="flex items-center gap-3">
-        <!-- CTA Button Desktop -->
+        <!-- CTA Button SPMB Desktop -->
         <a
           href="/pendaftaran"
-          class="hidden lg:inline-flex cta-btn items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-[13px] transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 active:scale-[0.98]"
+          class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs md:text-sm bg-primary hover:bg-secondary !text-white transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +123,7 @@ const isActiveLink = (href: string): boolean => {
             viewBox="0 0 24 24"
             stroke-width="2"
             stroke="currentColor"
-            class="w-4 h-4 text-white"
+            class="w-4 h-4 text-white shrink-0"
           >
             <path
               stroke-linecap="round"
@@ -145,41 +131,43 @@ const isActiveLink = (href: string): boolean => {
               d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
             ></path>
           </svg>
-          <p class="text-white">{pendaftaranLabel}</p>
+          <span>{pendaftaranLabel} <Year /></span>
         </a>
 
-        <!-- Hamburger Button -->
+        <!-- Hamburger Button Mobile -->
         <button
-          class="lg:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-primary/5 hover:bg-primary/10 border border-primary/10 transition-all duration-200 z-10"
+          class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-primary/5 hover:bg-primary/10 border border-border transition-colors z-10"
           x-on:click="$dispatch('toggle-mobile-menu')"
           aria-label="Toggle navigation"
         >
-          <div class="w-5 h-3.5 relative flex flex-col justify-between">
-            <span
-              class="w-full h-0.5 bg-primary rounded-full transition-all duration-300 origin-center"
-            ></span>
-            <span
-              class="w-2/3 h-0.5 bg-primary rounded-full transition-all duration-300 ml-auto"
-            ></span>
-            <span
-              class="w-full h-0.5 bg-primary rounded-full transition-all duration-300 origin-center"
-            ></span>
-          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-5 h-5 text-heading"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+          </svg>
         </button>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- Mobile Menu (di luar nav untuk menghindari inheritance) -->
+<!-- Mobile Menu Drawer -->
 <div
   x-data="{ open: false }"
   @toggle-mobile-menu.window="open = !open"
   x-effect="document.body.style.overflow = open ? 'hidden' : ''"
 >
-  <!-- Mobile Menu Overlay -->
+  <!-- Overlay Backdrop -->
   <div
-    class="fixed inset-0 bg-black/70 lg:hidden z-[9998]"
+    class="fixed inset-0 bg-black/60 backdrop-blur-xs lg:hidden z-[9998]"
     x-show="open"
     x-transition:enter="transition ease-out duration-200"
     x-transition:enter-start="opacity-0"
@@ -192,9 +180,9 @@ const isActiveLink = (href: string): boolean => {
   >
   </div>
 
-  <!-- Mobile Menu Panel -->
+  <!-- Slide-Over Panel -->
   <div
-    class="mobile-panel fixed inset-y-0 right-0 w-[300px] max-w-[85vw] lg:hidden z-[9999]"
+    class="fixed inset-y-0 right-0 w-[290px] max-w-[85vw] bg-surface border-l border-border shadow-2xl lg:hidden z-[9999] flex flex-col justify-between"
     x-show="open"
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="translate-x-full"
@@ -204,28 +192,21 @@ const isActiveLink = (href: string): boolean => {
     x-transition:leave-end="translate-x-full"
     x-cloak
   >
-    <div class="h-full flex flex-col">
-      <!-- Mobile Header -->
-      <div
-        class="flex items-center justify-between p-4 border-b border-border/30"
-      >
+    <div class="flex flex-col flex-1 overflow-y-auto">
+      <!-- Mobile Drawer Header -->
+      <div class="flex items-center justify-between p-4 border-b border-border">
         <div class="flex items-center gap-2.5">
           <img
             src={schoolInfo.logo}
             alt={schoolInfo.logoAlt}
-            class="h-auto"
-            style={`width: ${schoolInfo.logoWidthMobile}px;`}
-            width={schoolInfo.logoWidthMobile}
-            height={schoolInfo.logoWidthMobile}
+            class="w-8 h-8 object-contain"
           />
-          <div class="flex flex-col leading-tight">
-            <span class="text-sm font-bold text-heading uppercase"
-              >{schoolInfo.name}</span
-            >
-          </div>
+          <span class="text-sm font-bold text-heading uppercase tracking-tight">
+            {schoolInfo.name}
+          </span>
         </div>
         <button
-          class="w-9 h-9 flex items-center justify-center rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors"
+          class="w-8 h-8 flex items-center justify-center rounded-lg bg-muted/10 hover:bg-muted/20 text-heading transition-colors"
           x-on:click="open = false"
           aria-label="Close menu"
         >
@@ -235,7 +216,7 @@ const isActiveLink = (href: string): boolean => {
             viewBox="0 0 24 24"
             stroke-width="2"
             stroke="currentColor"
-            class="w-5 h-5 text-muted"
+            class="w-4 h-4"
           >
             <path
               stroke-linecap="round"
@@ -245,43 +226,29 @@ const isActiveLink = (href: string): boolean => {
         </button>
       </div>
 
-      <!-- Mobile Menu Items -->
-      <nav class="flex-1 p-4">
+      <!-- Mobile Navigation Links -->
+      <nav class="p-3">
         <ul class="space-y-1">
           {
-            menuItems.map((item, index) => {
+            menuItems.map((item) => {
               const isActive = isActiveLink(item.href);
               return (
-                <li style={`--delay: ${index * 40}ms`} class="mobile-item">
+                <li>
                   <a
                     href={item.href}
-                    class={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-[15px] transition-all duration-200 ${
+                    class={`flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-sm transition-colors ${
                       isActive
-                        ? "bg-primary"
-                        : "text-text/80 hover:bg-muted/10 hover:text-heading"
+                        ? "!text-primary bg-primary/10"
+                        : "!text-heading/80 hover:!text-primary hover:bg-primary/5"
                     }`}
                     x-on:click="open = false"
                   >
+                    <span>{item.label}</span>
                     <span
-                      class={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-white" : "bg-primary/40"}`}
-                    />
-                    <span class={`flex-1  ${isActive ? "text-white" : ""}`}>
-                      {item.label}
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      class={`w-4 h-4 transition-transform ${isActive ? "text-white/70" : "text-muted/50"}`}
+                      class={`text-xs ${isActive ? "text-primary" : "text-muted"}`}
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                      />
-                    </svg>
+                      &rarr;
+                    </span>
                   </a>
                 </li>
               );
@@ -289,174 +256,45 @@ const isActiveLink = (href: string): boolean => {
           }
         </ul>
       </nav>
+    </div>
 
-      <!-- Mobile CTA -->
-      <div class="p-4 border-t border-border/30">
-        <a
-          href="/pendaftaran"
-          class="flex items-center justify-center gap-2 w-full px-5 py-3.5 rounded-xl font-semibold bg-gradient-to-r from-primary to-secondary transition-all duration-200 active:scale-[0.98]"
-          x-on:click="open = false"
+    <!-- Mobile Drawer Footer CTA -->
+    <div class="p-4 border-t border-border bg-surface">
+      <a
+        href="/pendaftaran"
+        class="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl font-bold text-xs bg-primary hover:bg-secondary !text-white shadow-md transition-all text-center"
+        x-on:click="open = false"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="w-4 h-4 text-white"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            class="w-5 h-5 text-white"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
-            ></path>
-          </svg>
-          <p class="text-white">{pendaftaranLabel}</p>
-        </a>
-        <p class="text-[11px] text-muted/60 text-center mt-3">
-          © {new Date().getFullYear()}
-          {schoolInfo.name}
-        </p>
-      </div>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
+          ></path>
+        </svg>
+        <span>Daftar {pendaftaranLabel} Online</span>
+      </a>
+      <p class="text-[10px] text-muted text-center mt-2.5">
+        © {new Date().getFullYear()}
+        {schoolInfo.name}
+      </p>
     </div>
   </div>
 </div>
 
-<!-- Spacer -->
+<!-- Spacer agar konten tidak tertutup fixed navbar -->
 <div class="h-16 lg:h-[72px]"></div>
 
 <style>
-  /* Nav Container */
-  .nav-container {
-    max-width: 1280px;
-  }
-
-  /* Navbar Base */
-  .navbar-main {
-    transition: all 0.3s ease;
-  }
-
-  .navbar-top {
-    background: transparent;
-  }
-
-
-  .navbar-scrolled {
-    background: rgba(246, 246, 246, 0.9);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
-    box-shadow:
-      0 1px 0 rgba(0, 0, 0, 0.05),
-      0 4px 20px rgba(0, 0, 0, 0.03);
-  }
-
-
-  /* Logo Glow */
-  .logo-container {
-    position: relative;
-  }
-
-  .logo-glow {
-    position: absolute;
-    inset: -4px;
-    background: linear-gradient(
-      135deg,
-      var(--color-primary),
-      var(--color-secondary)
-    );
-    border-radius: 50%;
-    opacity: 0;
-    filter: blur(8px);
-    transition: opacity 0.3s ease;
-  }
-
-  .nav-logo:hover .logo-glow {
-    opacity: 0.2;
-  }
-
-  /* Nav Links */
-  .nav-link {
-    position: relative;
-  }
-
-  .nav-link-inactive {
-    color: rgba(0, 0, 0, 0.6);
-  }
-
-  .nav-link-inactive:hover {
-    color: var(--color-text-heading);
-  }
-
-  .nav-link-active {
-    font-weight: 600;
-  }
-
-  /* Nav Item Animation */
-  .nav-item {
-    opacity: 0;
-    animation: fadeIn 0.4s ease forwards;
-    animation-delay: calc(var(--item-index) * 40ms);
-  }
-
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-    }
-  }
-
-  /* CTA Button */
-  .cta-btn {
-    background: linear-gradient(
-      135deg,
-      var(--color-primary),
-      var(--color-secondary)
-    );
-  }
-
-  /* Mobile Panel */
-  .mobile-panel {
-    background-color: #f6f6f6;
-    background-color: var(--color-surface, #f6f6f6);
-    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.2);
-    isolation: isolate;
-  }
-
-  html.dark .mobile-panel {
-    background-color: #1f2937;
-    background-color: var(--color-surface, #1f2937);
-  }
-
-  /* Mobile Item Animation */
-  .mobile-item {
-    opacity: 0;
-    animation: slideIn 0.3s ease forwards;
-    animation-delay: var(--delay, 0ms);
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  /* Alpine.js cloak */
   [x-cloak] {
     display: none !important;
-  }
-
-  /* Scrollbar */
-  .mobile-panel nav::-webkit-scrollbar {
-    width: 3px;
-  }
-
-  .mobile-panel nav::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 3px;
   }
 </style>
 
@@ -472,5 +310,4 @@ const isActiveLink = (href: string): boolean => {
       }
     }
   });
-
 </script>

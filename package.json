@@ -1,14 +1,13 @@
 {
-  "name": "web-sekolah",
+  "name": "web-sekolah-masmifhda",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "tinacms dev -c \"astro dev\"",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:with-tina": "tinacms build --skip-cloud-checks && astro build",
-    "generate:secrets": "node generate-password.js"
+    "build:with-tina": "tinacms build --skip-cloud-checks && astro build"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.9",

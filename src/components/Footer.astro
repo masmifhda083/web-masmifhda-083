@@ -1,47 +1,138 @@
 ---
 import { getCollection } from "astro:content";
+import contactJson from "../content/contact/index.json";
+import { SOCIAL_ICON_REGISTRY } from "../config/socialIcons";
 
-// Ambil data settings
 const settingsData = await getCollection("settings");
 const settings = settingsData[0]?.data || {};
+const contact = contactJson;
 
-// Ambil nama sekolah dengan cara yang lebih aman
-let schoolName = "Nama Sekolah";
-
+let schoolName = "MA MIFTAHUL HUDA TAMBAK";
 if (settings.footer?.schoolName) {
-    schoolName = settings.footer.schoolName;
+  schoolName = settings.footer.schoolName;
 } else if (settings.header?.schoolInfo?.name) {
-    schoolName = settings.header.schoolInfo.name;
-} else if (settings.slider?.schoolInfo?.name) {
-    schoolName = settings.slider.schoolInfo.name;
+  schoolName = settings.header.schoolInfo.name;
 }
 
-// Tahun otomatis
+type SocialIconRegistry = Record<string, { label: string; svg: string }>;
+
+const getSocialIcon = (key: string): string => {
+  return (SOCIAL_ICON_REGISTRY as SocialIconRegistry)[key]?.svg ?? "";
+};
+
 const currentYear = new Date().getFullYear();
 ---
 
-<footer role="contentinfo" class="bg-primary">
-    <div class="container w-full mx-auto py-4">
-        <div
-            class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4"
-        >
-            <p class="text-sm text-surface text-center">
-                © {currentYear}
-                <a href="/" aria-label="footer">
-                    <span class="text-surface hover:text-secondary"
-                        >{schoolName}</span
-                    ></a
-                >
-                . All Rights Reserved.
-            </p>
-            <span class="hidden md:inline text-surface/50">|</span>
-            <a href="/privacy-policy">
-                <p
-                    class="text-sm text-surface/80 hover:text-secondary transition-colors"
-                >
-                    Kebijakan Privasi
-                </p>
+<footer role="contentinfo" class="bg-[#123316] text-white border-t border-white/10">
+  <div class="container mx-auto px-4 max-w-6xl py-14 md:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+      
+      <!-- Brand Column (4 Cols) -->
+      <div class="lg:col-span-4 space-y-4">
+        <a href="/" class="inline-flex items-center gap-3 !text-white group">
+          <img
+            src="/uploads/logo.webp"
+            alt="Logo MA Miftahul Huda"
+            class="w-11 h-11 object-contain"
+          />
+          <div>
+            <span class="font-bold text-base tracking-wide text-white block leading-tight uppercase font-sans group-hover:text-amber-400 transition-colors">
+              {schoolName}
+            </span>
+            <span class="text-xs text-emerald-200/70 block">Lampung Barat</span>
+          </div>
+        </a>
+
+        <p class="text-xs md:text-sm text-emerald-100/80 leading-relaxed pr-4">
+          Madrasah Aliyah berbasis nilai-nilai keislaman dan keunggulan akademik yang berkomitmen mencetak generasi siswa berilmu, berakhlak mulia, dan berwawasan luas.
+        </p>
+
+        <!-- Social Icons -->
+        <div class="flex items-center gap-2.5 pt-2">
+          {(contact.socialMedia?.links ?? []).map((social) => (
+            <a
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-8 h-8 rounded-lg bg-white/10 hover:bg-emerald-600 !text-white flex items-center justify-center transition-all duration-200"
+              aria-label={social.iconKey}
+            >
+              <span set:html={getSocialIcon(social.iconKey)} class="*:w-4 *:h-4 fill-current" />
             </a>
+          ))}
         </div>
+      </div>
+
+      <!-- Links Column 1: Madrasah (2 Cols) -->
+      <div class="lg:col-span-2 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">
+          Madrasah
+        </h3>
+        <ul class="space-y-2 text-xs md:text-sm">
+          <li><a href="/about" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Tentang Kami</a></li>
+          <li><a href="/about/visimisi" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Visi & Misi</a></li>
+          <li><a href="/about/profil" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Sejarah</a></li>
+          <li><a href="/about/sambutan" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Kepala Madrasah</a></li>
+        </ul>
+      </div>
+
+      <!-- Links Column 2: Informasi (2 Cols) -->
+      <div class="lg:col-span-2 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">
+          Informasi
+        </h3>
+        <ul class="space-y-2 text-xs md:text-sm">
+          <li><a href="/pendaftaran" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">SPMB Online</a></li>
+          <li><a href="/osis" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Kesiswaan & OSIS</a></li>
+          <li><a href="/about/facilities" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Fasilitas</a></li>
+          <li><a href="/extracurricular" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Ekstrakurikuler</a></li>
+        </ul>
+      </div>
+
+      <!-- Links Column 3: Terkini (2 Cols) -->
+      <div class="lg:col-span-2 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">
+          Terkini
+        </h3>
+        <ul class="space-y-2 text-xs md:text-sm">
+          <li><a href="/posts/news" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Berita</a></li>
+          <li><a href="/pengumuman" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Pengumuman</a></li>
+          <li><a href="/posts/prestasi" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Prestasi</a></li>
+          <li><a href="/about/gallery" class="!text-emerald-100/80 hover:!text-white transition-colors block py-0.5">Galeri</a></li>
+        </ul>
+      </div>
+
+      <!-- Links Column 4: Kontak (2 Cols) -->
+      <div class="lg:col-span-2 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400">
+          Kontak
+        </h3>
+        <ul class="space-y-2.5 text-xs text-emerald-100/80 leading-relaxed">
+          <li class="flex items-start gap-2">
+            <span class="mt-0.5 text-emerald-400">📍</span>
+            <span>Jl. Tirtomoyo, Tambak Jaya, Way Tenong, Lampung Barat</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-emerald-400">📞</span>
+            <a href="tel:+6281938240819" class="!text-emerald-100/80 hover:!text-white transition-colors">+62 819-3824-0819</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-emerald-400">✉️</span>
+            <a href="mailto:masmifhda083@gmail.com" class="!text-emerald-100/80 hover:!text-white transition-colors truncate">masmifhda083@gmail.com</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
+
+    <!-- Bottom Copyright -->
+    <div class="pt-8 mt-12 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-emerald-200/60">
+      <p>© {currentYear} {schoolName}. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="/privacy-policy" class="!text-emerald-200/70 hover:!text-white transition-colors">Kebijakan Privasi</a>
+        <span>•</span>
+        <a href="/contact" class="!text-emerald-200/70 hover:!text-white transition-colors">Peta Lokasi</a>
+      </div>
+    </div>
+  </div>
 </footer>

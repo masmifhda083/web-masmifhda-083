@@ -1,10 +1,11 @@
 ---
-import Layout from "../layouts/Layout.astro"
-import Kontak from "../components/Contact.astro"
+import Layout from "../layouts/Layout.astro";
+import Kontak from "../components/Contact.astro";
 
+const title = "Kontak - MA Miftahul Huda";
+const description = "Hubungi pihak Tata Usaha MA Miftahul Huda Tambak Jaya untuk informasi pendaftaran siswa baru (SPMB), administrasi, legalisir, dan lokasi madrasah.";
 ---
 
-
-<Layout title="Contact">
+<Layout title={title} description={description}>
   <Kontak />
 </Layout>

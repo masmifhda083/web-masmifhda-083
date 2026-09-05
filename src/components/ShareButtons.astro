@@ -2,7 +2,8 @@
 // FILE: src/components/ShareButtons.astro
 import { SOCIAL_ICON_REGISTRY } from "../config/socialIcons";
 import { SHARE_PLATFORMS } from "../config/sharePlatforms";
-const SHARE_COLORS = {
+
+const SHARE_COLORS: Record<string, string> = {
   twitter: "#000000",
   facebook: "#1877F2",
   whatsapp: "#25D366",
@@ -10,14 +11,21 @@ const SHARE_COLORS = {
   linkedin: "#0A66C2",
   threads: "#000000",
 };
+
+interface Props {
+  title?: string;
+  url?: string;
+  excerpt?: string;
+}
+
 const { title = "", url = "", excerpt = "" } = Astro.props;
 ---
 
-<section role="navigation" aria-label="Share article">
-  <div class="flex gap-2">
+<section role="region" aria-label="Bagikan artikel" class="w-full">
+  <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1">
     {
       Object.entries(SHARE_PLATFORMS).map(([key, config]) => {
-        const icon = SOCIAL_ICON_REGISTRY[key];
+        const icon = (SOCIAL_ICON_REGISTRY as any)[key];
         if (!icon) return null;
 
         const shareUrl = config.buildUrl({ title, url, excerpt });
@@ -27,31 +35,138 @@ const { title = "", url = "", excerpt = "" } = Astro.props;
             href={shareUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Share on ${icon.label}`}
-            class="p-2 rounded-full bg-primary hover:bg-secondary transition"
-            style={`background-color:${SHARE_COLORS[key]};color:#fff`}
+            aria-label={`Bagikan ke ${icon.label}`}
+            title={`Bagikan ke ${icon.label}`}
+            class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-white shadow-xs transition-all duration-200 hover:scale-110 hover:shadow-md shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            style={`background-color:${SHARE_COLORS[key] || "#10B981"}`}
           >
-            <p set:html={icon.svg} class="text-surface " />
+            <span
+              set:html={icon.svg}
+              class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex items-center justify-center [&>svg]:w-3.5 [&>svg]:h-3.5 sm:[&>svg]:w-4 sm:[&>svg]:h-4"
+            />
           </a>
         );
       })
     }
-  </div>
 
-  <button id="share-native" class="ml-2 text-sm"> Share </button>
+    <!-- Copy Link Button -->
+    <button
+      id="copy-link-btn"
+      type="button"
+      class="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center bg-surface hover:bg-border/60 text-heading border border-border shadow-xs transition-all duration-200 hover:scale-110 hover:border-primary/50 shrink-0 cursor-pointer focus:outline-none relative"
+      title="Salin Tautan"
+      aria-label="Salin Tautan Artikel"
+    >
+      <svg
+        id="copy-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-heading transition-transform"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+      </svg>
+      <svg
+        id="check-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white hidden"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </button>
+
+    <!-- Native Web Share Button (only shown if supported) -->
+    <button
+      id="share-native"
+      type="button"
+      class="hidden w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center bg-primary hover:bg-secondary text-white shadow-xs transition-all duration-200 hover:scale-110 hover:shadow-md shrink-0 cursor-pointer focus:outline-none"
+      title="Bagikan via Aplikasi"
+      aria-label="Bagikan via Aplikasi"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-3.5 h-3.5 sm:w-4 sm:h-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+      </svg>
+    </button>
+  </div>
 </section>
 
-<script client:load>
-  const btn = document.getElementById("share-native");
-  if (btn && navigator.share) {
-    btn.addEventListener("click", () => {
+<script is:inline define:vars={{ title, excerpt, url }}>
+  // Native share button
+  const shareBtn = document.getElementById("share-native");
+  if (shareBtn && typeof navigator !== "undefined" && navigator.share) {
+    shareBtn.classList.remove("hidden");
+    shareBtn.addEventListener("click", () => {
       navigator
         .share({
-          title: { title },
-          text: { excerpt },
-          url: { url },
+          title: title || document.title,
+          text: excerpt || "",
+          url: url || window.location.href,
         })
         .catch(() => {});
+    });
+  }
+
+  // Copy link functionality
+  const copyBtn = document.getElementById("copy-link-btn");
+  const copyIcon = document.getElementById("copy-icon");
+  const checkIcon = document.getElementById("check-icon");
+
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async () => {
+      const shareUrl = url || window.location.href;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(shareUrl);
+        } else {
+          throw new Error("Clipboard API unavailable");
+        }
+      } catch (err) {
+        const textarea = document.createElement("textarea");
+        textarea.value = shareUrl;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+
+      // Visual feedback
+      if (copyIcon && checkIcon) {
+        copyIcon.classList.add("hidden");
+        checkIcon.classList.remove("hidden");
+        copyBtn.classList.add("!bg-primary", "!border-primary");
+        setTimeout(() => {
+          copyIcon.classList.remove("hidden");
+          checkIcon.classList.add("hidden");
+          copyBtn.classList.remove("!bg-primary", "!border-primary");
+        }, 2000);
+      }
     });
   }
 </script>

@@ -1,33 +1,133 @@
 ---
-import { getCollection } from "astro:content"
-import Layout from "../../layouts/Layout.astro"
+// src/pages/about/facilities.astro
+import { getEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import AboutSubNav from "../../components/AboutSubNav.astro";
 
-const about = await getCollection("about")
-const facilities = about[0].data.facilities.items
+const about = await getEntry("about", "index");
+if (!about) throw new Error("About data not found");
+
+const facilities = about.data.facilities.items;
+
+const title = "Fasilitas & Sarana Belajar - MA Miftahul Huda";
+const description =
+  "Sarana dan prasarana penunjang kegiatan belajar mengajar MA Miftahul Huda Mathla'ul Anwar: Laboratorium Komputer, Perpustakaan, dan fasilitas modern lainnya di Lampung Barat.";
 ---
 
-<Layout>
-<section class="py-16">
-  <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-semibold mb-8">
-      Fasilitas Sekolah
-    </h1>
+<Layout title={title} description={description}>
+  <!-- 1. Header Section -->
+  <section class="relative bg-gradient-to-b from-primary/10 via-surface to-background pt-10 pb-12 border-b border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs md:text-sm text-muted mb-6" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
+        <span class="text-muted/60">/</span>
+        <a href="/about" class="hover:text-primary transition-colors">Tentang Kami</a>
+        <span class="text-muted/60">/</span>
+        <span class="text-heading font-semibold">Fasilitas Belajar</span>
+      </nav>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-      {facilities.map(item => (
-        <div class="relative w-full shadow rounded overflow-hidden">
-          <img
-            src={item.image}
-            alt={item.title}
-            class="object-cover aspect-video hover:scale-125 hover:-skew-3 transition-transform duration-300"
-          />
-          <span class="absolute bottom-2 left-1/2 -translate-x-1/2 w-max bg-surface rounded-full text-xs text-primary font-bold px-3 py-2 text-center">
-            {item.title}
-          </span>
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-3">
+          Sarana & Prasarana
         </div>
-      ))}
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold font-sans text-heading tracking-tight mb-3">
+          Fasilitas & Sarana Belajar
+        </h1>
+        <p class="text-sm sm:text-base text-muted leading-relaxed">
+          Sarana penunjang pembelajaran berkualitas untuk mengoptimalkan potensi akademik, keterampilan teknologi, dan kenyamanan ibadah para santri.
+        </p>
+      </div>
     </div>
-  </div>
-</section>
-  
+  </section>
+
+  <!-- 2. Sub-Navigation Tabs -->
+  <AboutSubNav active="facilities" />
+
+  <!-- 3. Facilities Grid Section with Lightbox Modal -->
+  <section class="py-12 md:py-16 bg-background" x-data="{ modalOpen: false, modalImg: '', modalTitle: '' }">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {
+          facilities.map((item) => (
+            <div
+              @click={`modalOpen = true; modalImg = '${item.image}'; modalTitle = '${item.title}'`}
+              class="group relative bg-surface rounded-2xl overflow-hidden border border-border hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between"
+            >
+              <div class="relative w-full aspect-16/10 overflow-hidden bg-muted/20">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                <div class="absolute top-3.5 left-3.5 z-10">
+                  <span class="inline-block px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-[11px] font-bold text-amber-300 uppercase tracking-wider border border-white/20">
+                    Fasilitas Utama
+                  </span>
+                </div>
+
+                <div class="absolute bottom-3.5 left-3.5 right-3.5 z-10">
+                  <h3 class="text-base sm:text-lg font-bold text-white drop-shadow-sm">
+                    {item.title}
+                  </h3>
+                </div>
+              </div>
+
+              <div class="p-4 bg-surface border-t border-border flex items-center justify-between text-xs text-muted">
+                <span>Sarana Representatif</span>
+                <span class="text-primary font-bold group-hover:underline">Perbesar Foto &rarr;</span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Lightbox Modal -->
+      <div
+        x-show="modalOpen"
+        style="display: none;"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        @keydown.escape.window="modalOpen = false"
+      >
+        <div
+          class="relative max-w-4xl w-full bg-surface rounded-2xl overflow-hidden shadow-2xl border border-white/20"
+          @click.outside="modalOpen = false"
+        >
+          <button
+            type="button"
+            @click="modalOpen = false"
+            class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <div class="max-h-[75vh] w-full bg-black flex items-center justify-center overflow-hidden">
+            <img :src="modalImg" :alt="modalTitle" class="max-h-[75vh] w-auto object-contain mx-auto" />
+          </div>
+
+          <div class="p-5 bg-surface border-t border-border">
+            <h4 x-text="modalTitle" class="text-base sm:text-lg font-bold text-heading"></h4>
+            <p class="text-xs text-muted mt-0.5">MA Miftahul Huda Sarana Belajar</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
 </Layout>

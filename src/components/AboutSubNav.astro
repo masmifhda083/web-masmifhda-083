@@ -1,0 +1,54 @@
+---
+// src/components/AboutSubNav.astro
+interface Props {
+  active: "profil" | "visimisi" | "sambutan" | "kepegawaian" | "facilities" | "gallery";
+}
+
+const { active } = Astro.props;
+
+const navItems = [
+  { id: "profil", label: "Profil & Legalitas", href: "/about/profil", icon: "document" },
+  { id: "visimisi", label: "Visi & Misi", href: "/about/visimisi", icon: "sparkles" },
+  { id: "sambutan", label: "Sambutan Kepsek", href: "/about/sambutan", icon: "user" },
+  { id: "kepegawaian", label: "Dewan Guru & Staf", href: "/about/kepegawaian", icon: "academic" },
+  { id: "facilities", label: "Fasilitas Belajar", href: "/about/facilities", icon: "building" },
+  { id: "gallery", label: "Galeri Aktivitas", href: "/about/gallery", icon: "photo" },
+];
+---
+
+<div class="bg-surface border-b border-border sticky top-16 lg:top-[72px] z-30 backdrop-blur-md bg-surface/90 shadow-2xs">
+  <div class="container mx-auto px-4 max-w-6xl">
+    <div class="flex items-center gap-2 py-2.5 overflow-x-auto no-scrollbar">
+      <a
+        href="/about"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-muted hover:text-primary transition-colors shrink-0"
+        title="Kembali ke Index Profil"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>Index Profil</span>
+      </a>
+
+      <span class="w-px h-4 bg-border shrink-0"></span>
+
+      {
+        navItems.map((item) => {
+          const isActive = active === item.id;
+          return (
+            <a
+              href={item.href}
+              class={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 ${
+                isActive
+                  ? "bg-primary !text-white shadow-xs font-bold"
+                  : "text-heading hover:text-primary hover:bg-background/80 border border-transparent hover:border-border"
+              }`}
+            >
+              <span>{item.label}</span>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+</div>

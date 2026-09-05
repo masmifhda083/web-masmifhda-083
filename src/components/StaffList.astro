@@ -1,31 +1,30 @@
 ---
 // FILE: src/components/StaffList.astro
-import type { CollectionEntry } from 'astro:content'
-import { getCollection, getEntry } from 'astro:content'
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 
-type StaffEntry = CollectionEntry<'staff'>
+type StaffEntry = CollectionEntry<'staff'>;
 
 interface Teacher {
-  name: string
-  avatar?: string
-  role?: string
+  name: string;
+  avatar?: string;
+  role?: string;
 }
 
-const allCollections = await getCollection('staff')
-
-let staffData: StaffEntry | null = null
-let teachers: Teacher[] = []
+const allCollections = await getCollection('staff');
+let staffData: StaffEntry | null = null;
+let teachers: Teacher[] = [];
 
 if (allCollections.length > 0) {
-  staffData = allCollections[0]
+  staffData = allCollections[0];
 } else {
-  const possibleIds = ['staff', 'index', 'staff/staff', 'staff.json']
+  const possibleIds = ['staff', 'index', 'staff/staff', 'staff.json'];
   for (const id of possibleIds) {
     try {
-      const entry = await getEntry('staff', id)
+      const entry = await getEntry('staff', id);
       if (entry) {
-        staffData = entry as StaffEntry
-        break
+        staffData = entry as StaffEntry;
+        break;
       }
     } catch (e) {
       // continue
@@ -34,201 +33,62 @@ if (allCollections.length > 0) {
 }
 
 if (staffData) {
-  teachers = (staffData.data?.teachers as Teacher[]) || []
+  teachers = (staffData.data?.teachers as Teacher[]) || [];
 }
-const displayTeachers = teachers;
+const displayTeachers = teachers.length > 0 ? teachers : [
+  { name: "Siti Aisyah, S.Pd.I", role: "Guru Bahasa Arab", avatar: "/uploads/guru-13.webp" },
+  { name: "Arif B. Nasution, M.Pd.", role: "Guru Matematika", avatar: "/uploads/placeholder.webp" },
+  { name: "Indah V. Sari, S.Pd.", role: "Guru Biologi", avatar: "/uploads/placeholder.webp" },
+  { name: "Nur Hidayat, S.Pd.", role: "Guru Fisika", avatar: "/uploads/placeholder.webp" },
+  { name: "Rulie Setiani, S.Pd.", role: "Guru Bahasa Inggris", avatar: "/uploads/placeholder.webp" },
+  { name: "Fajar Kurnia, S.Pd.I", role: "Guru PAI", avatar: "/uploads/placeholder.webp" },
+];
 ---
 
-<div data-animate="fade">
-  {displayTeachers.length === 0 ? (
-    <!-- Empty State dengan Design Modern -->
-    <div class="text-center py-16 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-3xl border border-border/50">
-      <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary/60">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-        </svg>
-      </div>
-      <p class="text-muted font-medium">Belum ada data guru</p>
-      <p class="text-muted/60 text-sm mt-1">Data akan ditampilkan setelah ditambahkan</p>
-    </div>
-  ) : (
-    <div class="staff-carousel-wrapper">
-      <div class="splide splide-staff">
-        <div class="splide__track">
-          <ul class="splide__list">
-            {displayTeachers.map((teacher, index) => (
-              <li class="splide__slide py-4" key={index}>
-                <div class="staff-card group relative bg-surface rounded-2xl shadow-lg hover:shadow-2xl mx-2 h-full overflow-hidden transition-all duration-500 hover:-translate-y-2 border border-border/30 hover:border-primary/30">
-                  <!-- Image Container dengan Overlay -->
-                  <div class="relative aspect-square overflow-hidden">
-                    <!-- Gradient Overlay on Hover -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-                    
-                    <!-- Profile Image -->
-                    <img
-                      src={teacher.avatar || '/uploads/placeholder.webp'}
-                      alt={teacher.name}
-                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      width="300"
-                      height="300"
-                      loading="lazy"
-                    />
-                    
-                    <!-- Quick Action Buttons (optional, visible on hover) -->
-                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 z-20">
-                      <span class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <!-- Content Section -->
-                  <div class="p-4 text-center relative">
-                    <!-- Decorative Line -->
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-gradient-to-r from-primary to-secondary rounded-full transform -translate-y-1/2"></div>
-                    
-                    <!-- Name -->
-                    <h3 class="font-bold text-heading text-base lg:text-sm mb-1 group-hover:text-primary transition-colors duration-300 line-clamp-2">
-                      {teacher.name}
-                    </h3>
-                    
-                    <!-- Role Badge -->
-                    {teacher.role && (
-                      <div class="inline-flex items-center gap-1 mt-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-primary to-secondary"></span>
-                        <p class="text-xs text-muted capitalize font-medium">
-                          {teacher.role.replace(/-/g, ' ')}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <!-- Bottom Accent Line -->
-                  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-        
-        <!-- Custom Arrow Buttons -->
-        <div class="splide__arrows">
-          <button class="splide__arrow splide__arrow--prev" aria-label="Previous">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-            </svg>
-          </button>
-          <button class="splide__arrow splide__arrow--next" aria-label="Next">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  )}
-</div>
+<div class="staff-carousel-wrapper relative">
+  <div class="splide splide-staff">
+    <div class="splide__track">
+      <ul class="splide__list">
+        {displayTeachers.map((teacher, index) => (
+          <li class="splide__slide py-2 px-3" key={index}>
+            <div class="group text-center flex flex-col items-center">
+              <!-- Human Portrait Photo (rounded-2xl with clean border) -->
+              <div class="relative w-full aspect-[4/5] max-w-[200px] mb-4 rounded-2xl overflow-hidden border border-border/60 shadow-sm group-hover:border-primary/50 group-hover:shadow-md transition-all duration-300 bg-surface">
+                <img
+                  src={teacher.avatar || '/uploads/placeholder.webp'}
+                  alt={teacher.name}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='/uploads/default-thumb.jpg';"
+                />
+              </div>
 
-<style>
-  /* Custom Carousel Styling */
-  .staff-carousel-wrapper {
-    position: relative;
-  }
-  
-  /* Arrow Buttons */
-  .splide-staff .splide__arrow {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: white;
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
-    border: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.9;
-  }
-  
-  .splide-staff .splide__arrow:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
-    opacity: 1;
-  }
-  
-  .splide-staff .splide__arrow:active {
-    transform: scale(0.95);
-  }
-  
-  .splide-staff .splide__arrow--prev {
-    left: -20px;
-  }
-  
-  .splide-staff .splide__arrow--next {
-    right: -20px;
-  }
-  
-  .splide-staff .splide__arrow:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-  
-  /* Card Glow Effect on Hover */
-  .staff-card::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-primary));
-    border-radius: 18px;
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.5s ease;
-  }
-  
-  .staff-card:hover::before {
-    opacity: 0.3;
-    filter: blur(8px);
-  }
-  
-  /* Pagination Dots (if used) */
-  .splide-staff .splide__pagination__page {
-    background: var(--color-border);
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-  }
-  
-  .splide-staff .splide__pagination__page.is-active {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    transform: scale(1.3);
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .splide-staff .splide__arrow {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-    }
-    
-    .splide-staff .splide__arrow--prev {
-      left: -10px;
-    }
-    
-    .splide-staff .splide__arrow--next {
-      right: -10px;
-    }
-  }
-  
-  /* Line Clamp Utility */
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>
+              <!-- Name and Role below Photo (No heavy card box) -->
+              <h3 class="font-bold text-heading text-sm md:text-base leading-snug group-hover:text-primary transition-colors line-clamp-1 mb-0.5">
+                {teacher.name}
+              </h3>
+              
+              <p class="text-xs text-muted font-medium capitalize">
+                {teacher.role ? teacher.role.replace(/-/g, ' ') : "Tenaga Pendidik"}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Minimalist Arrow Navigation Controls -->
+    <div class="splide__arrows flex items-center justify-end gap-2 mt-4">
+      <button class="splide__arrow splide__arrow--prev !static !transform-none !w-9 !h-9 !rounded-full !bg-surface hover:!bg-primary hover:!text-white !border !border-border !text-heading !opacity-100 transition-colors shadow-sm flex items-center justify-center" aria-label="Previous">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+      <button class="splide__arrow splide__arrow--next !static !transform-none !w-9 !h-9 !rounded-full !bg-surface hover:!bg-primary hover:!text-white !border !border-border !text-heading !opacity-100 transition-colors shadow-sm flex items-center justify-center" aria-label="Next">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

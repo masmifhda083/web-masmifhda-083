@@ -1,95 +1,263 @@
 ---
-import Layout from "../../layouts/Layout.astro"
-import { getEntry } from "astro:content"
-import Sidebar from "../../components/Sidebar.astro"
-import Breadcrumb from '../../components/Breadcrumb.astro';
-const about = await getEntry("about", "index")
-if (!about) throw new Error("About data not found")
+// src/pages/about/profil.astro
+import Layout from "../../layouts/Layout.astro";
+import { getEntry } from "astro:content";
+import Sidebar from "../../components/Sidebar.astro";
+import AboutSubNav from "../../components/AboutSubNav.astro";
 
-const { profil } = about.data
-const item = profil.items[0]
-const backgroundImage = item?.image
+const about = await getEntry("about", "index");
+if (!about) throw new Error("About data not found");
 
-function parseTable(markdown) {
+const { profil } = about.data;
+const item = profil.items[0];
+
+function parseTable(markdown: string) {
+  if (!markdown) return [];
   const lines = markdown
     .split("\n")
-    .map(l => l.trim())
-    .filter(l => l.startsWith("|"))
+    .map((l) => l.trim())
+    .filter((l) => l.startsWith("|"));
 
-  const rows = lines.slice(2)
+  const rows = lines.slice(2);
 
-  return rows.map(row => {
-    const cols = row
-      .split("|")
-      .map(c => c.trim())
-      .filter(Boolean)
+  return rows
+    .map((row) => {
+      const cols = row
+        .split("|")
+        .map((c) => c.trim())
+        .filter(Boolean);
 
-    return {
-      no: cols[0],
-      keterangan: cols[1],
-      data: cols[2]
-    }
-  })
+      return {
+        no: cols[0],
+        keterangan: cols[1],
+        data: cols[2] || "-",
+      };
+    })
+    .filter((r) => r.keterangan && r.keterangan !== "Keterangan");
 }
 
-const rows = parseTable(item.body)
-const title ="Profile Lengkap Sekolah"
+const allRows = parseTable(item.body);
+const title = "Profil & Data Pokok Madrasah - MA Miftahul Huda";
+const description =
+  "Data resmi MAS Miftahul Huda Mathla'ul Anwar: NPSN 10648392, Kurikulum Merdeka, Kepala Madrasah Ahmad Rifa'i M.Pd, alamat Way Tenong Lampung Barat.";
+
+function findRow(keyword: string, fallback: string) {
+  const row = allRows.find((r) => r.keterangan?.toLowerCase().includes(keyword.toLowerCase()));
+  return (row && row.data && row.data !== "-") ? row.data : fallback;
+}
+
+// Data highlight pokok
+const coreData = [
+  { label: "Nama Madrasah", value: findRow("nama sekolah", "MAS MIFTAHUL HUDA"), badge: "Resmi" },
+  { label: "NPSN", value: findRow("npsn", "10648392"), badge: "Kemenag/Kemdikbud" },
+  { label: "Jenjang Pendidikan", value: findRow("jenjang", "Madrasah Aliyah (MA)"), badge: "Setara SMA" },
+  { label: "Status Sekolah", value: findRow("status sekolah", "Swasta"), badge: "Kemenag RI" },
+  { label: "Kurikulum", value: findRow("kurikulum", "Kurikulum Merdeka"), badge: "Aktif" },
+  { label: "Kepala Madrasah", value: findRow("kepala sekolah", "Ahmad Rifa’i, M.Pd."), badge: "Pimpinan" },
+  { label: "Waktu Belajar", value: findRow("waktu penyelenggaraan", "Sehari Penuh (5 Hari/Minggu)"), badge: "Senin - Jumat" },
+  { label: "Bantuan Pemerintah", value: findRow("menerima bos", "Bersedia"), badge: "Terverifikasi" },
+];
+
+const rawEmail = findRow("email", "masmifhda083@gmail.com");
+const emailVal = rawEmail.replace(/\[|\]|\(mailto:[^)]+\)/g, '').trim();
+
+const rawWebsite = findRow("website", "https://masmifhda.sch.id/");
+const websiteVal = rawWebsite.replace(/\[|\]|\(http[^)]+\)/g, '').trim();
+
+const contactData = [
+  { label: "Alamat Kampus", value: findRow("alamat", "Jl. Tirtomoyo, Tambak Jaya, Kec. Way Tenong, Kab. Lampung Barat, Lampung 34884") },
+  { label: "Email Resmi", value: emailVal, isLink: true, href: `mailto:${emailVal}` },
+  { label: "Website Resmi", value: websiteVal, isLink: true, href: websiteVal },
+  { label: "Sumber Energi Listrik", value: findRow("sumber listrik", "PLN") },
+  { label: "Posisi Geografis", value: findRow("posisi geografis", "Kecamatan Way Tenong, Lampung Barat") },
+];
 ---
-<Layout title={title}>
-  <!-- HERO -->
-  <section class="relative py-12 px-4">
-    <div class="container relative w-full h-screen mx-auto rounded-2xl bg-cover bg-center before:content-[''] before:absolute before:bg-black before:opacity-70 before:inset-0 before:rounded-2xl before:w-full before:h-full" 
-          style={`background-image: url(${backgroundImage})`}>
-      <div class="relative w-full h-full flex flex-col items-center justify-center">
-          <h1 class="text-xl md:text-3xl text-surface text-center p-2 font-semibold">
-            {title}
-          </h1>
-          <Breadcrumb title={title} parent={{ label: "About", href: "/about" }}/>
+
+<Layout title={title} description={description}>
+  <!-- 1. Header Section -->
+  <section class="relative bg-gradient-to-b from-primary/10 via-surface to-background pt-10 pb-12 border-b border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs md:text-sm text-muted mb-6" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
+        <span class="text-muted/60">/</span>
+        <a href="/about" class="hover:text-primary transition-colors">Tentang Kami</a>
+        <span class="text-muted/60">/</span>
+        <span class="text-heading font-semibold">Profil Lengkap</span>
+      </nav>
+
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-3">
+          Identitas & Legalitas Resmi
+        </div>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold font-sans text-heading tracking-tight mb-3">
+          Profil & Data Pokok Madrasah
+        </h1>
+        <p class="text-sm sm:text-base text-muted leading-relaxed">
+          Dokumen legalitas operasional, data pokok kelembagaan, kurikulum pembelajaran, serta informasi kontak resmi MAS Miftahul Huda Mathla'ul Anwar.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- TABLE -->
-  <section>
-    <div class="container px-4 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6">
-      <div class="w-full lg:w-3/4 space-y-3 overflow-x-auto mb-12">
-        <h2 class="text-2xl font-semibold mb-6">
-            {item.title}
-        </h2>
-        <table class="w-full text-sm">
-          <thead class="bg-surface">
-            <tr>
-              <th class="px-2 py-3 text-left">
-                No
-              </th>
-              <th class="px-2 py-3 text-left">
-                Keterangan
-              </th>
-              <th class="px-2 py-3 text-left">
-                Data
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              rows.map((row, index) => (
-                <tr class={index % 2 === 0 ? "bg-surface" : "bg-muted text-surface"}>
-                  <td class="px-4 py-2">
-                    {row.no}
-                  </td>
-                  <td class="px-4 py-2">
-                    {row.keterangan}
-                  </td>
-                  <td class="px-4 py-2">
-                    {row.data}
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
+  <!-- 2. Sub-Navigation Tabs -->
+  <AboutSubNav active="profil" />
+
+  <!-- 3. Main Content Section -->
+  <section class="py-12 md:py-16 bg-background">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: Profile Data (8 Cols) -->
+        <div class="lg:col-span-8 space-y-8">
+          
+          <!-- Box 1: Highlight Card Identitas Utama -->
+          <div class="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+            <div class="flex items-center justify-between pb-4 mb-6 border-b border-border">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+                <h2 class="text-lg sm:text-xl font-bold text-heading">
+                  Identitas Kelembagaan Pokok
+                </h2>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
+                NPSN 10648392
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {
+                coreData.map((item) => (
+                  <div class="p-4 rounded-xl bg-background border border-border/70">
+                    <span class="text-xs font-medium text-muted block mb-1">
+                      {item.label}
+                    </span>
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-sm sm:text-base font-bold text-heading">
+                        {item.value}
+                      </span>
+                      <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-surface border border-border text-muted">
+                        {item.badge}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <!-- Box 2: Kontak & Domisili Kampus -->
+          <div class="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+            <div class="flex items-center gap-2 pb-4 mb-6 border-b border-border">
+              <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+              <h2 class="text-lg sm:text-xl font-bold text-heading">
+                Domisili & Saluran Resmi
+              </h2>
+            </div>
+
+            <div class="space-y-4">
+              {
+                contactData.map((item) => (
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-background border border-border/70 gap-1 sm:gap-4">
+                    <span class="text-xs font-medium text-muted shrink-0 sm:w-44">
+                      {item.label}
+                    </span>
+                    {item.isLink ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-sm font-bold text-primary hover:text-secondary transition-colors truncate"
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      <span class="text-sm font-semibold text-heading text-left sm:text-right">
+                        {item.value}
+                      </span>
+                    )}
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <!-- Box 3: Tabel Data Pokok Seluruhnya -->
+          <div class="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm">
+            <div class="flex items-center justify-between pb-4 mb-6 border-b border-border">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <h2 class="text-lg sm:text-xl font-bold text-heading">
+                  Rincian Data Arsip EMIS / Dapodik
+                </h2>
+              </div>
+              <span class="text-xs text-muted">
+                {allRows.length} Parameter
+              </span>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-border">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-background border-b border-border text-heading font-semibold">
+                  <tr>
+                    <th class="py-3 px-4 w-12 text-center">No</th>
+                    <th class="py-3 px-4 w-2/5">Keterangan</th>
+                    <th class="py-3 px-4">Data Validasi</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border/60">
+                  {
+                    allRows.map((row, idx) => (
+                      <tr class={idx % 2 === 0 ? "bg-surface" : "bg-background/50 hover:bg-primary/5 transition-colors"}>
+                        <td class="py-2.5 px-4 text-center text-muted font-medium">
+                          {row.no || idx + 1}
+                        </td>
+                        <td class="py-2.5 px-4 font-medium text-heading">
+                          {row.keterangan}
+                        </td>
+                        <td class="py-2.5 px-4 text-text font-semibold">
+                          {row.data === "-" || !row.data ? (
+                            <span class="text-muted italic text-xs">Belum Diisi</span>
+                          ) : (
+                            row.data
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Box 4: CTA Lokasi -->
+          <div class="p-6 rounded-2xl bg-gradient-to-r from-primary/10 via-surface to-surface border border-primary/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 class="text-base font-bold text-heading">Ingin Berkunjung Langsung ke Kampus?</h3>
+              <p class="text-xs sm:text-sm text-muted">Lihat petunjuk arah di Google Maps atau hubungi Tata Usaha madrasah.</p>
+            </div>
+            <a
+              href="/contact"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-secondary !text-white text-xs sm:text-sm font-semibold transition-colors shrink-0 shadow-xs"
+            >
+              <span>Petunjuk Lokasi & Kontak</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Sidebar (4 Cols) -->
+        <Sidebar />
+
       </div>
-      <Sidebar />
     </div>
   </section>
 </Layout>

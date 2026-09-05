@@ -1,108 +1,227 @@
 ---
-//src/pages/about/gallery/page/[page].astro
+// src/pages/about/gallery/page/[page].astro
 export const prerender = true;
 import Layout from "../../../../layouts/Layout.astro";
-import Breadcrumb from "../../../../components/Breadcrumb.astro";
 import Pagination from "../../../../components/Pagination.astro";
 import { getEntry } from "astro:content";
 import { paginate } from "../../../../utils/pagination";
+import AboutSubNav from "../../../../components/AboutSubNav.astro";
 
 export async function getStaticPaths() {
-    const about = await getEntry("about", "index");
-    if (!about) return [];
+  const about = await getEntry("about", "index");
+  if (!about) return [];
 
-    const allGallery = about.data.gallery.items;
-    const pageSize = 6;
-    const totalPages = Math.ceil(allGallery.length / pageSize);
+  const allGallery = about.data.gallery.items;
+  const pageSize = 8;
+  const totalPages = Math.ceil(allGallery.length / pageSize);
 
-    const paths = [];
+  const paths = [];
 
-    // Generate paths for page 2 onwards (page 1 is handled by gallery.astro)
-    for (let page = 2; page <= totalPages; page++) {
-        paths.push({
-            params: { page: String(page) },
-            props: { page, totalPages, allGallery },
-        });
-    }
+  // Generate paths for page 2 onwards (page 1 is handled by gallery.astro)
+  for (let page = 2; page <= totalPages; page++) {
+    paths.push({
+      params: { page: String(page) },
+      props: { page, totalPages, allGallery },
+    });
+  }
 
-    return paths;
+  return paths;
 }
 
 const { page } = Astro.params;
 const { totalPages, allGallery } = Astro.props;
 
-const backgroundImage =
-    allGallery.length > 0 ? allGallery[allGallery.length - 1].image : undefined;
+// Helper kategori
+function getGalleryCategory(title: string) {
+  const t = title.toLowerCase();
+  if (t.includes("juara")) return "Prestasi & Trofi";
+  if (t.includes("ujian")) return "Akademik";
+  if (t.includes("harlah") || t.includes("pengajian")) return "Peringatan & Harlah";
+  if (t.includes("pramuka")) return "Ekstrakurikuler";
+  return "Kegiatan Madrasah";
+}
 
 // Pagination settings
-const pageSize = 6;
+const pageSize = 8;
 const currentPage = parseInt(page);
 
 const pagination = paginate({
-    totalItems: allGallery.length,
-    currentPage,
-    pageSize,
+  totalItems: allGallery.length,
+  currentPage,
+  pageSize,
 });
 
 const gallery = allGallery.slice(pagination.start, pagination.end);
 const baseUrl = "/about/gallery";
 
-const title = "Galeri Kegiatan";
+const title = `Galeri Aktivitas & Prestasi - Halaman ${currentPage}`;
+const description = `Arsip foto dokumentasi kegiatan madrasah dan prestasi santri MA Miftahul Huda - Halaman ${currentPage}.`;
 ---
 
-<Layout title={`${title} - Halaman ${currentPage}`}>
-    <section class="relative py-12 px-4">
-        <div
-            class="container relative w-full h-screen mx-auto rounded-2xl bg-cover bg-center before:content-[''] before:absolute before:bg-black before:opacity-70 before:inset-0 before:rounded-2xl before:w-full before:h-full"
-            style={`background-image: url(${backgroundImage})`}
-        >
-            <div
-                class="relative w-full h-full flex flex-col items-center justify-center"
-            >
-                <h1
-                    class="text-xl md:text-3xl text-surface text-center p-2 font-semibold"
-                >
-                    {title}
-                </h1>
-                <Breadcrumb
-                    title={title}
-                    parent={{ label: "About", href: "/about" }}
-                />
-            </div>
-        </div>
-    </section>
-    <section class="py-12">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {
-                    gallery.map((item) => (
-                        <figure>
-                            <div class="relative w-full shadow rounded overflow-hidden">
-                                <img
-                                    src={item.image}
-                                    alt={item.title}
-                                    class="object-cover aspect-video hover:scale-125 hover:-skew-3 transition-transform duration-300"
-                                />
-                                <span class="absolute bottom-2 left-1/2 -translate-x-1/2 w-max bg-surface rounded-full text-xs text-primary font-bold px-3 py-2 text-center">
-                                    {item.title}
-                                </span>
-                            </div>
-                        </figure>
-                    ))
-                }
-            </div>
+<Layout title={`${title} | MA Miftahul Huda`} description={description}>
+  <!-- 1. Header Section -->
+  <section class="relative bg-gradient-to-b from-primary/10 via-surface to-background pt-10 pb-12 border-b border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs md:text-sm text-muted mb-6" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
+        <span class="text-muted/60">/</span>
+        <a href="/about" class="hover:text-primary transition-colors">Tentang Kami</a>
+        <span class="text-muted/60">/</span>
+        <a href="/about/gallery" class="hover:text-primary transition-colors">Galeri</a>
+        <span class="text-muted/60">/</span>
+        <span class="text-heading font-semibold">Halaman {currentPage}</span>
+      </nav>
 
-            {
-                pagination.totalPages > 1 && (
-                    <div class="mt-10 flex justify-center">
-                        <Pagination
-                            currentPage={pagination.currentPage}
-                            totalPages={pagination.totalPages}
-                            baseUrl={baseUrl}
-                        />
-                    </div>
-                )
-            }
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-3">
+          Dokumentasi & Prestasi • Halaman {currentPage}
         </div>
-    </section>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold font-sans text-heading tracking-tight mb-3">
+          Galeri Aktivitas & Prestasi Santri
+        </h1>
+        <p class="text-sm sm:text-base text-muted leading-relaxed">
+          Dokumentasi visual momen kebersamaan, dinamika pembelajaran, kegiatan kepramukaan, hari besar Islam, dan piala kejuaraan santri MA Miftahul Huda.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Sub-Navigation Tabs -->
+  <AboutSubNav active="gallery" />
+
+  <!-- 3. Gallery Grid Section with Lightbox Modal -->
+  <section class="py-12 md:py-16 bg-background" x-data="{ modalOpen: false, modalImg: '', modalTitle: '', modalCat: '' }">
+    <div class="max-w-6xl mx-auto px-4">
+      
+      <!-- Top Meta Filter Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 mb-8 border-b border-border">
+        <div class="flex items-center gap-2 text-xs font-medium text-muted">
+          <span class="font-bold text-heading text-sm">Arsip Dokumentasi</span>
+          <span>•</span>
+          <span>Halaman {currentPage} dari {totalPages}</span>
+        </div>
+
+        <span class="text-xs text-muted">
+          Klik foto untuk memperbesar
+        </span>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        {
+          gallery.map((item) => {
+            const category = getGalleryCategory(item.title);
+            return (
+              <div
+                @click={`modalOpen = true; modalImg = '${item.image}'; modalTitle = '${item.title}'; modalCat = '${category}'`}
+                class="group relative bg-surface rounded-2xl overflow-hidden border border-border hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between"
+              >
+                <!-- Image Container -->
+                <div class="relative w-full aspect-4/3 overflow-hidden bg-muted/20">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
+                    loading="lazy"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-80 group-hover:opacity-95 transition-opacity"></div>
+
+                  <!-- Category Tag Badge -->
+                  <div class="absolute top-3 left-3 z-10">
+                    <span class="inline-block px-2.5 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-[10px] font-bold text-amber-300 uppercase tracking-wider border border-white/20">
+                      {category}
+                    </span>
+                  </div>
+
+                  <!-- Zoom Icon Overlay -->
+                  <div class="absolute top-3 right-3 w-7 h-7 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                    </svg>
+                  </div>
+
+                  <!-- Bottom Title -->
+                  <div class="absolute bottom-3 left-3 right-3 z-10">
+                    <h3 class="text-sm font-bold text-white drop-shadow-sm line-clamp-2 leading-snug">
+                      {item.title}
+                    </h3>
+                  </div>
+                </div>
+
+                <!-- Footer Strip -->
+                <div class="p-3 bg-surface border-t border-border/70 flex items-center justify-between text-xs text-muted">
+                  <span class="truncate">{category}</span>
+                  <span class="text-primary font-bold text-[11px] group-hover:underline shrink-0">Lihat Foto &rarr;</span>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+
+      <!-- Pagination -->
+      {
+        pagination.totalPages > 1 && (
+          <div class="mt-12 flex justify-center">
+            <Pagination
+              currentPage={pagination.currentPage}
+              totalPages={pagination.totalPages}
+              baseUrl={baseUrl}
+            />
+          </div>
+        )
+      }
+
+      <!-- Lightbox Modal (Alpine.js) -->
+      <div
+        x-show="modalOpen"
+        style="display: none;"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        @keydown.escape.window="modalOpen = false"
+      >
+        <div
+          class="relative max-w-4xl w-full bg-surface rounded-2xl overflow-hidden shadow-2xl border border-white/20"
+          @click.outside="modalOpen = false"
+        >
+          <!-- Close Button -->
+          <button
+            type="button"
+            @click="modalOpen = false"
+            class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <!-- Modal Image -->
+          <div class="max-h-[75vh] w-full bg-black flex items-center justify-center overflow-hidden">
+            <img :src="modalImg" :alt="modalTitle" class="max-h-[75vh] w-auto object-contain mx-auto" />
+          </div>
+
+          <!-- Modal Caption -->
+          <div class="p-5 bg-surface border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span x-text="modalCat" class="text-xs font-bold text-primary uppercase tracking-wider block mb-1"></span>
+              <h4 x-text="modalTitle" class="text-base sm:text-lg font-bold text-heading leading-tight"></h4>
+            </div>
+            <span class="text-xs text-muted">MA Miftahul Huda Dokumentasi</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
 </Layout>

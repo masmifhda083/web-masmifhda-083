@@ -6,171 +6,213 @@ import osisData from "../content/osis/pengurus.json";
 const { hero, visiMisi, pembina, pengurusInti, sekbid } = osisData;
 ---
 
-<Layout title="OSIS - MA Miftahul Huda">
-    <!-- Hero Section -->
-    <section
-        class="relative h-[60vh] flex items-center justify-center text-white overflow-hidden"
-    >
-        <div class="absolute inset-0 z-0">
-            <img
-                src={hero.heroImage || "/uploads/hero-default.jpg"}
-                alt="OSIS Hero"
-                class="w-full h-full object-cover brightness-50"
-            />
-        </div>
-        <div class="container mx-auto px-4 z-10 text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 animate-fade-in-up">
-                {hero.title}
-            </h1>
-            <p class="text-xl opacity-90 max-w-2xl mx-auto">
-                {hero.description}
-            </p>
-        </div>
-    </section>
+<Layout title="OSIM - MA Miftahul Huda" description={hero.description}>
+  <!-- Hero Section -->
+  <section
+    class="relative h-[55vh] min-h-[380px] flex items-center justify-center text-white overflow-hidden"
+  >
+    <div class="absolute inset-0 z-0">
+      <img
+        src={hero.heroImage || "/uploads/osim-ma-miftahul-huda-1.webp"}
+        alt="OSIS MA Miftahul Huda"
+        class="w-full h-full object-cover brightness-[0.45]"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+      >
+      </div>
+    </div>
+    <div class="container mx-auto px-4 z-10 text-center max-w-3xl">
+      <p
+        class="text-amber-400 font-semibold uppercase tracking-widest text-xs md:text-sm mb-2"
+      >
+        Organisasi Siswa Intra Madrasah
+      </p>
+      <h1
+        class="text-3xl md:text-5xl lg:text-6xl font-bold font-sans mb-4 tracking-tight"
+      >
+        {hero.title || "OSIM MA Miftahul Huda"}
+      </h1>
+      <p
+        class="text-base md:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed"
+      >
+        {hero.description}
+      </p>
+    </div>
+  </section>
 
-    <!-- Visi & Misi -->
-    <section class="py-20 bg-surface">
-        <div class="container mx-auto px-4">
-            <div
-                class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center"
-            >
-                <div>
-                    <h2
-                        class="text-3xl font-bold text-primary mb-6 relative inline-block"
-                    >
-                        Visi Kami
-                        <span
-                            class="absolute -bottom-2 left-0 w-12 h-1 bg-secondary rounded-full"
-                        ></span>
-                    </h2>
-                    <p class="text-lg text-muted italic leading-relaxed">
-                        "{visiMisi.visi}"
-                    </p>
+  <!-- Visi & Misi Section -->
+  <section class="py-16 md:py-20 bg-surface border-b border-border">
+    <div class="container mx-auto px-4 max-w-5xl">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
+        <!-- Visi -->
+        <div>
+          <h2
+            class="text-2xl md:text-3xl font-bold text-primary mb-6 relative inline-block"
+          >
+            Visi Kami
+            <span
+              class="absolute -bottom-2 left-0 w-12 h-1 bg-secondary rounded-full"
+            ></span>
+          </h2>
+          <p
+            class="text-base md:text-lg text-heading italic leading-relaxed font-medium"
+          >
+            "{visiMisi.visi}"
+          </p>
+        </div>
+
+        <!-- Misi -->
+        <div>
+          <h2
+            class="text-2xl md:text-3xl font-bold text-primary mb-6 relative inline-block"
+          >
+            Misi Kami
+            <span
+              class="absolute -bottom-2 left-0 w-12 h-1 bg-secondary rounded-full"
+            ></span>
+          </h2>
+          <ul class="space-y-4">
+            {
+              visiMisi.misi.map((item) => (
+                <li class="flex items-start gap-3">
+                  <span class="mt-2 w-2 h-2 rounded-full bg-secondary shrink-0" />
+                  <span class="text-text text-sm md:text-base leading-relaxed">
+                    {item}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pembina Section -->
+  {
+    pembina && pembina.length > 0 && (
+      <section class="py-16 bg-primary border-b border-border">
+        <div class="container mx-auto px-4 max-w-4xl text-center">
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">
+            Pembina OSIM
+          </h2>
+          <p class="text-sm text-white/80 mb-10">
+            Bimbingan dan pengawasan kegiatan siswa MA Miftahul Huda
+          </p>
+
+          <div class="flex flex-wrap justify-center gap-8">
+            {pembina.map((item) => (
+              <div class="group flex flex-col items-center max-w-xs">
+                <div class="relative w-32 h-32 md:w-36 md:h-36 mb-4 rounded-full overflow-hidden border-4 border-surface shadow-md group-hover:border-secondary transition-all duration-300">
+                  <img
+                    src={item.avatar || "/uploads/placeholder.webp"}
+                    alt={item.name}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
-                <div>
-                    <h2
-                        class="text-3xl font-bold text-primary mb-6 relative inline-block"
-                    >
-                        Misi Kami
-                        <span
-                            class="absolute -bottom-2 left-0 w-12 h-1 bg-secondary rounded-full"
-                        ></span>
-                    </h2>
-                    <ul class="space-y-4">
-                        {
-                            visiMisi.misi.map((item) => (
-                                <li class="flex items-start gap-3">
-                                    <span class="mt-1.5 w-2 h-2 rounded-full bg-secondary shrink-0" />
-                                    <span class="text-muted">{item}</span>
-                                </li>
-                            ))
-                        }
-                    </ul>
+                <h3 class="text-base md:text-lg font-bold text-white group-hover:text-primary transition-colors text-center">
+                  {item.name}
+                </h3>
+                <p class="text-xs md:text-sm text-white/80 font-medium text-center">
+                  {item.role}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Pengurus Inti Section -->
+  <section class="py-16 md:py-20 bg-white">
+    <div class="container mx-auto px-4 max-w-6xl text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2">
+        Pengurus Inti
+      </h2>
+      <p class="text-sm text-muted mb-12">
+        Struktur pimpinan harian OSIM MA Miftahul Huda
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {
+          pengurusInti.map((member) => (
+            <div class="text-center group">
+              <div class="relative w-40 h-40 md:w-44 md:h-44 mx-auto mb-5 rounded-full overflow-hidden shadow-lg ring-4 ring-surface ring-offset-4 group-hover:ring-secondary transition-all duration-300">
+                <img
+                  src={member.avatar || "/uploads/placeholder.webp"}
+                  alt={member.name}
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <h3 class="text-lg md:text-xl font-bold text-heading mb-1 group-hover:text-primary transition-colors">
+                {member.name}
+              </h3>
+              <p class="text-secondary font-medium uppercase tracking-wider text-xs md:text-sm">
+                {member.role}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Sekbid Section -->
+  <section class="py-16 md:py-20 bg-surface">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2">
+          Seksi Bidang (Sekbid)
+        </h2>
+        <p class="text-sm text-muted">
+          Divisi operasional penggerak kegiatan siswa
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {
+          sekbid.map((item) => (
+            <div class="bg-white p-6 md:p-7 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow">
+              <h3 class="text-lg md:text-xl font-bold text-primary mb-4 pb-3 border-b border-surface">
+                {item.name.trim()}
+              </h3>
+
+              <div class="space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-muted font-medium">Koordinator:</span>
+                  <span class="font-bold text-heading">{item.koordinator}</span>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Pengurus Inti -->
-    <section class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-primary mb-16">
-                Pengurus Inti
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {
-                    pengurusInti.map((member) => (
-                        <div class="text-center group">
-                            <div class="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden shadow-xl ring-4 ring-surface ring-offset-4 group-hover:ring-secondary transition-all duration-300">
-                                <img
-                                    src={
-                                        member.avatar ||
-                                        "/uploads/placeholder.webp"
-                                    }
-                                    alt={member.name}
-                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                />
-                            </div>
-                            <h3 class="text-xl font-bold text-heading mb-1">
-                                {member.name}
-                            </h3>
-                            <p class="text-secondary font-medium uppercase tracking-wider text-sm">
-                                {member.role}
-                            </p>
-                        </div>
-                    ))
-                }
-            </div>
-        </div>
-    </section>
+                {item.sekretaris && (
+                  <div class="flex justify-between items-center text-sm">
+                    <span class="text-muted font-medium">Sekretaris:</span>
+                    <span class="font-bold text-heading">
+                      {item.sekretaris}
+                    </span>
+                  </div>
+                )}
 
-    <!-- Sekbid Section -->
-    <section class="py-20 bg-surface">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-primary mb-16">
-                Seksi Bidang
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {
-                    sekbid.map((item) => (
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow">
-                            <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-surface">
-                                {item.name}
-                            </h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-muted font-medium">
-                                        Koordinator:
-                                    </span>
-                                    <span class="text-sm font-bold text-heading">
-                                        {item.koordinator}
-                                    </span>
-                                </div>
-                                {item.sekretaris && (
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm text-muted font-medium">
-                                            Sekretaris:
-                                        </span>
-                                        <span class="text-sm font-bold text-heading">
-                                            {item.sekretaris}
-                                        </span>
-                                    </div>
-                                )}
-                                {item.anggota && item.anggota.length > 0 && (
-                                    <div class="mt-4">
-                                        <span class="text-xs text-muted uppercase tracking-widest block mb-2">
-                                            Anggota:
-                                        </span>
-                                        <div class="flex flex-wrap gap-2">
-                                            {item.anggota.map((a) => (
-                                                <span class="px-2 py-1 bg-surface rounded text-xs text-muted">
-                                                    {a}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    ))
-                }
+                {item.anggota && item.anggota.length > 0 && (
+                  <div class="pt-3 border-t border-surface">
+                    <span class="text-xs text-muted uppercase tracking-wider block mb-2 font-medium">
+                      Anggota:
+                    </span>
+                    <div class="flex flex-wrap gap-2">
+                      {item.anggota.map((a: string) => (
+                        <span class="px-3 py-1 bg-surface rounded-lg text-xs text-heading font-medium border border-border/60">
+                          {a}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-        </div>
-    </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 </Layout>
-
-<style>
-    @keyframes fade-in-up {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    .animate-fade-in-up {
-        animation: fade-in-up 0.8s ease-out forwards;
-    }
-</style>

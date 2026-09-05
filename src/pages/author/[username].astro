@@ -3,6 +3,7 @@
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import CardPosts from "../../components/CardPosts.astro";
+import { getVisiblePosts } from "../../utils/postFilter";
 
 export async function getStaticPaths() {
   const authors = await getCollection("authors");

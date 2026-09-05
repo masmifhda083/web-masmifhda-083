@@ -115,8 +115,8 @@ if (category) {
 }
 ---
 
-<Layout 
-  title={title} 
+<Layout
+  title={title}
   description={description}
   image={heroSrc}
   type="article"
@@ -126,7 +126,7 @@ if (category) {
     <div
       class="container px-6 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6"
     >
-      <div class="w-full lg:w-3/4 space-y-3 px-2">
+      <div class="w-full lg:w-3/4 space-y-3">
         <!-- Breadcrumb Navigation -->
         <nav aria-label="Breadcrumb" class="mb-2">
           <ol class="flex items-center flex-wrap text-sm gap-1">
@@ -175,7 +175,7 @@ if (category) {
           {title}
         </h1>
 
-        <div class="flex flex-wrap items-center gap-4 mb-4">
+        <div class="flex flex-wrap items-center gap-4 mb-3 text-sm">
           {
             authorData && (
               <a
@@ -184,7 +184,7 @@ if (category) {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="text-muted "
+                  class="text-muted"
                   width="18"
                   height="18"
                   viewBox="0 0 24 24"
@@ -214,7 +214,7 @@ if (category) {
           {/* FALLBACK */}
           {
             !authorData && authorUsername && (
-              <div class="flex items-center gap-2 text-muted">
+              <div class="flex items-center gap-1 text-muted">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -237,7 +237,7 @@ if (category) {
             )
           }
 
-          <div class="flex items-center gap-2 text-muted">
+          <div class="flex items-center gap-1 text-muted text-sm">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -257,14 +257,14 @@ if (category) {
             </svg>
             <FormattedDate date={pubdateDate} />
           </div>
+        </div>
 
-          {
-            category && (
-              <span class="bg-surface text-primary text-sm px-3 py-1 rounded-full">
-                {category}
-              </span>
-            )
-          }
+        <div class="mb-5">
+          <ShareButtons
+            url={url}
+            title={title ?? ""}
+            excerpt={description ?? ""}
+          />
         </div>
 
         {
@@ -284,35 +284,19 @@ if (category) {
         <!-- Table of Contents -->
         <nav
           id="table-of-contents"
-          class="toc-container hidden bg-surface border border-border rounded-xl p-5 mb-6"
+          class="toc-container hidden bg-muted rounded-sm p-2 mb-6 w-fit max-w-full"
         >
-          <div class="flex items-center justify-between mb-3">
-            <h2
-              class="text-lg font-semibold text-heading flex items-center gap-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-              </svg>
-              Daftar Isi
+          <div
+            id="toc-header"
+            class="flex items-center justify-between gap-3 cursor-pointer select-none"
+          >
+            <h2 class="text-sm text-surface flex items-center gap-2 m-0">
+              <span>Table of Contents</span>
             </h2>
             <button
               id="toc-toggle"
-              class="text-muted hover:text-primary transition-colors p-1"
+              type="button"
+              class="text-surface p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
               aria-label="Toggle Table of Contents"
             >
               <svg
@@ -326,18 +310,22 @@ if (category) {
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="transition-transform"
+                class="transition-transform collapsed"
               >
                 <polyline points="18 15 12 9 6 15"></polyline>
               </svg>
             </button>
           </div>
-          <ol id="toc-list" class="toc-list space-y-1 text-sm"></ol>
+          <ol
+            id="toc-list"
+            class="toc-list space-y-1 text-sm text-surface mt-3 pt-3 border-t border-white/20 collapsed"
+          >
+          </ol>
         </nav>
 
         <article
           id="article-content"
-          class="prose prose-headings:text-primary prose-p:text-justify max-w-none"
+          class="prose prose-headings:text-primary max-w-none font-graphik"
         >
           <slot />
         </article>
@@ -347,27 +335,10 @@ if (category) {
           relatedPosts.length > 0 && (
             <div
               id="related-posts-container"
-              class="hidden my-8 p-5 bg-surface border border-border rounded-xl"
+              class="hidden my-8 border border-border p-3 rounded-md"
             >
               <div class="flex items-center gap-3 mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="text-primary"
-                >
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                </svg>
-                <h3 class="text-lg font-semibold text-heading m-0">
-                  Artikel Terkait
-                </h3>
+                <h3 class="text-sm text-text m-0">Baca Juga</h3>
               </div>
 
               <ul class="space-y-1 list-none p-0 m-0">
@@ -377,7 +348,7 @@ if (category) {
                       href={`/posts/${post.category}/${post.slug}`}
                       class="group flex items-center no-underline"
                     >
-                      <span class="text-sm text-heading group-hover:text-primary transition-colors line-clamp-1">
+                      <span class="text-sm text-primary font-bold group-hover:text-primary transition-colors line-clamp-1">
                         {post.data.title}
                       </span>
                     </a>
@@ -387,18 +358,24 @@ if (category) {
             </div>
           )
         }
-
-        <div class="mt-8">
-          <ShareButtons url={url} title={title ?? ""} />
-        </div>
       </div>
 
-      <Sidebar />
+      <Sidebar isFlex={true} />
     </div>
   </section>
 </Layout>
 
-<style>
+<style is:global>
+  #article-content,
+  #article-content p,
+  #article-content li,
+  #article-content a,
+  #article-content blockquote,
+  #article-content table {
+    font-family: 'Graphik', sans-serif;
+    font-weight: 300;
+  }
+
   .toc-container {
     scroll-margin-top: 2rem;
   }
@@ -406,64 +383,81 @@ if (category) {
   .toc-list {
     list-style: none;
     padding-left: 0;
-    counter-reset: toc-counter;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .toc-list li {
-    counter-increment: toc-counter;
     position: relative;
   }
 
   .toc-list li::before {
-    content: counter(toc-counter) ".";
+    content: "•";
     position: absolute;
-    left: 0;
-    color: var(--color-text-muted);
-    font-weight: 500;
+    left: 0.25rem;
+    color: var(--color-surface) !important;
+    opacity: 0.85;
+    font-size: 1.1rem;
+    line-height: 1.4;
   }
 
   .toc-list li a {
     display: block;
-    padding: 0.375rem 0;
-    padding-left: 1.5rem;
-    color: var(--color-text-base);
-    text-decoration: none;
+    padding: 0.25rem 0;
+    padding-left: 1.25rem;
+    color: var(--color-surface) !important;
+    text-decoration: none !important;
     border-left: 2px solid transparent;
     transition: all 0.2s ease;
+    line-height: 1.4;
   }
 
   .toc-list li a:hover {
-    color: var(--color-primary);
-    border-left-color: var(--color-primary);
-    background-color: var(--color-primary);
-    background-color: rgba(var(--color-primary-rgb, 46, 103, 49), 0.05);
+    color: #ffffff !important;
+    border-left-color: var(--color-surface) !important;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border-radius: 0 0.25rem 0.25rem 0;
   }
 
-  .toc-list li.toc-h3 a {
-    padding-left: 2.5rem;
-    font-size: 0.875rem;
+  .toc-list li.toc-h3 {
+    margin-left: 0.75rem;
   }
 
   .toc-list li.toc-h3::before {
-    left: 1rem;
+    content: "○";
     font-size: 0.75rem;
+    top: 0.1rem;
   }
 
-  .toc-list li.toc-h4 a {
-    padding-left: 3.5rem;
-    font-size: 0.8125rem;
-    color: var(--color-text-muted);
+  .toc-list li.toc-h3 a {
+    padding-left: 1.25rem;
+    font-size: 0.875rem;
+    opacity: 0.95;
+  }
+
+  .toc-list li.toc-h4 {
+    margin-left: 1.5rem;
   }
 
   .toc-list li.toc-h4::before {
-    left: 2rem;
-    font-size: 0.6875rem;
+    content: "▪";
+    font-size: 0.75rem;
+    top: 0.1rem;
+  }
+
+  .toc-list li.toc-h4 a {
+    padding-left: 1.25rem;
+    font-size: 0.8125rem;
+    color: var(--color-surface) !important;
+    opacity: 0.85;
   }
 
   .toc-list li.toc-active a {
-    color: var(--color-primary);
-    border-left-color: var(--color-primary);
-    font-weight: 500;
+    color: #ffffff !important;
+    border-left-color: var(--color-surface) !important;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.18) !important;
+    border-radius: 0 0.25rem 0.25rem 0;
   }
 
   #toc-chevron.collapsed {
@@ -480,6 +474,7 @@ if (category) {
     const articleContent = document.getElementById("article-content");
     const tocContainer = document.getElementById("table-of-contents");
     const tocList = document.getElementById("toc-list");
+    const tocHeader = document.getElementById("toc-header");
     const tocToggle = document.getElementById("toc-toggle");
     const tocChevron = document.getElementById("toc-chevron");
 
@@ -511,6 +506,7 @@ if (category) {
       const link = document.createElement("a");
       link.href = `#${heading.id}`;
       link.textContent = heading.textContent || "";
+      link.className = "!text-surface hover:!text-white";
 
       // Smooth scroll on click
       link.addEventListener("click", (e) => {
@@ -534,11 +530,15 @@ if (category) {
     });
 
     // Toggle functionality
-    if (tocToggle && tocChevron) {
-      tocToggle.addEventListener("click", () => {
-        tocList.classList.toggle("collapsed");
-        tocChevron.classList.toggle("collapsed");
-      });
+    const toggleTOC = () => {
+      tocList.classList.toggle("collapsed");
+      tocChevron?.classList.toggle("collapsed");
+    };
+
+    if (tocHeader) {
+      tocHeader.addEventListener("click", toggleTOC);
+    } else if (tocToggle) {
+      tocToggle.addEventListener("click", toggleTOC);
     }
 
     // Highlight active heading on scroll

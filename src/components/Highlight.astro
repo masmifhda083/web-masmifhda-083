@@ -1,230 +1,13 @@
 ---
 // file: src/components/Highlight.astro
-import type { CollectionEntry } from "astro:content";
-import { getEntry, getCollection } from "astro:content";
-import LatestPosts from "./LatestPosts.astro";
+import { getCollection, getEntry } from "astro:content";
+import Year from "./Year.astro";
 
-interface PostData {
-  title: string;
-  author?: string;
-  pubdate?: Date | string;
-  heroImage?: string;
-  description?: string;
-  category?: string;
-}
-
-interface Post {
-  slug: string;
-  category: string;
-  data: PostData;
-}
-
-function getSafeImageSrc(path: string | undefined): string {
-  if (!path) return "/uploads/default-thumb.jpg";
-  return path.startsWith("/") ? path : `/${path}`;
-}
-
-// 1. Ambil data pendaftaran settings
-const pendaftaranData = await getCollection("pendaftaran").catch(() => []);
-const pendaftaranSettings =
-  pendaftaranData.find((item) => item.id === "settings") || pendaftaranData[0];
-
-// 2. Ambil semua pamflate
-const allPamflate = await getCollection("pamflate").catch(() => []);
-
-// 3. Proses highlight pamflet
-let pamfletToDisplay = {
-  image: "/uploads/default-pamflet.jpg",
-  title: "Pamflet Pendaftaran",
-  description: "",
-  link: "#",
-  show: true,
-};
-
-// Cek apakah ada settings dan highlight pamflet aktif
-const highlightSettings = pendaftaranSettings?.data?.highlightPamflet;
-const highlightEnabled = highlightSettings?.enabled !== false;
-
-if (highlightEnabled && highlightSettings) {
-  const highlight = highlightSettings;
-
-  // OPTION 1: Jika menggunakan reference ke koleksi pamflate
-  if (highlight.pamflet) {
-    // Format ID di Astro biasanya: "pamflate/filename"
-    const pamfletId = highlight.pamflet.startsWith("pamflate/")
-      ? highlight.pamflet
-      : `pamflate/${highlight.pamflet}`;
-
-    // Cari berdasarkan ID atau slug
-    const selectedPamflet = allPamflate.find((p) => {
-      return (
-        p.id === pamfletId ||
-        (p as any).slug === highlight.pamflet ||
-        p.id.endsWith(`/${highlight.pamflet}`)
-      );
-    });
-
-    if (selectedPamflet) {
-      const pData = selectedPamflet.data as any;
-      pamfletToDisplay.image = getSafeImageSrc(pData.heroImage);
-      pamfletToDisplay.title = pData.title || "Pamflet Pendaftaran";
-      pamfletToDisplay.description = pData.description || "";
-      pamfletToDisplay.link = `/pamflate/${selectedPamflet.id}`;
-      pamfletToDisplay.show = true;
-    } else {
-      // Fallback ke custom
-      if (highlight.customImage) {
-        const hCustom = highlight as any;
-        pamfletToDisplay.image = getSafeImageSrc(highlight.customImage);
-        pamfletToDisplay.title = hCustom.customTitle || "Pamflet Pendaftaran";
-        pamfletToDisplay.description = hCustom.customDescription || "";
-        pamfletToDisplay.link = hCustom.customLink || "#";
-        pamfletToDisplay.show = true;
-      }
-    }
-  }
-  // OPTION 2: Jika menggunakan custom image langsung
-  else if (highlight.customImage) {
-    const hCustom = highlight as any;
-    pamfletToDisplay.image = getSafeImageSrc(highlight.customImage);
-    pamfletToDisplay.title = hCustom.customTitle || "Pamflet Pendaftaran";
-    pamfletToDisplay.description = hCustom.customDescription || "";
-    pamfletToDisplay.link = hCustom.customLink || "#";
-    pamfletToDisplay.show = true;
-  }
-}
-
-// 4. Fallback: Jika belum dapat pamflet, cari yang terbaru dengan kategori pendaftaran
-if (
-  !pamfletToDisplay.show ||
-  pamfletToDisplay.image === "/uploads/default-pamflet.jpg"
-) {
-  const pendaftaranPamflets = allPamflate
-    .filter((p) => {
-      const data = p.data as any;
-      // Cek kategori pendaftaran
-      const isPendaftaranCategory =
-        data.category === "pendaftaran" || data.category === "spmb";
-      // Cek aktif
-      const isActive = data.active !== false;
-      // Cek punya gambar
-      const hasImage = !!data.heroImage;
-
-      return isPendaftaranCategory && isActive && hasImage;
-    })
-    .sort((a, b) => {
-      const dateA = new Date((a.data as any).pubDate || 0).getTime();
-      const dateB = new Date((b.data as any).pubDate || 0).getTime();
-      return dateB - dateA; // Terbaru dulu
-    });
-
-  if (pendaftaranPamflets.length > 0) {
-    const latestPamflet = pendaftaranPamflets[0];
-    const latestData = latestPamflet.data as any;
-    pamfletToDisplay.image = getSafeImageSrc(latestData.heroImage);
-    pamfletToDisplay.title = latestData.title || "Pamflet Pendaftaran";
-    pamfletToDisplay.description = latestData.description || "";
-    pamfletToDisplay.link = `/pamflate/${latestPamflet.id}`;
-    pamfletToDisplay.show = true;
-  }
-}
-
-// Ambil data profile (sambutan kepala sekolah)
-const about = await getEntry("about", "index");
-const sambutanKepsek = about?.data?.sambutan?.items?.[0] || null;
-
-const sambutanTitle = sambutanKepsek?.title || "Sambutan Kepala Sekolah";
-const sambutanImage = sambutanKepsek?.image
-  ? getSafeImageSrc(sambutanKepsek.image)
-  : "/uploads/default-thumb.jpg";
-
-const styledExcerpt = sambutanKepsek
-  ? getStyledExcerpt(sambutanKepsek.body, 200)
-  : { __html: "Sambutan kepala sekolah akan segera tersedia..." };
-function getStyledExcerpt(body: string | undefined, limit: number) {
-  if (!body)
-    return { __html: "Sambutan kepala sekolah akan segera tersedia..." };
-
-  let cleanText = body
-    .replace(/^#+\s+/gm, "")
-    .replace(/\*\*/g, "")
-    .replace(/\*/g, "")
-    .replace(/<[^>]*>/g, "")
-    .trim();
-
-  const paragraphs = cleanText
-    .split(/\n\s*\n/)
-    .filter((p) => p.trim().length > 0);
-
-  let result = "";
-  let totalLength = 0;
-
-  for (let i = 0; i < paragraphs.length; i++) {
-    const paragraph = paragraphs[i].trim();
-    const lines = paragraph
-      .split("\n")
-      .filter((line) => line.trim().length > 0);
-
-    for (let j = 0; j < lines.length; j++) {
-      const line = lines[j].trim();
-
-      if (totalLength + line.length > limit && i > 0) {
-        const remaining = limit - totalLength;
-        if (remaining > 10) {
-          result += `<span class="text-gray-700 block">${line.slice(0, remaining)}...</span>`;
-        }
-        return { __html: result };
-      }
-
-      if (line.toLowerCase().includes("bismillah")) {
-        result += `<span class="font-bold text-md md:text-lg italic text-primary block mb-2">${line}</span>`;
-      } else if (line.toLowerCase().includes("assalamu")) {
-        result += `<span class="font-bold italic text-sm text-primary block mb-3">${line}</span>`;
-      } else {
-        result += `<span class="text-muted block">${line}</span>`;
-      }
-
-      totalLength += line.length;
-    }
-
-    if (i < paragraphs.length - 1) {
-      result += '<div class="mb-2"></div>';
-    }
-  }
-
-  return { __html: result };
-}
-
-// Ambil data pengumuman
+// Fetch pengumuman posts
 const allPosts = await getCollection("posts").catch(() => []);
-
-// Proses posts untuk mendapatkan category dan slug yang benar
 const processedPosts = allPosts.map((post) => {
-  const filePath = post.filePath ?? "";
-  let category = "";
-  let slug = "";
-
-  // Extract category dari filePath
-  if (filePath.startsWith("src/content/posts/")) {
-    const relPath = filePath.replace(/^src\/content\/posts\//, "");
-    const parts = relPath.split("/");
-    if (parts.length >= 2) {
-      category = parts[0];
-      slug = parts
-        .slice(1)
-        .join("/")
-        .replace(/\.mdx?$/, "");
-    }
-  }
-
-  if (!category && post.data.category) {
-    category = post.data.category;
-  }
-
-  if (!slug) {
-    slug = post.id.split("/").pop() ?? "";
-  }
-
+  const category = (post.data.category || "").toLowerCase();
+  const slug = post.id.split("/").pop()?.replace(/\.mdx?$/, "") || post.id;
   return {
     slug,
     category,
@@ -232,90 +15,180 @@ const processedPosts = allPosts.map((post) => {
   };
 });
 
-// Filter posts by category
 const pengumumanPosts = processedPosts
-  .filter((post) => post.category.toLowerCase() === "pengumuman")
+  .filter((post) => post.category === "pengumuman" || post.category === "akademik")
   .sort((a, b) => {
     const dateA = new Date(a.data.pubdate ?? 0).getTime();
     const dateB = new Date(b.data.pubdate ?? 0).getTime();
     return dateB - dateA;
-  });
+  })
+  .slice(0, 3);
 
-// Fungsi untuk mendapatkan excerpt dengan styling
+// Fetch Sambutan Kepala Sekolah
+const about = await getEntry("about", "index").catch(() => null);
+const sambutan = about?.data?.sambutan?.items?.[0];
+const kepsekImage = sambutan?.image || "/uploads/kepsek.webp";
+
+let kepsekName = "Ahmad Rifa'i, M.Pd.";
+let sambutanExcerpt = "Selamat datang di website resmi MA Miftahul Huda Tambak. Kami berkomitmen membentuk generasi yang berilmu, berakhlak, dan siap menghadapi masa depan dengan iman dan ilmu.";
+
+if (sambutan?.body) {
+  const nameMatch = sambutan.body.match(/####\s*\*?\s*([^*#\n]+)\*?\s*$/m);
+  if (nameMatch && nameMatch[1]) {
+    kepsekName = nameMatch[1].trim();
+  }
+
+  const paragraphs = sambutan.body
+    .split(/\n\s*\n/)
+    .map((p: string) => p.replace(/[#*_-]/g, '').trim())
+    .filter((p: string) => p.length > 30 && !p.toLowerCase().includes('bismillah') && !p.toLowerCase().includes('assalamu') && !p.toLowerCase().includes('wassalamu'));
+  if (paragraphs[0]) {
+    sambutanExcerpt = paragraphs[0].slice(0, 190) + (paragraphs[0].length > 190 ? '...' : '');
+  }
+}
+const kepsekRole = "Kepala Madrasah";
+
+function formatDateParts(dateVal: any) {
+  const d = dateVal ? new Date(dateVal) : new Date();
+  const day = d.getDate().toString().padStart(2, '0');
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN', 'JUL', 'AGU', 'SEP', 'OKT', 'NOV', 'DES'];
+  const month = months[d.getMonth()];
+  const year = d.getFullYear();
+  return { day, month, year };
+}
 ---
 
-<section>
-  <div
-    class="container mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-  >
-    <!-- Kolom 1: Pamflet -->
-    {
-      pamfletToDisplay.show && (
-        <div
-          data-animate="fade"
-          class="bg-white shadow rounded-md overflow-hidden order-last lg:order-0"
-        >
-          <img
-            src={pamfletToDisplay.image}
-            alt={pamfletToDisplay.title}
-            loading="lazy"
-            decoding="async"
-            class="rounded-md aspect-4/5 object-cover object-top w-full"
-            onerror="this.onerror=null;this.src='/uploads/default-thumb.jpg';"
-          />
+<section class="py-14 bg-background">
+  <div class="container mx-auto px-4 max-w-6xl">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      
+      <!-- Kolom 1: Sambutan Kepala Madrasah (4.5 Cols) -->
+      <div class="lg:col-span-5 bg-surface rounded-2xl p-7 border border-border shadow-sm flex flex-col justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-heading mb-6 pb-3 border-b border-border flex items-center justify-between">
+            <span>Sambutan Kepala Madrasah</span>
+          </h2>
+
+          <div class="flex flex-col sm:flex-row gap-5 items-start">
+            <div class="w-28 h-36 rounded-xl overflow-hidden shrink-0 border border-border shadow-inner bg-primary/5">
+              <img
+                src={kepsekImage}
+                alt={kepsekName}
+                class="w-full h-full object-cover"
+                onerror="this.onerror=null;this.src='/uploads/kepsek.webp';"
+              />
+            </div>
+            <div class="text-xs md:text-sm text-muted leading-relaxed space-y-2">
+              <p class="font-bold text-heading italic text-xs">
+                Assalamu'alaikum Warahmatullahi Wabarakatuh
+              </p>
+              <p>
+                {sambutanExcerpt}
+              </p>
+              <div class="pt-2">
+                <p class="font-bold text-heading text-sm">{kepsekName}</p>
+                <p class="text-xs text-primary font-medium">{kepsekRole}</p>
+              </div>
+            </div>
+          </div>
         </div>
-      )
-    }
 
-    <!-- Kolom 2: Pengumuman -->
-    <LatestPosts
-      posts={pengumumanPosts}
-      maxPosts={3}
-      layout="sidebar"
-      showDescription={true}
-    />
-
-    <!-- Kolom 3: Sambutan Kepala Sekolah -->
-    <div
-      data-animate="fade"
-      class="p-4 shadow rounded-md order-first lg:order-0"
-    >
-      <h2 class="text-xl font-bold mb-3 text-primary">
-        {sambutanTitle}
-      </h2>
-
-      <div class="relative overflow-hidden rounded-md mb-3">
-        <img
-          src={sambutanImage}
-          alt="Kepala Sekolah"
-          loading="lazy"
-          class="rounded-md aspect-video object-cover object-center w-full"
-          onerror="this.onerror=null;this.src='/uploads/default-thumb.jpg';"
-        />
+        <div class="pt-5 border-t border-border mt-6">
+          <a
+            href="/about/sambutan"
+            class="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-secondary transition-colors"
+          >
+            <span>Selengkapnya</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
       </div>
 
-      <div class="text-sm space-y-2">
-        <div set:html={styledExcerpt.__html} />
-        {
-          sambutanKepsek && (
-            <a
-              href="/about/sambutan"
-              class="inline-block float-end font-semibold hover:underline mt-2"
-            >
-              Selengkapnya →
-            </a>
-          )
-        }
+      <!-- Kolom 2: Pengumuman Terbaru (4 Cols) -->
+      <div class="lg:col-span-4 bg-surface rounded-2xl p-7 border border-border shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="pb-3 mb-4 border-b border-border">
+            <h2 class="text-xl font-bold text-heading">
+              Pengumuman Terbaru
+            </h2>
+          </div>
+
+          <div class="space-y-4">
+            {pengumumanPosts.map((post) => {
+              const { day, month, year } = formatDateParts(post.data.pubdate);
+              const tag = post.category === "pengumuman" ? "PENERIMAAN" : "INFORMASI";
+
+              return (
+                <div class="flex items-start gap-3.5 group">
+                  <!-- Date Block -->
+                  <div class="w-12 h-14 rounded-lg bg-primary/10 border border-primary/20 flex flex-col items-center justify-center shrink-0 text-center leading-none">
+                    <span class="text-sm font-bold text-heading">{day}</span>
+                    <span class="text-[10px] font-bold text-primary tracking-wider uppercase mt-0.5">{month}</span>
+                    <span class="text-[9px] text-muted">{year}</span>
+                  </div>
+
+                  <!-- Text -->
+                  <div class="flex-1 min-w-0">
+                    <span class="text-[10px] font-bold tracking-wider text-secondary uppercase block mb-0.5">
+                      {tag}
+                    </span>
+                    <a
+                      href={`/posts/${post.category}/${post.slug}`}
+                      class="text-xs font-bold text-heading group-hover:text-primary transition-colors line-clamp-2 leading-snug block"
+                    >
+                      {post.data.title}
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-border mt-4 text-center">
+          <a
+            href="/pengumuman"
+            class="text-xs font-bold text-primary hover:text-secondary inline-flex items-center gap-1"
+          >
+            <span>Pusat Pengumuman Lengkap</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
       </div>
+
+      <!-- Kolom 3: Banner SPMB Hijau (3 Cols) -->
+      <div class="lg:col-span-3 bg-gradient-to-br from-primary via-[#245427] to-[#163819] rounded-2xl p-7 text-white shadow-md flex flex-col justify-between relative overflow-hidden">
+        <!-- Subtle image overlay -->
+        <div class="absolute inset-0 bg-cover bg-center opacity-15 pointer-events-none" style="background-image: url(/uploads/mifda-1.webp);"></div>
+
+        <div class="relative z-10">
+          <span class="text-[11px] font-bold tracking-widest text-amber-400 uppercase block mb-2">
+            SPMB Online <Year />
+          </span>
+          <h3 class="text-xl md:text-2xl font-bold mb-3 leading-tight text-white">
+            PENERIMAAN MURID BARU (SPMB)
+          </h3>
+          <p class="text-xs text-white/85 leading-relaxed mb-6">
+            Bersama keluarga besar MA Miftahul Huda Tambak, wujudkan masa depan yang gemilang.
+          </p>
+        </div>
+
+        <div class="space-y-3 relative z-10 pt-4 border-t border-white/15">
+          <a
+            href="/pendaftaran"
+            class="block w-full py-2.5 px-4 bg-white hover:bg-emerald-50 !text-primary font-bold text-xs rounded-xl text-center transition-all shadow-md"
+          >
+            Daftar Sekarang 
+          </a>
+          <a
+            href="/pendaftaran"
+            class="block text-center text-xs text-white/80 hover:text-white transition-colors"
+          >
+            Informasi Pendaftaran 
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
-
-<style>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>

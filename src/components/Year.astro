@@ -1,26 +1,35 @@
 ---
-
+// Hitung Tahun Ajaran Pendaftaran (SPMB/PPDB)
+// Ajaran baru dimulai bulan Juli (bulan ke-7, index 6).
+// Jika bulan >= Juli (6-11): pendaftaran dibuka untuk tahun ajaran baru: (tahun ini + 1) / (tahun ini + 2).
+// Contoh: September 2026 -> 2027/2028.
+// Jika bulan < Juli (0-5): pendaftaran untuk tahun ajaran yang akan mulai Juli: (tahun ini) / (tahun ini + 1).
+// Contoh: Februari 2027 -> 2027/2028.
+const now = new Date();
+const currentYear = now.getFullYear();
+const startYear = now.getMonth() >= 6 ? currentYear + 1 : currentYear;
+const endYear = startYear + 1;
+const academicYear = `${startYear}/${endYear}`;
 ---
-<span id="currentYear"></span>/<span id="nextYear"></span>
+
+<span class="academic-year">{academicYear}</span>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Get the current date
-    const today = new Date();
-    
-    // Get the current year (e.g., 2025)
-    const currentYear = today.getFullYear();
-    
-    // Calculate the next year by adding 1 to the current year
-    const nextYear = currentYear + 1;
+  function updateAcademicYears() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const startYear = now.getMonth() >= 6 ? currentYear + 1 : currentYear;
+    const endYear = startYear + 1;
+    const academicYear = `${startYear}/${endYear}`;
 
-    // Find the HTML elements by their IDs and update their text content
-    const currentYearElement = document.getElementById('currentYear');
-    const nextYearElement = document.getElementById('nextYear');
+    document.querySelectorAll('.academic-year').forEach((el) => {
+      el.textContent = academicYear;
+    });
+  }
 
-    if (currentYearElement && nextYearElement) {
-        currentYearElement.textContent = currentYear;
-        nextYearElement.textContent = nextYear;
-    }
-});
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateAcademicYears);
+  } else {
+    updateAcademicYears();
+  }
 </script>

@@ -1,100 +1,272 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import { getCollection } from "astro:content";
+import { getVisiblePosts } from "../utils/postFilter";
 
 const title = "Pusat Pengumuman";
-const description = "Pilih kategori pengumuman yang ingin Anda lihat.";
+const description = "Portal resmi pengumuman kelulusan, seleksi penerimaan murid baru (SPMB), dan informasi akademik MA Miftahul Huda.";
+
+// Fetch pengumuman posts
+const allPosts = await getCollection("posts");
+const visiblePosts = getVisiblePosts(allPosts);
+
+const pengumumanPosts = visiblePosts
+  .filter((post) => (post.data.category || "").toLowerCase() === "pengumuman")
+  .map((post) => {
+    const slug = post.id.split("/").pop()?.replace(/\.mdx?$/, "") || post.id;
+    const category = (post.data.category || "pengumuman").toLowerCase();
+    return {
+      slug,
+      category,
+      data: post.data,
+    };
+  })
+  .sort((a, b) => {
+    const dateA = new Date(a.data.pubdate ?? 0).getTime();
+    const dateB = new Date(b.data.pubdate ?? 0).getTime();
+    return dateB - dateA;
+  })
+  .slice(0, 6);
+
+function excerpt(text: string | undefined, limit: number): string {
+  if (!text) return "";
+  return text.length > limit ? text.slice(0, limit) + "..." : text;
+}
 ---
 
 <Layout title={title} description={description}>
-  <section
-    class="min-h-screen py-24 bg-gray-50 dark:bg-dark-base text-gray-900 dark:text-gray-100 transition-colors"
-  >
-    <div class="container mx-auto px-4 max-w-4xl">
-      <div class="text-center mb-16">
-        <h1
-          class="text-3xl md:text-5xl font-bold font-poppins text-primary-600 dark:text-primary-400 mb-4"
-        >
-          {title}
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-primary/10 via-surface to-background pt-10 pb-16 border-b border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs md:text-sm text-muted mb-6" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
+        <span>/</span>
+        <span class="text-heading font-semibold">Pusat Pengumuman</span>
+      </nav>
+
+      <div class="text-center max-w-3xl mx-auto">
+        <h1 class="text-3xl md:text-5xl font-bold font-sans text-heading mb-4 tracking-tight">
+          Pusat Pengumuman
         </h1>
-        <p class="text-md text-gray-600 max-w-prose mx-auto dark:text-gray-400">
-          {description}
+        <p class="text-base md:text-lg text-muted leading-relaxed">
+          Akses cepat layanan kelulusan siswa, pendaftaran murid baru (SPMB), serta edaran dan informasi resmi MA Miftahul Huda.
         </p>
       </div>
+    </div>
+  </section>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+  <!-- Layanan Pengumuman Utama (Quick Hub Cards) -->
+  <section class="py-12 md:py-16 bg-primary">
+    <div class="container mx-auto px-4 max-w-6xl">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <!-- Card 1: Kelulusan -->
         <a
           href="/cek-kelulusan"
-          class="group block bg-white dark:bg-dark-surface rounded-2xl shadow-sm hover:shadow-xl p-8 border border-gray-100 dark:border-dark-border transition-all duration-300 hover:-translate-y-1"
+          class="group relative bg-surface rounded-2xl p-7 border border-border hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
         >
-          <div
-            class="w-14 h-14 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
-          >
-            <!-- Graduation Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
-              <path
-                d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-              ></path>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-              ></path>
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300">
+                <!-- Graduation Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
+                </svg>
+              </div>
+              <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200">
+                Kelas XII
+              </span>
+            </div>
+
+            <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors mb-3">
+              Pengumuman Kelulusan
+            </h3>
+            <p class="text-sm text-muted leading-relaxed mb-6">
+              Cek status kelulusan siswa Kelas 12, lihat rekapitulasi nilai, dan unduh Surat Keterangan Lulus (SKL) secara mandiri.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-border flex items-center justify-between text-sm font-semibold text-primary group-hover:translate-x-1 transition-transform">
+            <span>Buka Portal Kelulusan</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </div>
-          <h3
-            class="text-2xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-primary transition-colors"
-          >
-            Pengumuman Kelulusan
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            Cek status kelulusan Kelas 12 dan unduh dokumen nilai Anda secara
-            online.
-          </p>
         </a>
 
         <!-- Card 2: SPMB -->
         <a
-          href="/pendaftaran/status"
-          class="group block bg-white dark:bg-dark-surface rounded-2xl shadow-sm hover:shadow-xl p-8 border border-gray-100 dark:border-dark-border transition-all duration-300 hover:-translate-y-1"
+          href="/pendaftaran"
+          class="group relative bg-surface rounded-2xl p-7 border border-border hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
         >
-          <div
-            class="w-14 h-14 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
-          >
-            <!-- Enrollment/Registration Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              ></path>
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300">
+                <!-- Registration Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+              </div>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
+                SPMB Online
+              </span>
+            </div>
+
+            <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors mb-3">
+              Informasi & Status SPMB
+            </h3>
+            <p class="text-sm text-muted leading-relaxed mb-6">
+              Informasi Seleksi Penerimaan Murid Baru, brosur pendaftaran, alur tes, dan cek status kelulusan berkas pendaftar.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-border flex items-center justify-between text-sm font-semibold text-primary group-hover:translate-x-1 transition-transform">
+            <span>Buka Portal SPMB</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </div>
-          <h3
-            class="text-2xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-primary transition-colors"
-          >
-            Pengumuman SPMB
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            Informasi Seleksi Penerimaan Murid Baru (SPMB) dan pendaftaran calon
-            siswa.
-          </p>
         </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Pengumuman & Berita Terbaru -->
+  <section class="py-12 md:py-16 bg-surface border-t border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-primary tracking-wider uppercase mb-1">
+            <span>Update Terkini</span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-heading">
+            Pengumuman & Edaran Terbaru
+          </h2>
+        </div>
+        <a
+          href="/posts/pengumuman"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-secondary transition-colors"
+        >
+          <span>Lihat Semua Pengumuman</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+
+      {pengumumanPosts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pengumumanPosts.map((post) => {
+            const img = post.data?.heroImage || "/uploads/default-thumb.jpg";
+            const pub = post.data?.pubdate ?? null;
+            const dateObj = pub ? new Date(pub) : null;
+
+            return (
+              <article class="bg-background rounded-xl border border-border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full group hover:-translate-y-1">
+                <!-- Image Box -->
+                <div class="relative h-48 overflow-hidden shrink-0">
+                  <a href={`/posts/${post.category}/${post.slug}`} class="block w-full h-full">
+                    <img
+                      src={img}
+                      alt={post.data.title}
+                      loading="lazy"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </a>
+                  {dateObj && (
+                    <div class="absolute bottom-3 left-3 bg-primary text-white text-xs font-medium px-2.5 py-1 rounded-md shadow-sm">
+                      <FormattedDate date={dateObj} format="short" />
+                    </div>
+                  )}
+                  <span class="absolute top-3 right-3 bg-surface/90 backdrop-blur-sm text-primary text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm border border-border">
+                    Pengumuman
+                  </span>
+                </div>
+
+                <!-- Text Body -->
+                <div class="p-5 flex flex-col flex-grow">
+                  <h3 class="font-bold text-lg text-heading group-hover:text-primary transition-colors line-clamp-2 mb-2 leading-snug">
+                    <a href={`/posts/${post.category}/${post.slug}`}>
+                      {post.data.title}
+                    </a>
+                  </h3>
+
+                  {post.data.description && (
+                    <p class="text-sm text-muted line-clamp-2 mb-4 flex-grow">
+                      {excerpt(post.data.description, 110)}
+                    </p>
+                  )}
+
+                  <div class="pt-4 border-t border-border mt-auto flex items-center justify-between text-xs text-muted">
+                    <span class="font-medium">{post.data.author || "Admin Madrasah"}</span>
+                    <a
+                      href={`/posts/${post.category}/${post.slug}`}
+                      class="inline-flex items-center gap-1 font-semibold text-primary group-hover:text-secondary transition-colors"
+                    >
+                      Baca Detail
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="text-center py-12 bg-background rounded-2xl border border-border p-8">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-muted mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <p class="text-heading font-semibold">Belum ada pengumuman baru</p>
+          <p class="text-sm text-muted mt-1">Silakan kembali lagi nanti untuk melihat informasi terbaru.</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Help & Contact Callout -->
+  <section class="py-12 bg-background">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="bg-gradient-to-r from-primary to-secondary text-white rounded-2xl p-8 md:p-10 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="max-w-2xl text-center md:text-left">
+          <h2 class="text-2xl md:text-3xl font-bold mb-2">
+            Butuh Bantuan Terkait Pengumuman?
+          </h2>
+          <p class="text-white/90 text-sm md:text-base leading-relaxed">
+            Jika terdapat kendala teknis saat pengecekan kelulusan atau pertanyaan seputar berkas SPMB, tim Tata Usaha kami siap membantu.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-3 shrink-0">
+          <a
+            href="https://wa.me/6281938240819"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-5 py-3 bg-white hover:bg-emerald-50 !text-primary font-bold text-sm rounded-xl transition-all shadow-md flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+            </svg>
+            Hubungi Tata Usaha
+          </a>
+          <a
+            href="/contact"
+            class="px-5 py-3 bg-white/10 hover:bg-white/20 !text-white font-semibold text-sm rounded-xl transition-all border border-white/30 backdrop-blur-sm flex items-center gap-1.5"
+          >
+            <span>Info Kontak & Lokasi</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>

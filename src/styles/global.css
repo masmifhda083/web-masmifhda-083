@@ -1,16 +1,40 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--color-bg);
-  color: var(--color-text-base);
+
+@font-face {
+  font-family: 'Graphik';
+  src: url('/fonts/Graphik-Regular-Trial.otf') format('opentype');
+  font-weight: 100 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 
 
+body {
+  font-family: 'Graphik', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-base);
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Graphik', sans-serif;
+}
+
 @theme {
+  --font-sans: "Graphik", sans-serif;
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-graphik: "Graphik", sans-serif;
   --font-dafoe: "Mr Dafoe", cursive;
+
+  --color-emerald-300: var(--color-amber-400, #fbbf24);
 
   --color-background: var(--color-bg);
   --color-surface: var(--color-surface);
@@ -22,20 +46,30 @@ body {
   --color-link: var(--color-link);
   --color-link-hover: var(--color-link-hover);
   --color-border: var(--color-border);
-
 }
 
-/* Global element */
-a {
-  color: var(--color-link);
+/* Global base element */
+@layer base {
+  a {
+    color: var(--color-link);
+  }
+
+  a:hover {
+    color: var(--color-link-hover);
+  }
+
+  hr {
+    border-color: var(--color-border);
+  }
 }
 
-a:hover {
-  color: var(--color-link-hover);
-}
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
-hr {
-  border-color: var(--color-border);
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 
@@ -43,7 +77,8 @@ hr {
 
 @utility prose-pink {
   @apply prose;
-  & > * {
+
+  &>* {
     --tw-prose-body: var(--color-text);
     --tw-prose-headings: var(--color-heading);
     --tw-prose-links: var(--color-link);
@@ -62,17 +97,20 @@ hr {
 }
 
 @utility prose {
+
   ol,
   ul {
     @apply my-4;
+    padding-inline-start: 1.25rem;
 
     ol,
     ul {
       @apply my-1;
+      padding-inline-start: 1rem;
     }
 
     li {
-      @apply my-1 ml-6;
+      @apply my-1;
 
       h1,
       h2,

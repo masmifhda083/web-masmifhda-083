@@ -3,23 +3,20 @@ import Layout from "../layouts/Layout.astro";
 import LatestPosts from "../components/LatestPosts.astro";
 import ExtracurricularList from "../components/ExtracurricularList.astro";
 import Highlight from "../components/Highlight.astro";
-import Contact from "../components/Contact.astro";
 import "../styles/global.css";
 import { getCollection } from "astro:content";
-import websiteSettings from "../content/settings/website.json";
 import HeroSection from "../components/HeroSection.astro";
 import StaffList from "../components/StaffList.astro";
-import Year from "../components/Year.astro";
 import GallerySlider from "../components/GallerySlider.astro";
-import OsisInti from "../components/OsisInti.astro";
+import Year from "../components/Year.astro";
 import { getVisiblePosts } from "../utils/postFilter";
 
 const allPosts = await getCollection("posts");
 const visiblePosts = getVisiblePosts(allPosts);
 
-// Proses posts untuk mendapatkan category dan slug yang benar
+// Process posts
 const processedPosts = visiblePosts.map((post) => {
-  const category = post.data.category || "news";
+  const category = (post.data.category || "news").toLowerCase();
   const slug =
     post.id
       .split("/")
@@ -33,164 +30,233 @@ const processedPosts = visiblePosts.map((post) => {
   };
 });
 
-// Filter posts by category (contoh: pengumuman)
-const pengumumanPosts = processedPosts
-  .filter((post) => post.category.toLowerCase() === "pengumuman")
-  .sort((a, b) => {
-    // Gunakan pubdate, jika tidak ada gunakan tanggal default
-    const dateA = new Date(a.data.pubdate ?? 0).getTime();
-    const dateB = new Date(b.data.pubdate ?? 0).getTime();
-    return dateB - dateA; // Terbaru dulu
-  });
-
-const prestasiPosts = processedPosts
-  .filter((post) => post.category.toLowerCase() === "prestasi")
-  .sort((a, b) => {
-    // Gunakan pubdate, jika tidak ada gunakan tanggal default
-    const dateA = new Date(a.data.pubdate ?? 0).getTime();
-    const dateB = new Date(b.data.pubdate ?? 0).getTime();
-    return dateB - dateA; // Terbaru dulu
-  });
-
-// Atau ambil semua posts terbaru
-const latestPosts = processedPosts
+// News posts
+const newsPosts = processedPosts
+  .filter((post) => post.category === "news" || post.category === "berita")
   .sort((a, b) => {
     const dateA = new Date(a.data.pubdate ?? 0).getTime();
     const dateB = new Date(b.data.pubdate ?? 0).getTime();
     return dateB - dateA;
   })
-  .slice(0, 6); // 6 post terbaru
+  .slice(0, 5);
+
+const newsToDisplay = newsPosts.length > 0 ? newsPosts : processedPosts.slice(0, 5);
+
+// Prestasi posts fetched dynamically from /posts/prestasi
+const prestasiPosts = processedPosts
+  .filter((post) => post.category === "prestasi")
+  .sort((a, b) => {
+    const dateA = new Date(a.data.pubdate ?? 0).getTime();
+    const dateB = new Date(b.data.pubdate ?? 0).getTime();
+    return dateB - dateA;
+  })
+  .slice(0, 3);
 ---
 
-<Layout>
+<Layout title="MA Miftahul Huda Tambak - Portal Resmi Institusi Pendidikan">
+  <!-- 1. Hero Section (Editorial Photographic Living Institution with Slider) -->
   <HeroSection />
+
+  <!-- 2. Highlight 3-Part Component (Sambutan, Pengumuman, SPMB Card) -->
   <Highlight />
-  <section class="bg-primary">
-    <div class="container mx-auto px-4 py-12">
-      <h2
-        class="text-3xl text-surface text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2"
-      >
-        Berita Terbaru
-      </h2>
-      <LatestPosts posts={latestPosts} maxPosts={4} showDescription={true} />
-    </div>
-  </section>
-  <section>
-    <div class="container mx-auto px-4 py-8">
-      <div
-        class="mt-12 max-w-3xl mx-auto md:[&>div>article>div]:w-64! md:[&>div>article>div]:h-36! md:[&>div>article>div]:text-[14px]! md:[&>div>article>div>h3]:text-xl! md:[&>div>article>div>p]:text-[14px]!"
-      >
-        <h2
-          class="text-3xl text-primary text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-primary before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2"
-        >
-          Prestasi Siswa
+
+  <!-- 3. Berita Terkini (Editorial Layout: 1 Featured Utama + 3 List) -->
+  <section class="py-16 bg-background">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="flex items-center justify-between pb-4 mb-10 border-b border-border">
+        <h2 class="text-2xl md:text-3xl font-bold text-heading">
+          Berita Terkini
         </h2>
-        <LatestPosts
-          posts={prestasiPosts}
-          maxPosts={4}
-          showDescription={true}
-          layout="sidebar"
-        />
-      </div>
-      <div data-animate="fade" class="mt-8 text-center">
         <a
-          href="/posts/prestasi"
-          class="inline-block bg-primary px-6 py-3 rounded-lg hover:bg-secondary transition-colors"
+          href="/posts/news"
+          class="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-primary hover:text-secondary transition-colors"
         >
-          <button class="text-surface">Lihat Semua Prestasi</button>
+          <span>Lihat Semua Berita</span>
+          <span>&rarr;</span>
         </a>
       </div>
+
+      <LatestPosts posts={newsToDisplay} maxPosts={5} layout="editorial" />
     </div>
   </section>
 
-  <!-- OSIS SECTION -->
-  <section class="bg-primary py-24 relative overflow-hidden">
-    <!-- Premium Glowing Background Decoration & Dotted Mesh Overlay -->
-    <div
-      class="absolute inset-0 w-full h-full pointer-events-none z-0"
-      style="background-image: radial-gradient(rgba(255, 255, 255, 0.15) 2px, transparent 2px); background-size: 30px 30px;"
-    >
-      <div
-        class="absolute -top-[10%] -right-[10%] w-[500px] h-[500px] rounded-full bg-secondary/30 blur-[100px] mix-blend-lighten animate-pulse"
-        style="animation-duration: 4s;"
-      >
-      </div>
-      <div
-        class="absolute -bottom-[10%] -left-[10%] w-[600px] h-[600px] rounded-full bg-secondary/20 blur-[120px] mix-blend-lighten pointer-events-none"
-      >
-      </div>
-      <div
-        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-white/5 blur-[100px] pointer-events-none"
-      >
-      </div>
-    </div>
-
-    <div class="container mx-auto px-4 relative z-10">
-      <h2
-        class="text-3xl text-surface text-center font-bold mb-16 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after:-bottom-2 after:right-1/2"
-      >
-        Pengurus OSIS
-      </h2>
-      <OsisInti />
-    </div>
-  </section>
-  <section class="py-24 bg-primary text-white">
-    <div class="container mx-auto px-4">
-      <div class="text-center max-w-3xl mx-auto mb-20" data-animate="fade">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          Wadah Kreativitas Siswa
-        </h2>
-        <p class="text-lg opacity-80 leading-relaxed">
-          Lebih dari sekadar akademik, kami mengasah bakat dan minat siswa
-          melalui berbagai kegiatan ekstrakurikuler yang bervariasi.
-        </p>
-      </div>
-      <ExtracurricularList />
-
-      <div data-animate="fade" class="mt-12 text-center">
-        <a href="/extracurricular" class="">
-          <p
-            class="text-primary bg-surface hover:text-surface hover:bg-secondary inline-block px-4 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+  <!-- 4. Prestasi Siswa (Dynamically from /posts/prestasi) -->
+  <section class="py-16 bg-primary text-white">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="flex items-center justify-between pb-4 mb-10 border-b border-white/15">
+        <div>
+          <span class="text-xs font-bold text-amber-400 tracking-widest uppercase block mb-1">
+            Jejak Keberhasilan
+          </span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">
+            Prestasi Siswa
+          </h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <a
+            href="/posts/prestasi"
+            class="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-amber-400 hover:text-white transition-colors"
           >
-            Semua Ekstrakurikuler
+            <span>Semua Prestasi</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        {prestasiPosts.map((post, idx) => {
+          const num = `0${idx + 1}`;
+          const img = post.data.heroImage || "/uploads/default-thumb.jpg";
+          const pub = post.data.pubdate ? new Date(post.data.pubdate) : null;
+
+          return (
+            <a 
+              href={`/posts/prestasi/${post.slug}`}
+              class="bg-surface rounded-2xl p-6 border border-white/10 shadow-md flex items-center justify-between gap-4 group hover:shadow-xl hover:-translate-y-0.5 transition-all block"
+            >
+              <!-- Left Info -->
+              <div class="flex-1 min-w-0">
+                <!-- Big Number -->
+                <span class="text-3xl md:text-4xl font-bold text-primary/30 group-hover:text-primary transition-colors block mb-1">
+                  {num}
+                </span>
+                <span class="text-[11px] font-bold text-secondary uppercase tracking-wider block mb-1">
+                  PRESTASI
+                </span>
+                <h3 class="text-xs md:text-sm font-bold text-heading leading-snug line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                  {post.data.title}
+                </h3>
+                {post.data.author && (
+                  <p class="text-xs font-semibold text-text truncate capitalize">{post.data.author}</p>
+                )}
+                {pub && (
+                  <p class="text-[11px] text-muted">
+                    {pub.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
+                  </p>
+                )}
+              </div>
+
+              <!-- Right Student Photo -->
+              <div class="w-20 h-24 sm:w-24 sm:h-28 rounded-xl overflow-hidden shrink-0 border border-border shadow-inner bg-background">
+                <img
+                  src={img}
+                  alt={post.data.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='/uploads/default-thumb.jpg';"
+                />
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Tenaga Pendidik (Human, Clean Portraits without Box Borders) -->
+  <section class="py-16 bg-background">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="flex items-center justify-between pb-4 mb-10 border-b border-border">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-heading">
+            Tenaga Pendidik
+          </h2>
+          <p class="text-xs md:text-sm text-muted mt-1">
+            Membimbing dengan ilmu, mendidik dengan keteladanan akhlak.
           </p>
+        </div>
+        <a
+          href="/about/kepegawaian"
+          class="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-primary hover:text-secondary transition-colors"
+        >
+          <span>Lihat Semua</span>
+          <span>&rarr;</span>
         </a>
       </div>
-    </div>
-  </section>
-  <GallerySlider />
-  <section
-    class="relative bg-cover bg-center py-20 px-6 before:content-[''] before:absolute before:bg-primary before:opacity-50 before:inset-0 before:w-full before:h-full"
-    style="background-image: url(https://images.unsplash.com/photo-1494949649109-ecfc3b8c35df?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);"
-  >
-    <div class="container relative py-12 w-full mx-auto">
-      <div class="text-surface text-center relative">
-        <h1 data-animate="fade" class="text-3xl md:text-4xl font-bold mb-4">
-          Penerimaan Peserta Didik Baru <Year />
-        </h1>
-        <p data-animate="fade" class="text-lg mb-8">
-          Klik link berikut untuk informasi dan syarat pendaftaran siswa baru
-        </p>
-        <a href="/pendaftaran">
-          <span
-            class="bg-surface text-primary rounded-sm py-2 px-4"
-            data-animate="fade">FORMULIR PENDAFTARAN</span
-          >
-        </a>
-      </div>
-    </div>
-  </section>
-  <section class="bg-primary">
-    <div class="container mx-auto px-4 py-20">
-      <h2
-        class="text-3xl text-surface text-center font-bold mb-12 relative before:content-[''] before:absolute before:w-20 before:h-1 before:bg-surface before:ml- before:-bottom-2 before:left-1/2 after:content-[''] after:absolute after:w-20 after:h-1 after:bg-secondary after: after:-bottom-2 after:right-1/2"
-      >
-        Tenaga Pendidik
-      </h2>
+
       <StaffList />
     </div>
   </section>
-  <Contact />
+
+  <!-- 6. Ekstrakurikuler (Photo-Led Cards with Overlay Titles) -->
+  <section class="py-16 bg-surface">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="flex items-center justify-between pb-4 mb-10 border-b border-border">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-heading">
+            Ekstrakurikuler
+          </h2>
+          <p class="text-xs md:text-sm text-muted mt-1">
+            Wadah pengembangan bakat, minat, dan kepemimpinan siswa.
+          </p>
+        </div>
+        <a
+          href="/extracurricular"
+          class="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-primary hover:text-secondary transition-colors"
+        >
+          <span>Lihat Semua</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+
+      <ExtracurricularList maxItems={4} />
+    </div>
+  </section>
+
+  <!-- 7. Galeri Kegiatan (Editorial Masonry Photo Composition) -->
+  <section class="py-16 bg-background">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="flex items-center justify-between w-full pb-4 mb-10 border-b border-border">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-heading">
+            Galeri Kegiatan
+          </h2>
+          <p class="text-xs md:text-sm text-muted mt-1">
+            Dokumentasi kehidupan belajar dan kebersamaan siswa.
+          </p>
+        </div>
+        <a
+          href="/about/gallery"
+          class="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-primary hover:text-secondary transition-colors"
+        >
+          <span>Lihat Semua</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+
+      <GallerySlider />
+    </div>
+  </section>
+
+  <!-- 8. Banner Akbar SPMB (Full-Width Conversion Banner) -->
+  <section class="relative py-20 bg-cover bg-center text-white overflow-hidden" style="background-image: url(/uploads/cover.webp);">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/90 to-[#143617]/95"></div>
+    <div class="container mx-auto px-4 max-w-5xl relative z-10 text-center">
+      <span class="px-4 py-1 bg-white/15 backdrop-blur-sm text-white text-xs font-bold rounded-full inline-block mb-4 border border-white/20">
+        SPMB <Year />
+      </span>
+      <h2 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight leading-tight text-white">
+        SISTEM PENERIMAAN MURID BARU (SPMB)
+      </h2>
+      <p class="text-sm md:text-base text-white/90 max-w-2xl mx-auto leading-relaxed mb-8 font-medium">
+        Temukan lingkungan belajar yang membantu siswa berkembang dalam ilmu, karakter, dan wawasan masa depan.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/pendaftaran"
+          class="px-8 py-3.5 bg-amber-400 hover:bg-emerald-50 text-white hover:text-primary font-bold text-sm md:text-base rounded-full transition-all shadow-xl hover:scale-105"
+        >
+          Daftar SPMB Online
+        </a>
+        <a
+          href="/pendaftaran"
+          class="px-8 py-3.5 bg-black/30 hover:bg-black/50 !text-white font-semibold text-sm md:text-base rounded-full border border-white/30 backdrop-blur-sm"
+        >
+          Informasi Pendaftaran
+        </a>
+      </div>
+    </div>
+  </section>
 
   <script>
     import { initScrollAnimations } from "../scripts/scrollAnimations.js";

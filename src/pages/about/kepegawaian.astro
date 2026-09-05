@@ -1,88 +1,316 @@
 ---
-import Layout from "../../layouts/Layout.astro"
-import { getEntry } from "astro:content"
-import Sidebar from "../../components/Sidebar.astro"
-import Breadcrumb from '../../components/Breadcrumb.astro';
-const about = await getEntry("about", "index")
-if (!about) throw new Error("About data not found")
+// src/pages/about/kepegawaian.astro
+import Layout from "../../layouts/Layout.astro";
+import { getEntry } from "astro:content";
+import Sidebar from "../../components/Sidebar.astro";
+import AboutSubNav from "../../components/AboutSubNav.astro";
 
-const { kepegawaian } = about.data
-const item = kepegawaian.items[0]
-const backgroundImage = item?.image
+const about = await getEntry("about", "index");
+if (!about) throw new Error("About data not found");
 
-function parseTable(markdown) {
+const { kepegawaian } = about.data;
+const item = kepegawaian.items[0];
+
+function parseTable(markdown: string) {
+  if (!markdown) return [];
   const lines = markdown
     .split("\n")
-    .map(l => l.trim())
-    .filter(l => l.startsWith("|"))
+    .map((l) => l.trim())
+    .filter((l) => l.startsWith("|"));
 
-  const rows = lines.slice(2)
+  const rows = lines.slice(2);
 
-  return rows.map(row => {
-    const cols = row
-      .split("|")
-      .map(c => c.trim())
-      .filter(Boolean)
+  return rows
+    .map((row) => {
+      const cols = row
+        .split("|")
+        .map((c) => c.trim())
+        .filter(Boolean);
 
-    return {
-      nama: cols[0],
-      role: cols[1]
-    }
-  })
+      return {
+        nama: cols[0],
+        role: cols[1],
+      };
+    })
+    .filter((r) => r.nama && r.nama !== "NAMA");
 }
 
-const rows = parseTable(item.body)
-const title = "Tendik dan Kependidikan"
+const staffList = parseTable(item.body);
+
+// Pisahkan berdasarkan kategori
+const pimpinan = staffList.filter((s) => s.role.toLowerCase().includes("kepala"));
+const guru = staffList.filter(
+  (s) => !s.role.toLowerCase().includes("kepala") && !s.role.toLowerCase().includes("tata usaha")
+);
+const tu = staffList.filter((s) => s.role.toLowerCase().includes("tata usaha"));
+
+// Helper warna kategori
+function getRoleBadgeStyle(role: string) {
+  const r = role.toLowerCase();
+  if (r.includes("agama") || r.includes("islam") || r.includes("arab")) {
+    return "bg-emerald-100 text-emerald-800 border-emerald-200";
+  }
+  if (r.includes("matematika") || r.includes("fisika") || r.includes("komputer")) {
+    return "bg-blue-100 text-blue-800 border-blue-200";
+  }
+  if (r.includes("inggris") || r.includes("indonesia")) {
+    return "bg-purple-100 text-purple-800 border-purple-200";
+  }
+  if (r.includes("seni") || r.includes("olahraga") || r.includes("ekonomi")) {
+    return "bg-amber-100 text-amber-800 border-amber-200";
+  }
+  if (r.includes("tata usaha")) {
+    return "bg-slate-100 text-slate-800 border-slate-200";
+  }
+  return "bg-primary/10 text-primary border-primary/20";
+}
+
+function getInitials(name: string) {
+  return name
+    .replace(/(S\.Pd|M\.Pd|Drs|S\.E|S\.Pd\.I)/g, "")
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+}
+
+const title = "Dewan Guru & Tenaga Kependidikan - MA Miftahul Huda";
+const description =
+  "Daftar dewan asatidz/guru dan staf tata usaha MA Miftahul Huda Mathla'ul Anwar Tambak Jaya, membimbing santri dengan integritas keilmuan dan keteladanan akhlak.";
 ---
-<Layout title={title}>
-  <!-- HERO -->
-  <section class="relative py-12 px-4">
-    <div class="container relative w-full h-screen mx-auto rounded-2xl bg-cover bg-center before:content-[''] before:absolute before:bg-black before:opacity-70 before:inset-0 before:rounded-2xl before:w-full before:h-full" 
-          style={`background-image: url(${backgroundImage})`}>
-      <div class="relative w-full h-full flex flex-col items-center justify-center">
-          <h1 class="text-xl md:text-3xl text-surface text-center p-2 font-semibold">
-            {title}
-          </h1>
-          <Breadcrumb title={title} parent={{ label: "About", href: "/about" }}/>
+
+<Layout title={title} description={description}>
+  <!-- 1. Header Section -->
+  <section class="relative bg-gradient-to-b from-primary/10 via-surface to-background pt-10 pb-12 border-b border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs md:text-sm text-muted mb-6" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
+        <span class="text-muted/60">/</span>
+        <a href="/about" class="hover:text-primary transition-colors">Tentang Kami</a>
+        <span class="text-muted/60">/</span>
+        <span class="text-heading font-semibold">Dewan Guru & Staf</span>
+      </nav>
+
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-3">
+          Sumber Daya Insani
+        </div>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold font-sans text-heading tracking-tight mb-3">
+          Dewan Guru & Tenaga Kependidikan
+        </h1>
+        <p class="text-sm sm:text-base text-muted leading-relaxed">
+          Mengenal para asatidz, pendidik profesional, dan tenaga administrasi yang membimbing santri MA Miftahul Huda dengan dedikasi dan keteladanan.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- TABLE -->
-  <section>
-    <div class="container px-4 mx-auto w-full h-full overflow-hidden flex flex-col lg:flex-row gap-6">
-      <div class="w-full lg:w-3/4 space-y-3 overflow-x-auto mb-12">
-        <h2 class="text-2xl font-semibold mb-6">
-            {item.title}
-        </h2>
-        <table class="w-full text-sm">
-          <thead class="bg-surface">
-            <tr>
-              <th class="px-2 py-3 text-left">
-                Nama
-              </th>
-              <th class="px-2 py-3 text-left">
-                Jabatan
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              rows.map((row, index) => (
-                <tr class={index % 2 === 0 ? "bg-surface" : "bg-muted text-surface"}>
-                  <td class="border-y px-2 py-2">
-                    {row.nama}
-                  </td>
-                  <td class="border-y px-2 py-2">
-                    {row.role}
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
+  <!-- 2. Sub-Navigation Tabs -->
+  <AboutSubNav active="kepegawaian" />
+
+  <!-- 3. Main Content Section -->
+  <section class="py-12 md:py-16 bg-background" x-data="{ view: 'grid' }">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: Staff Directory (8 Cols) -->
+        <div class="lg:col-span-8 space-y-10">
+          
+          <!-- Quick Stat Pills & View Switcher -->
+          <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-surface border border-border shadow-2xs">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs font-medium text-muted">
+              <span class="px-3 py-1 rounded-lg bg-background border border-border/80 text-heading font-bold">
+                Total: {staffList.length} GTK
+              </span>
+              <span>•</span>
+              <span>1 Kepala Madrasah</span>
+              <span>•</span>
+              <span>{guru.length} Guru Mapel</span>
+              <span>•</span>
+              <span>{tu.length} Staf TU</span>
+            </div>
+
+            <!-- View Switcher -->
+            <div class="inline-flex rounded-lg border border-border bg-background p-1 text-xs">
+              <button
+                type="button"
+                @click="view = 'grid'"
+                :class="view === 'grid' ? 'bg-primary text-white font-bold shadow-2xs' : 'text-muted hover:text-heading'"
+                class="px-3 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span>Kartu</span>
+              </button>
+              <button
+                type="button"
+                @click="view = 'table'"
+                :class="view === 'table' ? 'bg-primary text-white font-bold shadow-2xs' : 'text-muted hover:text-heading'"
+                class="px-3 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                <span>Tabel</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Section 1: Pimpinan Madrasah -->
+          {
+            pimpinan.length > 0 && (
+              <div>
+                <div class="flex items-center gap-2 pb-3 mb-6 border-b border-border">
+                  <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                  <h2 class="text-xl font-bold text-heading">
+                    Pimpinan Madrasah
+                  </h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {pimpinan.map((leader) => (
+                    <div class="bg-surface rounded-2xl p-6 border-2 border-primary/20 shadow-sm flex items-center gap-4 hover:border-primary transition-all">
+                      <div class="w-16 h-16 rounded-2xl overflow-hidden border border-border shadow-inner shrink-0 bg-primary/10">
+                        <img
+                          src="/uploads/kepsek.webp"
+                          alt={leader.nama}
+                          class="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-primary/10 text-primary uppercase block w-max mb-1">
+                          {leader.role}
+                        </span>
+                        <h3 class="text-base font-bold text-heading leading-snug">
+                          {leader.nama}
+                        </h3>
+                        <p class="text-xs text-muted mt-1">Kepemimpinan & Tata Kelola</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+
+          <!-- Section 2: Dewan Guru Mata Pelajaran -->
+          <div>
+            <div class="flex items-center justify-between pb-3 mb-6 border-b border-border">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+                <h2 class="text-xl font-bold text-heading">
+                  Dewan Pendidik (Guru Mata Pelajaran)
+                </h2>
+              </div>
+              <span class="text-xs text-muted font-medium">{guru.length} Guru</span>
+            </div>
+
+            <!-- Grid View -->
+            <div x-show="view === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {
+                guru.map((t) => (
+                  <div class="bg-surface p-4 sm:p-5 rounded-2xl border border-border hover:border-primary/40 hover:shadow-md transition-all duration-200 flex items-start gap-3.5">
+                    <!-- Initials Avatar -->
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary font-bold text-sm flex items-center justify-center shrink-0 border border-primary/20">
+                      {getInitials(t.nama)}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-sm sm:text-base font-bold text-heading truncate mb-1">
+                        {t.nama}
+                      </h3>
+                      <span
+                        class={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-md border ${getRoleBadgeStyle(
+                          t.role
+                        )}`}
+                      >
+                        {t.role}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+
+            <!-- Table View -->
+            <div x-show="view === 'table'" style="display: none;" class="overflow-x-auto rounded-2xl border border-border bg-surface">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-background border-b border-border text-heading font-semibold">
+                  <tr>
+                    <th class="py-3 px-4 w-12 text-center">No</th>
+                    <th class="py-3 px-4">Nama Lengkap & Gelar</th>
+                    <th class="py-3 px-4">Tugas / Bidang Studi</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border/60">
+                  {
+                    guru.map((t, idx) => (
+                      <tr class={idx % 2 === 0 ? "bg-surface" : "bg-background/50 hover:bg-primary/5 transition-colors"}>
+                        <td class="py-2.5 px-4 text-center text-muted font-medium">{idx + 1}</td>
+                        <td class="py-2.5 px-4 font-bold text-heading">{t.nama}</td>
+                        <td class="py-2.5 px-4">
+                          <span class={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded border ${getRoleBadgeStyle(t.role)}`}>
+                            {t.role}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 3: Tenaga Kependidikan / Tata Usaha -->
+          {
+            tu.length > 0 && (
+              <div>
+                <div class="flex items-center justify-between pb-3 mb-6 border-b border-border">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                    <h2 class="text-xl font-bold text-heading">
+                      Tenaga Kependidikan (Tata Usaha)
+                    </h2>
+                  </div>
+                  <span class="text-xs text-muted font-medium">{tu.length} Staf</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {tu.map((staff) => (
+                    <div class="bg-surface p-5 rounded-2xl border border-border hover:border-primary/40 transition-all flex items-center gap-4">
+                      <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm flex items-center justify-center shrink-0 border border-slate-200">
+                        {getInitials(staff.nama)}
+                      </div>
+                      <div>
+                        <h3 class="text-sm sm:text-base font-bold text-heading mb-1">
+                          {staff.nama}
+                        </h3>
+                        <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                          {staff.role}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+
+        </div>
+
+        <!-- Right Column: Sidebar (4 Cols) -->
+        <Sidebar />
+
       </div>
-      <Sidebar />
     </div>
   </section>
 </Layout>

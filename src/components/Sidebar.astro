@@ -1,9 +1,14 @@
 ---
+// src/components/Sidebar.astro
 import { getCollection } from "astro:content";
 import LatestPosts from "./LatestPosts.astro";
 
+interface Props {
+  class?: string;
+  isFlex?: boolean;
+}
 
-
+const { class: className = "", isFlex = false } = Astro.props;
 
 const allPosts = await getCollection("posts");
 
@@ -48,45 +53,51 @@ const processedPosts = allPosts.map((post) => {
 const pengumumanPosts = processedPosts
   .filter((post) => post.category.toLowerCase() === "pengumuman")
   .sort((a, b) => {
-    // Gunakan pubdate, jika tidak ada gunakan tanggal default
     const dateA = new Date(a.data.pubdate ?? 0).getTime();
     const dateB = new Date(b.data.pubdate ?? 0).getTime();
-    return dateB - dateA; // Terbaru dulu
+    return dateB - dateA;
   });
 
-// Atau ambil semua posts terbaru
+// Ambil post berita terbaru
 const latestPosts = processedPosts
   .sort((a, b) => {
     const dateA = new Date(a.data.pubdate ?? 0).getTime();
     const dateB = new Date(b.data.pubdate ?? 0).getTime();
     return dateB - dateA;
   })
-  .slice(0, 6); // 6 post terbaru
+  .slice(0, 5);
 ---
 
-<div class="w-full lg:w-1/4 ps-4 lg:border-l border-border">
-    <div class="">
-        <div class="flex items-center gap-2 mb-3">
-            <h2 class=" text-primary flex-none uppercase">Recent Post</h2>
-            <span class="inline-block grow  w-full h-px bg-primary/50"></span>
-        </div>
-        <LatestPosts 
-        posts={latestPosts} 
-        maxPosts={5} 
-        layout="sidebar" 
-        showDescription={false} 
-        />
-        <hr class="h-px my-8 bg-surface border-0" />
-        <div class="flex items-center gap-2 mb-3">
-            <h2 class=" text-primary flex-none uppercase">Pengumuman</h2>
-            <span class="inline-block grow  w-full h-px bg-primary/50"></span>
-        </div>
-        <LatestPosts 
-        posts={pengumumanPosts} 
-        maxPosts={5} 
-        layout="sidebar" 
-        showDescription={false} 
-        />
-        
+<aside class={`w-full ${isFlex ? "lg:w-1/4" : "lg:col-span-4"} ps-0 lg:ps-6 lg:border-l border-border space-y-8 ${className}`}>
+  <!-- Berita Terbaru -->
+  <div>
+    <div class="flex items-center gap-2 pb-2.5 mb-4 border-b border-border">
+      <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+      <h2 class="text-sm font-bold text-heading uppercase tracking-wider">
+        Berita Terkini
+      </h2>
     </div>
-</div>
+    <LatestPosts
+      posts={latestPosts}
+      maxPosts={5}
+      layout="sidebar"
+      showDescription={false}
+    />
+  </div>
+
+  <!-- Pengumuman Resmi -->
+  <div>
+    <div class="flex items-center gap-2 pb-2.5 mb-4 border-b border-border">
+      <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+      <h2 class="text-sm font-bold text-heading uppercase tracking-wider">
+        Pengumuman
+      </h2>
+    </div>
+    <LatestPosts
+      posts={pengumumanPosts}
+      maxPosts={4}
+      layout="sidebar"
+      showDescription={false}
+    />
+  </div>
+</aside>

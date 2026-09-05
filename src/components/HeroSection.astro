@@ -1,212 +1,99 @@
 ---
-//src/components/HeroSection.astro
+// src/components/HeroSection.astro
 import { getCollection } from 'astro:content';
 
 const settingsData = await getCollection('settings');
 const settings = settingsData[0]?.data;
 
 const slider = settings?.slider || {};
-const images = slider.images || [
-  { url: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-  { url: 'https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-  { url: 'https://images.unsplash.com/photo-1714192833473-3271b3561c95?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+const schoolInfo = slider.schoolInfo || {};
+const images = slider.images?.length ? slider.images : [
+  { url: '/uploads/cover.webp', alt: 'Dokumentasi MA Miftahul Huda 1' },
+  { url: '/uploads/mifda-1.webp', alt: 'Dokumentasi MA Miftahul Huda 2' },
+  { url: '/uploads/mifda-15.webp', alt: 'Dokumentasi MA Miftahul Huda 3' },
 ];
 
-// Ambil overlay settings atau gunakan default
-const overlay = slider.overlay || { 
-  color: '#000000', 
-  opacity: '0.7'
-};
-
-const schoolInfo = slider.schoolInfo || { 
-  name: 'SMA NEGERI 1', 
-  city: 'Semarang', 
-  motto: 'sekolah maju untuk dunia akhirat',
-  welcomeMessage: 'Selamat Datang di Website Kami'
-};
-
-interface TextSettings {
-  color?: string;
-  fontSize?: string;
-  fontFamily?: string;
-}
-
-const textSettings: TextSettings = (schoolInfo as any)?.textSettings || {};
-const animation = slider.animation || { autoSlide: true, slideInterval: 3000, marqueeSpeed: 15 };
-
-// Generate unique ID untuk slider
-const sliderId = `hero-slider-${Math.random().toString(36).substring(2, 11)}`;
-
-// Ambil data pendaftaran untuk teks button
-const pendaftaranCollection = await getCollection('pendaftaran');
-const pendaftaranData = pendaftaranCollection[0]?.data?.datappdb;
-const pendaftaranText = pendaftaranData?.ppdbAlias || "Pendaftaran";
-
-// Variabel untuk animation duration calculation
-const marqueeDuration = `calc(10s / ${animation.marqueeSpeed || 15} * 15)`;
+const schoolName = schoolInfo.name || "MA MIFTAHUL HUDA";
+const city = schoolInfo.city || "TAMBAK JAYA";
+const motto = schoolInfo.motto || "Madrasah Aliyah yang membentuk generasi berilmu, berkarakter islami, dan berwawasan luas.";
+const accreditation = schoolInfo.accreditation || "Akreditasi B+";
 ---
 
-<div class="splide splide-hero" id={sliderId}>
-  <div class="splide__track">
-    <ul class="splide__list">
-      {images.map((image, index) => {
-        const slideKey = `slide-${index}`;
-        return (
-          <li class="splide__slide" data-index={index}>
-            <div class="relative h-screen w-full">
-              <img 
-                src={image.url} 
-                class="absolute inset-0 w-full h-full object-cover object-center"
-                alt={image.alt || `Hero Image ${index + 1}`}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                width="1920"
-                height="1080"
-              />
-              
-              {/* Overlay Solid Color */}
-              <div 
-                class="absolute inset-0 z-10"
-                style={`background-color: ${overlay.color}; opacity: ${overlay.opacity}`}
-                aria-hidden="true"
-              ></div>
-              
-              <!-- Text Content -->
-              <div class="absolute inset-0 z-20 flex items-center justify-center">
-                <div 
-                  class="text-center w-full max-w-4xl px-6"
-                  style={textSettings.color ? `color: ${textSettings.color}` : ''}
-                >
-                  <h2 class="text-3xl md:text-4xl font-dafoe mb-6">
-                    {schoolInfo.welcomeMessage}
-                  </h2>
-                  <div class="text-5xl md:text-7xl font-bold uppercase tracking-tight overflow-hidden w-full max-w-lg mx-auto">
-                  <marquee scrollamount="7" direction="left">{schoolInfo.name}</marquee>
-                  <marquee scrollamount="7" direction="right">{schoolInfo.city}</marquee>
-                  </div>
-                  <p class="text-md mb-4 max-w-prose mx-auto">
-                    {schoolInfo.motto}
-                  </p>
-                  
-                  <!-- Badge Akreditasi -->
-                  {schoolInfo.accreditation && (
-                    <div class="mb-8 block">
-                      <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg hover:bg-white/20 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><path fill="currentColor" d="m328.375 384l3.698 74.999l-75.862-52.719l-76.287 52.769L183.625 384h-32.039l-5.522 112h36.692l73.413-50.78L329.242 496h36.694l-5.522-112h-32.039zm87.034-229.086l-2.194-48.054L372.7 80.933l-25.932-40.519l-48.055-2.2L256 16.093l-42.713 22.126l-48.055 2.2L139.3 80.933L98.785 106.86l-2.194 48.054l-22.127 42.714l22.127 42.715l2.2 48.053l40.509 25.927l25.928 40.52l48.055 2.195L256 379.164l42.713-22.126l48.055-2.195l25.928-40.52l40.518-25.923l2.195-48.053l22.127-42.715Zm-31.646 76.949L382 270.377l-32.475 20.78l-20.78 32.475l-38.515 1.76L256 343.125l-34.234-17.733l-38.515-1.76l-20.78-32.475L130 270.377l-1.759-38.514l-17.741-34.235l17.737-34.228L130 124.88l32.471-20.78l20.78-32.474l38.515-1.76L256 52.132l34.234 17.733l38.515 1.76l20.78 32.474L382 124.88l1.759 38.515l17.741 34.233Z"/></svg>
-                        <span class="font-bold tracking-wider text-white text-sm shadow-sm">{schoolInfo.accreditation}</span>
-                      </span>
-                    </div>
-                  )}
-                  <div class="flex flex-col sm:flex-row justify-center gap-4 mt-12 w-full max-w-md mx-auto *:rounded-md *:py-2 *:px-6 *:uppercase *:text-surface *:w-full">
-                    <a href="/about" aria-label="Detail" class="group bg-primary transition-all ease-linear duration-500 hover:bg-secondary"><button class="text-surface">Detail Profile</button></a>
-                    <a href="/pendaftaran" aria-label="Detail" class="group font-bold tracking-widest border border-border relative before:content-[''] before:absolute before:inset-0 before:w-0 before:h-0 before:rounded-md before:-z-10 before:transition-all before:ease-linear before:duration-500 hover:before:bg-surface hover:before:w-full hover:before:h-full"><button class="text-surface group-hover:text-primary">{pendaftaranText}</button></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+<section class="relative min-h-[600px] lg:min-h-[680px] w-full flex items-end justify-start overflow-hidden pt-24 bg-slate-900">
+  
+  <!-- 100% Full-Width Edge-to-Edge Crossfade Background Slider -->
+  <div 
+    class="absolute inset-0 z-0 w-full h-full overflow-hidden"
+    x-data={`{
+      current: 0,
+      total: ${images.length},
+      timer: null,
+      init() {
+        this.timer = setInterval(() => {
+          this.current = (this.current + 1) % this.total;
+        }, 5000);
+      }
+    }`}
+  >
+    {images.map((image: any, index: number) => (
+      <div
+        class="absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out"
+        :class={`current === ${index} ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-105 z-0 pointer-events-none'`}
+        style="transition: opacity 1.2s ease-in-out, transform 7s ease-out;"
+      >
+        <img 
+          src={image.url} 
+          alt={image.alt || `Dokumentasi MA Miftahul Huda ${index + 1}`}
+          class="w-full h-full object-cover object-center"
+          loading={index === 0 ? 'eager' : 'lazy'}
+        />
+      </div>
+    ))}
   </div>
-  
-  <!-- Slider Indicators (Pagination) -->
-  <div class="splide__progress">
-    <div class="splide__progress__bar"></div>
+
+  <!-- Left-to-right subtle dark gradient overlay for crystal-clear contrast -->
+  <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/90 via-black/55 to-black/20 pointer-events-none z-10"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none z-10"></div>
+
+  <!-- Editorial Left-Aligned Content Overlay -->
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-20 pb-12 lg:pb-16 w-full">
+    <div class="max-w-2xl text-left">
+      
+      <!-- Big Modern Headline (Plus Jakarta Sans & Bold) -->
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.08] mb-4 drop-shadow-md">
+        {schoolName}<br />
+        <span class="text-amber-400">{city}</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-base sm:text-lg text-white/90 leading-relaxed max-w-xl mb-8 font-medium">
+        {motto}
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3 mb-10">
+        <a 
+          href="/about" 
+          class="px-6 py-3 bg-primary hover:bg-secondary !text-white font-bold text-sm sm:text-base rounded-full transition-all shadow-lg hover:shadow-primary/30 flex items-center gap-2"
+        >
+          <span>Profile Sekolah</span>
+        </a>
+
+        <a 
+          href="/pendaftaran" 
+          class="px-6 py-3 bg-amber-400 !text-white font-bold text-sm sm:text-base rounded-full"
+        >
+          <span>Pendaftaran</span>
+        </a>
+      </div>
+
+      <!-- Feature Info Bar at the Bottom -->
+      <div class="flex flex-wrap items-center gap-2 text-xs text-white/80 pt-4 border-t border-white/15">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 font-semibold">
+          🏛️ {accreditation}
+        </span>
+      </div>
+
+    </div>
   </div>
-  
-  <!-- Custom Pagination Dots -->
-  <ul class="splide__pagination" role="tablist"></ul>
-  
-  <!-- Slider Controls -->
-  <div class="splide__arrows hidden">
-    <button class="splide__arrow splide__arrow--prev" aria-label="Previous slide">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-      </svg>
-    </button>
-    <button class="splide__arrow splide__arrow--next" aria-label="Next slide">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-      </svg>
-    </button>
-  </div>
-</div>
-
-<!-- STYLE untuk Hero Splide -->
-<style>
-  /* Hero Slider Styling */
-  .splide-hero {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .splide-hero .splide__slide {
-    position: relative;
-    height: 100vh;
-  }
-  
-  /* Custom Arrow Styling */
-  .splide-hero .splide__arrow {
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    width: 60px;
-    height: 60px;
-    transition: all 0.3s ease;
-  }
-  
-  .splide-hero .splide__arrow:hover {
-    background: rgba(255, 255, 255, 0.5);
-    transform: scale(1.1);
-  }
-  
-  .splide-hero .splide__arrow svg {
-    width: 24px;
-    height: 24px;
-    stroke-width: 2;
-  }
-  
-  /* Custom Pagination */
-  .splide-hero .splide__pagination {
-    bottom: 30px;
-    gap: 10px;
-  }
-  
-  .splide-hero .splide__pagination__page {
-    background: rgba(255, 255, 255, 0.4);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-  }
-  
-  .splide-hero .splide__pagination__page.is-active {
-    background: white;
-    transform: scale(1.2);
-  }
-  
-  .splide-hero .splide__pagination__page:hover {
-    background: rgba(255, 255, 255, 0.8);
-  }
-  
-  /* Progress Bar */
-  .splide-hero .splide__progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    z-index: 30;
-  }
-  
-  .splide-hero .splide__progress__bar {
-    height: 100%;
-    background: white;
-    transition: width 0.1s linear;
-  }
-  
-
-
-</style>
+</section>

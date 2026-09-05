@@ -1,95 +1,487 @@
 ---
-import Layout from "../../layouts/Layout.astro"
-import Breadcrumb from "../../components/Breadcrumb.astro"
-import { getEntry } from "astro:content"
+// src/pages/about/index.astro
+import Layout from "../../layouts/Layout.astro";
+import { getEntry } from "astro:content";
 
-const about = await getEntry("about", "index")
-if (!about) throw new Error("About data not found")
+const about = await getEntry("about", "index");
+if (!about) throw new Error("About data not found");
 
-const { facilities, gallery, kepegawaian, profil, sambutan, visimisi } = about.data
+const { facilities, gallery, kepegawaian, profil, sambutan, visimisi } = about.data;
 
-const cards = [
+const title = "Profil & Identitas Madrasah";
+const description =
+  "Mengenal lebih dekat MA Miftahul Huda Mathla'ul Anwar Tambak Jaya: Visi misi, sambutan kepala madrasah, dewan pendidik, fasilitas, dan dokumentasi kegiatan di Lampung Barat.";
+
+// Data Sambutan Kepala Madrasah
+const kepsekData = sambutan.items[0] || {};
+const kepsekImage = kepsekData.image || "/uploads/kepsek.webp";
+const kepsekName = "Ahmad Rifa'i, M.Pd.";
+
+// Data Visi Misi
+const visiData = visimisi.items[0] || {};
+
+// 6 Hub Cards
+const hubCards = [
   {
-    title: "Fasilitas Sekolah",
-    description: "Sarana dan prasarana pendukung kegiatan belajar",
-    image: facilities.items[0]?.image,
-    url: "/about/facilities"
+    title: "Profil & Legalitas Sekolah",
+    badge: "Identitas Resmi",
+    tagline: "NPSN: 10648392 • Akreditasi",
+    description: "Data pokok sekolah, legalitas operasional, kurikulum merdeka, status kepemilikan, dan letak geografis.",
+    image: profil.items[0]?.image || "/uploads/cover.webp",
+    url: "/about/profil",
+    icon: "document",
+    accent: "from-blue-600/90 via-blue-900/80 to-black/90",
   },
   {
-    title: "Galeri Kegiatan",
-    description: "Dokumentasi aktivitas dan kegiatan sekolah",
-    image: gallery.items[0]?.image,
-    url: "/about/gallery"
+    title: "Visi, Misi & Karakter",
+    badge: "Arah & Nilai",
+    tagline: "6 Pilar Misi Pendidikan",
+    description: "Cita-cita luhur melahirkan generasi santri yang intelektual, agamis, berdaya cipta, dan berakhlakul karimah.",
+    image: visimisi.items[0]?.image || "/uploads/cover.webp",
+    url: "/about/visimisi",
+    icon: "sparkles",
+    accent: "from-emerald-600/90 via-emerald-950/80 to-black/90",
   },
   {
-    title: "Tenaga Pendidik",
-    description: "Daftar tenaga pendidik dan kependidikan",
-    image: kepegawaian.items[0]?.image,
-    url: "/about/kepegawaian"
+    title: "Sambutan Kepala Madrasah",
+    badge: "Amanat Pimpinan",
+    tagline: "Ahmad Rifa'i, M.Pd.",
+    description: "Pesan kepemimpinan, dedikasi pengembangan institusi, dan komitmen pelayanan pendidikan berkualitas.",
+    image: kepsekImage,
+    url: "/about/sambutan",
+    icon: "user",
+    accent: "from-amber-600/90 via-amber-950/80 to-black/90",
   },
   {
-    title: "Profil Sekolah",
-    description: "Profil Sekolah",
-    image: profil.items[0]?.image,
-    url: "/about/profil"
+    title: "Tenaga Pendidik & Staf",
+    badge: "SDM Berkualitas",
+    tagline: "20+ Guru & Tenaga Kependidikan",
+    description: "Dewan asatidz/guru mata pelajaran kompeten dan staf tata usaha yang membimbing santri dengan sepenuh hati.",
+    image: kepegawaian.items[0]?.image || "/uploads/mifda-1.webp",
+    url: "/about/kepegawaian",
+    icon: "academic",
+    accent: "from-indigo-600/90 via-indigo-950/80 to-black/90",
   },
   {
-    title: "Sambutan Kepala Sekolah",
-    description: "Sambutan Kepala Sekolah",
-    image: sambutan.items[0]?.image,
-    url: "/about/sambutan"
+    title: "Fasilitas & Sarana Belajar",
+    badge: "Sarana Prasarana",
+    tagline: "Lab Komputer & Perpustakaan",
+    description: "Dukungan laboratorium komputer, perpustakaan, ruang belajar multimedia, dan lingkungan asri yang representatif.",
+    image: facilities.items[0]?.image || "/uploads/20251104113343-whatsapp-image-2025-11-04-at-092100.webp",
+    url: "/about/facilities",
+    icon: "building",
+    accent: "from-teal-600/90 via-teal-950/80 to-black/90",
   },
   {
-    title: "Visi Misi Sekolah",
-    description: "Visi Misi Sekolah",
-    image: visimisi.items[0]?.image,
-    url: "/about/visimisi"
-  }
-]
-const title = "Profil Sekolah"
+    title: "Galeri Aktivitas & Juara",
+    badge: "Dokumentasi",
+    tagline: `${gallery.items?.length || 10}+ Dokumentasi Kegiatan`,
+    description: "Rekam jejak kegiatan belajar mengajar, upacara, kepramukaan, harlah, hingga piala prestasi perlombaan.",
+    image: gallery.items[0]?.image || "/uploads/upacara-bendera-ma-miftahul-huda-sanyir.jpg",
+    url: "/about/gallery",
+    icon: "photo",
+    accent: "from-purple-600/90 via-purple-950/80 to-black/90",
+  },
+];
+
+// Quick Stats
+const quickFacts = [
+  {
+    label: "NPSN Resmi",
+    value: "10648392",
+    sub: "Terdaftar Kemenag & Kemdikbud",
+    icon: "shield",
+  },
+  {
+    label: "Kurikulum",
+    value: "Kurikulum Merdeka",
+    sub: "Berbasis Karakter & Keislaman",
+    icon: "book",
+  },
+  {
+    label: "Jenjang Pendidikan",
+    value: "Madrasah Aliyah",
+    sub: "Setara SMA / Formal Terpadu",
+    icon: "badge",
+  },
+  {
+    label: "Wilayah Kampus",
+    value: "Way Tenong",
+    sub: "Kabupaten Lampung Barat",
+    icon: "location",
+  },
+];
+
+// Keunggulan
+const advantages = [
+  {
+    title: "Integrasi Agama & Sains",
+    desc: "Memadukan standar Kurikulum Merdeka nasional dengan kurikulum khas pesantren Mathla'ul Anwar.",
+    icon: "star",
+  },
+  {
+    title: "Pembiasaan Akhlakul Karimah",
+    desc: "Kultivasi karakter harian melalui sholat dhuha, sholat berjamaah, tahfidz Al-Qur'an, dan kajian adab.",
+    icon: "heart",
+  },
+  {
+    title: "Pengembangan Prestasi Santri",
+    desc: "Dukungan penuh untuk kompetisi sains madrasah, seni hadroh, olahraga, kepramukaan, catur, dan kebahasaan.",
+    icon: "trophy",
+  },
+  {
+    title: "Lingkungan Asri & Kondusif",
+    desc: "Suasana kampus yang tenang, bersih, dan sejuk di Way Tenong, mendukung fokus dan kenyamanan belajar para santri.",
+    icon: "check",
+  },
+];
 ---
-<Layout title={title}>
-  <section
-    class="min-h-80 bg-cover bg-center flex items-center relative before:content-[''] before:absolute before:bg-black before:opacity-70 before:w-full before:h-full"
-    style={`background-image: url(${cards[3]?.image})`}
-  >
-    <div class="container relative mx-auto px-4">
-      <h1 class="text-3xl text-white text-center font-semibold">
-        {title}
-      </h1>
-      <Breadcrumb title={title} parent={{ label: "About", href: "/about" }} />
+
+<Layout title={`${title} | MA Miftahul Huda`} description={description}>
+  <!-- 1. Hero Header Section -->
+  <section class="relative bg-gradient-to-b from-primary/10 via-surface to-background pt-10 pb-16 border-b border-border overflow-hidden">
+    <!-- Ambient decorative glow -->
+    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-primary/10 blur-3xl rounded-full pointer-events-none"></div>
+
+    <div class="container mx-auto px-4 max-w-6xl relative z-10">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs md:text-sm text-muted mb-6" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-primary transition-colors flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
+        <span class="text-muted/60">/</span>
+        <span class="text-heading font-semibold">Tentang Kami</span>
+      </nav>
+
+      <!-- Main Hero Content -->
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-wide uppercase mb-4">
+          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+          Profil Resmi Madrasah
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold font-sans text-heading tracking-tight mb-5 leading-tight">
+          Mengenal Lebih Dekat <br class="hidden sm:inline" />
+          <span class="text-primary">MA Miftahul Huda</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-muted leading-relaxed mb-8">
+          Lembaga pendidikan formal tingkat menengah atas berbasis Islam di bawah naungan Yayasan Perguruan Pesantren Miftahul Huda Mathla'ul Anwar Tambak Jaya, Lampung Barat. Membina santri berilmu, bertakwa, dan berkarya nyata.
+        </p>
+
+        <!-- Quick Jump Buttons -->
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="#hub-profil"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-secondary !text-white text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md"
+          >
+            <span>Jelajahi Profil Lengkap</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </a>
+          <a
+            href="/contact"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface hover:bg-background border border-border text-heading text-sm font-semibold transition-colors"
+          >
+            <span>Hubungi Kami</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- CARD SECTION -->
-  <section class="py-16">
-    <div class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {
-        cards.map(card => (
-          <a
-            href={card.url}
-            class="group block relative rounded overflow-hidden border"
-          >
-            <img
-              src={card.image}
-              alt={card.title}
-              class="w-full h-48 object-cover transition-transform group-hover:scale-105"
-            />
-
-            <div class="absolute inset-0 bg-black/40"></div>
-
-            <div class="absolute bottom-0 p-4 text-surface">
-              <h3 class="text-lg font-semibold">
-                {card.title}
-              </h3>
-              <p class="text-sm opacity-90">
-                {card.description}
+  <!-- 2. Quick Fact Strip -->
+  <section class="py-6 bg-surface border-b border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        {
+          quickFacts.map((fact) => (
+            <div class="p-4 rounded-xl bg-background border border-border/70 hover:border-primary/40 transition-colors">
+              <span class="text-xs font-semibold uppercase tracking-wider text-muted block mb-1">
+                {fact.label}
+              </span>
+              <div class="text-base sm:text-lg font-bold text-heading leading-snug">
+                {fact.value}
+              </div>
+              <p class="text-xs text-muted mt-1 leading-tight">
+                {fact.sub}
               </p>
             </div>
-          </a>
-        ))
-      }
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Executive Spotlight: Sambutan Kepala Madrasah & Visi Utama -->
+  <section id="sambutan" class="py-14 md:py-18 bg-background">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        
+        <!-- Sambutan Kepala Madrasah (7 Cols) -->
+        <div class="lg:col-span-7 bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-4 mb-6 border-b border-border">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                <h2 class="text-lg sm:text-xl font-bold text-heading">
+                  Sambutan Kepala Madrasah
+                </h2>
+              </div>
+              <span class="text-xs text-muted font-medium">Periode Aktif</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-6 items-start">
+              <div class="w-28 sm:w-36 shrink-0 mx-auto sm:mx-0 text-center">
+                <div class="w-28 h-36 sm:w-36 sm:h-44 rounded-2xl overflow-hidden border-2 border-border shadow-md bg-surface mb-2">
+                  <img
+                    src={kepsekImage}
+                    alt={kepsekName}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <h3 class="text-sm font-bold text-heading leading-tight">
+                  {kepsekName}
+                </h3>
+                <p class="text-[11px] text-primary font-semibold mt-0.5 uppercase tracking-wide">
+                  Kepala MA Miftahul Huda
+                </p>
+              </div>
+
+              <div class="flex-1 space-y-3">
+                <p class="text-xs sm:text-sm font-semibold text-primary italic">
+                  "Bismillahirrohmanirrahim — Assalamu‘alaikum Wr. Wb."
+                </p>
+                <p class="text-sm sm:text-base text-text leading-relaxed">
+                  Alhamdulillah kami panjatkan syukur kepada Allah SWT. Di era transformasi digital saat ini, madrasah terus berkomitmen menjadi sarana interaksi yang positif, media penyebaran informasi terbuka, dan pusat pembentukan karakter santri yang unggul.
+                </p>
+                <p class="text-xs sm:text-sm text-muted leading-relaxed">
+                  Mari bersama-sama bekerja dan berkarya dengan niat tulus demi kemajuan pendidikan, peradaban Islam, dan martabat bangsa.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-6 mt-6 border-t border-border flex items-center justify-between">
+            <span class="text-xs text-muted">Amanat resmi kepemimpinan madrasah</span>
+            <a
+              href="/about/sambutan"
+              class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-primary hover:text-secondary transition-colors"
+            >
+              <span>Baca Sambutan Lengkap</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Visi & Nilai Inti (5 Cols) -->
+        <div class="lg:col-span-5 bg-gradient-to-br from-primary/95 via-primary to-primary/90 text-white rounded-2xl p-6 sm:p-8 shadow-md flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div class="relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4 border border-white/15">
+              <span>★</span>
+              <span>Cita-Cita & Komitmen</span>
+            </div>
+
+            <h2 class="text-xs uppercase tracking-widest text-white/70 font-semibold mb-2">
+              Visi Madrasah
+            </h2>
+
+            <blockquote class="text-lg sm:text-xl font-bold font-sans text-white leading-snug mb-6 pl-4 border-l-4 border-amber-400">
+              "{visiData.body?.split('\n')?.[2]?.replace(/[*#]/g, '').trim() || 'Terwujudnya warga madrasah yang Intelektual, Agamis, Kreatif & Berakhlaqul Karimah'}"
+            </blockquote>
+
+            <div class="pt-4 border-t border-white/15">
+              <h3 class="text-xs uppercase tracking-wider text-white/80 font-bold mb-3">
+                4 Pilar Nilai Pokok
+              </h3>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="px-3 py-2 rounded-lg bg-white/10 text-xs font-semibold text-white/90 border border-white/10">
+                  ✓ Intelektual
+                </div>
+                <div class="px-3 py-2 rounded-lg bg-white/10 text-xs font-semibold text-white/90 border border-white/10">
+                  ✓ Agamis
+                </div>
+                <div class="px-3 py-2 rounded-lg bg-white/10 text-xs font-semibold text-white/90 border border-white/10">
+                  ✓ Kreatif & Mandiri
+                </div>
+                <div class="px-3 py-2 rounded-lg bg-white/10 text-xs font-semibold text-white/90 border border-white/10">
+                  ✓ Berakhlaqul Karimah
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-6 mt-6 border-t border-white/15 relative z-10 flex items-center justify-between">
+            <span class="text-xs text-white/70">6 butir misi strategis</span>
+            <a
+              href="/about/visimisi"
+              class="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-amber-300 hover:text-white transition-colors"
+            >
+              <span>Pelajari Misi Madrasah &rarr;</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Interactive Navigation Hub (6 Pilar Profil Lengkap) -->
+  <section id="hub-profil" class="py-16 md:py-20 bg-surface border-y border-border">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-3">
+          Direktori Profil
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold font-sans text-heading tracking-tight mb-3">
+          Eksplorasi Seluruh Informasi Madrasah
+        </h2>
+        <p class="text-sm sm:text-base text-muted leading-relaxed">
+          Pilih topik di bawah ini untuk melihat data resmi, legalitas, dewan guru, fasilitas, dan galeri kegiatan MA Miftahul Huda.
+        </p>
+      </div>
+
+      <!-- 6 Cards Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+        {
+          hubCards.map((card) => (
+            <a
+              href={card.url}
+              class="group relative bg-background rounded-2xl overflow-hidden border border-border hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
+            >
+              <!-- Card Image Header with Overlay -->
+              <div class="relative h-48 sm:h-52 w-full overflow-hidden bg-muted/20">
+                <img
+                  src={card.image}
+                  alt={card.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+
+                <!-- Category Badge -->
+                <div class="absolute top-3.5 left-3.5 z-10">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-[11px] font-bold text-white uppercase tracking-wider border border-white/20">
+                    {card.badge}
+                  </span>
+                </div>
+
+                <!-- Bottom Image Tagline -->
+                <div class="absolute bottom-3 left-3.5 right-3.5 z-10">
+                  <span class="text-xs font-semibold text-amber-300 drop-shadow-sm">
+                    {card.tagline}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Card Body Content -->
+              <div class="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 class="text-lg font-bold text-heading group-hover:text-primary transition-colors mb-2">
+                    {card.title}
+                  </h3>
+                  <p class="text-xs sm:text-sm text-muted leading-relaxed">
+                    {card.description}
+                  </p>
+                </div>
+
+                <div class="pt-5 mt-5 border-t border-border/70 flex items-center justify-between text-xs font-bold text-primary group-hover:text-secondary transition-colors">
+                  <span>Lihat Selengkapnya</span>
+                  <div class="w-7 h-7 rounded-full bg-primary/10 group-hover:bg-secondary group-hover:text-white flex items-center justify-center transition-all duration-300 transform group-hover:translate-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Keunggulan Kami (Why Choose MA Miftahul Huda) -->
+  <section id="keunggulan" class="py-16 md:py-20 bg-background">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/15 text-secondary text-xs font-bold uppercase tracking-wider mb-3">
+          Nilai Keunggulan
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold font-sans text-heading tracking-tight mb-3">
+          Mengapa Memilih MA Miftahul Huda?
+        </h2>
+        <p class="text-sm sm:text-base text-muted leading-relaxed">
+          Pilar keunggulan yang menjadikan madrasah kami pilihan tepat bagi masa depan putra-putri Anda.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {
+          advantages.map((item, idx) => (
+            <div class="bg-surface rounded-2xl p-6 border border-border hover:border-primary/40 transition-all duration-300 hover:shadow-md flex flex-col justify-between">
+              <div>
+                <div class="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-sm mb-4">
+                  0{idx + 1}
+                </div>
+                <h3 class="text-base font-bold text-heading mb-2">
+                  {item.title}
+                </h3>
+                <p class="text-xs sm:text-sm text-muted leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Call To Action (CTA Section) -->
+  <section class="py-14 bg-gradient-to-r from-primary via-primary to-emerald-900 text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent pointer-events-none"></div>
+
+    <div class="container mx-auto px-4 max-w-5xl relative z-10 text-center">
+      <span class="inline-block text-amber-300 text-xs uppercase tracking-widest font-bold mb-3">
+        Penerimaan Santri Baru (SPMB)
+      </span>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold font-sans mb-4 tracking-tight">
+        Wujudkan Pendidikan Berkarakter & Unggul Bersama Kami
+      </h2>
+      <p class="text-sm sm:text-base text-white/85 max-w-2xl mx-auto mb-8 leading-relaxed">
+        Pendaftaran santri baru MA Miftahul Huda Mathla'ul Anwar telah dibuka secara online maupun langsung di kantor sekretariat madrasah.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          href="/pendaftaran"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-sm font-bold transition-colors shadow-lg hover:shadow-xl"
+        >
+          <span>Daftar SPMB Online</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+        <a
+          href="/contact"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-semibold transition-colors backdrop-blur-sm"
+        >
+          <span>Pusat Informasi & Lokasi</span>
+        </a>
+      </div>
     </div>
   </section>
 </Layout>
-
