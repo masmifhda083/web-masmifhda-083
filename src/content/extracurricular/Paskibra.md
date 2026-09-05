@@ -1,16 +1,14 @@
 ---
 title: Paskibra
 shortName: Paskibra
-thumbnail: /uploads/Paskibra.jpeg
-description: >-
-  Ekstrakurikuler pelatihan pasukan pengibar bendera dengan fokus pada
-  kedisiplinan, ketahanan fisik, dan kemampuan kerja tim.
+thumbnail: /uploads/Paskibra-ma-miftahul-huda-tambak-jaya.webp
+description: 'Ekstrakurikuler pelatihan pasukan pengibar bendera dengan fokus pada kedisiplinan, ketahanan fisik, dan kemampuan kerja tim.'
 schedule:
   day: Sabtu
   time: 15.00 -17.00
   location: Lapangan Upacara
 instructor:
-  name: 'Andi Rahmat, S.Pd.'
+  name: 'Hasyim, S.Pd.'
   position: Pelatih Paskibra
 gallery:
   - image: /uploads/Paskibra.jpeg
