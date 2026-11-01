@@ -1,7 +1,7 @@
 ---
 title: 'Peringatan G30S/PKI 2026, MA Miftahul Huda Tambak Jaya Perkuat Nilai Pancasila di Era Modern'
 author: src/content/authors/admin.md
-pubdate: 2026-11-01T00:00:00.000Z
+pubdate: 2026-09-30T00:00:00.000Z
 description: Peringatan G30S/PKI 2026 di MA Miftahul Huda Tambak Jaya menjadi refleksi nilai Pancasila dan penghormatan bagi pahlawan revolusi Indonesia.
 category: news
 status: published
@@ -37,7 +37,7 @@ Diskusi panel yang diadakan di aula madrasah menyoroti bagaimana Pancasila mampu
 
 ## Peran Literasi Digital dalam Mengawal Sejarah
 
-Kepala MA Miftahul Huda menegaskan pentingnya literasi digital bagi siswa. 
+Kepala MA Miftahul Huda menegaskan pentingnya literasi digital bagi siswa.
 
 > "Siswa harus mampu membedakan mana fakta sejarah yang kredibel dan mana distorsi sejarah yang sengaja disebarkan di internet untuk memecah belah bangsa," ungkapnya di sela-sela kegiatan.
 
